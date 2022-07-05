@@ -1,7 +1,10 @@
 package org.cloud.sonic.core.ios;
 
 public class IOSDriver {
-    public IOSDriver(String url,int mjpegPort){
+    WDAClient wdaClient = new WDAClient();
+
+    public IOSDriver(String url, int mjpegPort) {
+        wdaClient.setRemoteUrl(url);
 
     }
 }
