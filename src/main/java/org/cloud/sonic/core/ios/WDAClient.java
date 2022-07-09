@@ -23,6 +23,6 @@ public class WDAClient {
     }
 
     public String getSource(){
-        HttpUtil.post("/");
+        HttpUtil.post(remoteUrl+"/");
     }
 }
