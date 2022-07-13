@@ -1,5 +1,6 @@
 package org.cloud.sonic.core.ios;
 
+import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpResponse;
 import cn.hutool.http.HttpUtil;
 import com.alibaba.fastjson.JSONObject;
@@ -32,7 +33,7 @@ public class WDAClient {
     public void newSession() {
         JSONObject data = new JSONObject();
         data.put("capabilities", new JSONObject());
-        HttpResponse response = HttpUtil.createPost(remoteUrl + "/session").body(data.toJSONString()).execute();
+        HttpRequest request = HttpUtil.createPost(remoteUrl + "/session").body(data.toJSONString());
         System.out.println(response.getStatus());
     }
 }
