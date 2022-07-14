@@ -5,6 +5,8 @@ public class ErrorMsg {
     private String message;
     private String traceback;
 
+    public ErrorMsg(){}
+
     public String getError() {
         return error;
     }

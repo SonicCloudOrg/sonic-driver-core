@@ -1,14 +1,11 @@
 package org.cloud.sonic.core.ios;
 
-import cn.hutool.http.HttpRequest;
-import cn.hutool.http.HttpResponse;
 import cn.hutool.http.HttpUtil;
+import cn.hutool.http.Method;
 import com.alibaba.fastjson.JSONObject;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import org.cloud.sonic.core.tool.BaseResp;
+import org.cloud.sonic.core.tool.RespHandler;
+import org.cloud.sonic.core.tool.SonicRespException;
 
 public class WDAClient {
     private String remoteUrl;
@@ -30,10 +27,18 @@ public class WDAClient {
         this.sessionId = sessionId;
     }
 
-    public void newSession() {
+    public void newSession() throws SonicRespException {
         JSONObject data = new JSONObject();
         data.put("capabilities", new JSONObject());
-        HttpRequest request = HttpUtil.createPost(remoteUrl + "/session").body(data.toJSONString());
-        System.out.println(response.getStatus());
+        BaseResp b = RespHandler.getResp(HttpUtil.createPost(remoteUrl + "/session").body(data.toJSONString()));
+        if (b.getErr() == null) {
+            setSessionId(b.getSessionId());
+        } else {
+            throw new SonicRespException("start session failed.");
+        }
+    }
+
+    public void closeSession() {
+        RespHandler.getResp(HttpUtil.createRequest(Method.DELETE, remoteUrl + "/session/" + getSessionId()));
     }
 }

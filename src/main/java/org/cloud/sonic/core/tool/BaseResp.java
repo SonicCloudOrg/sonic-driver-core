@@ -3,13 +3,19 @@ package org.cloud.sonic.core.tool;
 public class BaseResp<T> {
 
     private String sessionId;
-    private boolean success;
     private ErrorMsg err;
     private T value;
 
     public BaseResp(T value) {
-        this.success = true;
         this.value = value;
+    }
+
+    public BaseResp(boolean success, T value) {
+        this.value = value;
+    }
+
+    public BaseResp(ErrorMsg err) {
+        this.err = err;
     }
 
     public String getSessionId() {
@@ -18,14 +24,6 @@ public class BaseResp<T> {
 
     public void setSessionId(String sessionId) {
         this.sessionId = sessionId;
-    }
-
-    public boolean isSuccess() {
-        return success;
-    }
-
-    public void setSuccess(boolean success) {
-        this.success = success;
     }
 
     public ErrorMsg getErr() {

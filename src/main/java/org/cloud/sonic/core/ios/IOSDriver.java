@@ -1,14 +1,12 @@
 package org.cloud.sonic.core.ios;
 
+import org.cloud.sonic.core.tool.SonicRespException;
+
 public class IOSDriver {
     WDAClient wdaClient = new WDAClient();
 
-    public IOSDriver(String url, int mjpegPort) {
+    public IOSDriver(String url) throws SonicRespException {
         wdaClient.setRemoteUrl(url);
         wdaClient.newSession();
-    }
-
-    public static void main(String[] args) {
-        new IOSDriver("http://localhost:8100", 9100);
     }
 }
