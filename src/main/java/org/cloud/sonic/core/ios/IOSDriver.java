@@ -9,4 +9,16 @@ public class IOSDriver {
         wdaClient.setRemoteUrl(url);
         wdaClient.newSession();
     }
+
+    public void closeDriver() {
+        wdaClient.closeSession();
+    }
+
+    public void tap(int x, int y) {
+
+    }
+
+    public void swipe(int fromX, int fromY, int toX, int toY) throws SonicRespException {
+        wdaClient.swipe(fromX, fromY, toX, toY);
+    }
 }
