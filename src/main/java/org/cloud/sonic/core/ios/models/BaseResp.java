@@ -1,6 +1,7 @@
-package org.cloud.sonic.core.tool;
+package org.cloud.sonic.core.ios.models;
 
 import lombok.Data;
+import org.cloud.sonic.core.ios.models.ErrorMsg;
 
 @Data
 public class BaseResp<T> {

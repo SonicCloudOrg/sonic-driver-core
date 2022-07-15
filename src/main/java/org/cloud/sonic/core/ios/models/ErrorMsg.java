@@ -1,4 +1,4 @@
-package org.cloud.sonic.core.tool;
+package org.cloud.sonic.core.ios.models;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

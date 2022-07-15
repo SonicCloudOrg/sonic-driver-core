@@ -2,6 +2,8 @@ package org.cloud.sonic.core.tool;
 
 import cn.hutool.http.HttpRequest;
 import com.alibaba.fastjson.JSON;
+import org.cloud.sonic.core.ios.models.BaseResp;
+import org.cloud.sonic.core.ios.models.ErrorMsg;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -10,11 +12,13 @@ public class RespHandler {
     private static final int REQUEST_TIMEOUT = 5000;
 
     public static BaseResp getResp(HttpRequest httpRequest) {
-        return initResp(httpRequest.addHeaders(initHeader()).timeout(REQUEST_TIMEOUT).execute().body());
+        return getResp(httpRequest, REQUEST_TIMEOUT);
     }
 
     public static BaseResp getResp(HttpRequest httpRequest, int timeout) {
-        return initResp(httpRequest.addHeaders(initHeader()).timeout(timeout).execute().body());
+        synchronized (RespHandler.class) {
+            return initResp(httpRequest.addHeaders(initHeader()).timeout(timeout).execute().body());
+        }
     }
 
     public static BaseResp initResp(String response) {

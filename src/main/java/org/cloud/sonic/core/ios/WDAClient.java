@@ -2,9 +2,12 @@ package org.cloud.sonic.core.ios;
 
 import cn.hutool.http.HttpUtil;
 import cn.hutool.http.Method;
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import lombok.extern.slf4j.Slf4j;
-import org.cloud.sonic.core.tool.BaseResp;
+import org.cloud.sonic.core.ios.models.BaseResp;
+import org.cloud.sonic.core.ios.models.ErrorMsg;
+import org.cloud.sonic.core.ios.models.SessionInfo;
 import org.cloud.sonic.core.tool.RespHandler;
 import org.cloud.sonic.core.tool.SonicRespException;
 
@@ -34,8 +37,8 @@ public class WDAClient {
         data.put("capabilities", new JSONObject());
         BaseResp b = RespHandler.getResp(HttpUtil.createPost(remoteUrl + "/session").body(data.toJSONString()));
         if (b.getErr() == null) {
-            JSONObject re = JSONObject.parseObject(b.getValue().toString());
-            setSessionId(re.getString("sessionId"));
+            SessionInfo sessionInfo = JSON.parseObject(b.getValue().toString(), SessionInfo.class);
+            setSessionId(sessionInfo.getSessionId());
             log.info("start session successful!");
         } else {
             log.error("start session failed.");
@@ -49,24 +52,24 @@ public class WDAClient {
     }
 
     public void swipe(int fromX, int fromY, int toX, int toY) throws SonicRespException {
-        synchronized (WDAClient.class) {
-            if (sessionId != null) {
-                JSONObject data = new JSONObject();
-                data.put("fromX", (float)fromX);
-                data.put("fromY", (float)fromY);
-                data.put("toX", (float)toX);
-                data.put("toY", (float)toY);
-                data.put("duration",0);
-                BaseResp b = RespHandler.getResp(HttpUtil.createPost(remoteUrl + "/session/" + sessionId + "/wda/dragfromtoforduration")
-                        .body(data.toJSONString()));
-                if (b.getErr() != null) {
-                    log.error("swipe failed.");
-                    throw new SonicRespException(b.getErr().getMessage());
-                }
+        if (sessionId != null) {
+            JSONObject data = new JSONObject();
+            data.put("fromX", (float) fromX);
+            data.put("fromY", (float) fromY);
+            data.put("toX", (float) toX);
+            data.put("toY", (float) toY);
+            data.put("duration", 0);
+            BaseResp b = RespHandler.getResp(HttpUtil.createPost(remoteUrl + "/session/" + sessionId + "/wda/dragfromtoforduration")
+                    .body(data.toJSONString()));
+            if (b.getErr() == null) {
+                log.info("swipe {} {} to {} {}.", fromX, fromY, toX, toY);
             } else {
-                log.error("sessionId not found.");
-                throw new SonicRespException("sessionId not found.");
+                log.error("swipe failed.");
+                throw new SonicRespException(b.getErr().getMessage());
             }
+        } else {
+            log.error("sessionId not found.");
+            throw new SonicRespException("sessionId not found.");
         }
     }
 

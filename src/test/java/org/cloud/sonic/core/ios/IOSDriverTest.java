@@ -21,7 +21,7 @@ public class IOSDriverTest {
 
     @Test
     public void testSwipe() {
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < 10; i++) {
             try {
                 iosDriver.swipe(50, 256, 100, 256);
                 iosDriver.swipe(100, 256, 50, 256);
