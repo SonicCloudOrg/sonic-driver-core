@@ -1,4 +1,4 @@
-package org.cloud.sonic.core.tool;
+package org.cloud.sonic.core.ios;
 
 import cn.hutool.http.HttpRequest;
 import com.alibaba.fastjson.JSON;
@@ -37,6 +37,6 @@ public class RespHandler {
 
     public static BaseResp<ErrorMsg> initErrorMsg(String resp) {
         BaseResp<ErrorMsg> err = JSON.parseObject(resp, BaseResp.class);
-        return new BaseResp(err);
+        return err;
     }
 }

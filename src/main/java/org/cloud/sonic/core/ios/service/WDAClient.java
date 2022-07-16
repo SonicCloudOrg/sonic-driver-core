@@ -14,14 +14,26 @@
  *  limitations under the License.
  *
  */
-package org.cloud.sonic.core.tool;
+package org.cloud.sonic.core.ios.service;
 
-public class SonicRespException extends Exception{
-    public SonicRespException(String message) {
-        super(message);
-    }
+import org.cloud.sonic.core.tool.SonicRespException;
 
-    public SonicRespException(String message, Throwable cause) {
-        super(message, cause);
-    }
+/**
+ * @author Eason
+ * wda client interface
+ */
+public interface WDAClient {
+    String getRemoteUrl();
+
+    void setRemoteUrl(String remoteUrl);
+
+    String getSessionId();
+
+    void setSessionId(String sessionId);
+
+    void newSession() throws SonicRespException;
+
+    void closeSession();
+
+    void swipe(int fromX, int fromY, int toX, int toY) throws SonicRespException;
 }
