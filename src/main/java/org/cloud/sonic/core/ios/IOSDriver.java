@@ -16,24 +16,38 @@
  */
 package org.cloud.sonic.core.ios;
 
-import org.cloud.sonic.core.ios.service.WDAClient;
-import org.cloud.sonic.core.ios.service.impl.WDAClientImpl;
+import com.alibaba.fastjson.JSONObject;
+import org.cloud.sonic.core.ios.service.WdaClient;
+import org.cloud.sonic.core.ios.service.impl.WdaClientImpl;
 import org.cloud.sonic.core.tool.SonicRespException;
 
 public class IOSDriver {
-    WDAClient wdaClient = new WDAClientImpl();
+    private WdaClient wdaClient;
 
     public IOSDriver(String url) throws SonicRespException {
+        wdaClient = new WdaClientImpl();
         wdaClient.setRemoteUrl(url);
-        wdaClient.newSession();
+        wdaClient.newSession(new JSONObject());
     }
 
-    public void closeDriver() {
+    public WdaClient getWdaClient() {
+        return wdaClient;
+    }
+
+    public String getSessionId() {
+        return wdaClient.getSessionId();
+    }
+
+    public void closeDriver() throws SonicRespException {
         wdaClient.closeSession();
     }
 
-    public void tap(int x, int y) {
+    public void tap(int x, int y) throws SonicRespException {
+        wdaClient.tap(x, y);
+    }
 
+    public void touchAndHold(int x, int y, int second) throws SonicRespException {
+        wdaClient.touchAndHold(x, y, second);
     }
 
     public void swipe(int fromX, int fromY, int toX, int toY) throws SonicRespException {

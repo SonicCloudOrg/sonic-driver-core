@@ -20,32 +20,34 @@ import org.cloud.sonic.core.tool.SonicRespException;
 import org.junit.*;
 
 public class IOSDriverTest {
-    IOSDriver iosDriver;
+    static IOSDriver iosDriver;
 
     @BeforeClass
-    public void before() {
-        try {
-            iosDriver = new IOSDriver("http://localhost:8100");
-            Assert.assertEquals("http://localhost:8100", iosDriver.wdaClient.getRemoteUrl());
-        } catch (SonicRespException e) {
-            e.printStackTrace();
+    public static void before() throws SonicRespException {
+        iosDriver = new IOSDriver("http://192.168.1.6:8100");
+        Assert.assertEquals("http://192.168.1.6:8100", iosDriver.getWdaClient().getRemoteUrl());
+    }
+
+    @Test
+    public void testSwipe() throws SonicRespException {
+        for (int i = 0; i < 10; i++) {
+            iosDriver.swipe(50, 256, 100, 256);
+            iosDriver.swipe(100, 256, 50, 256);
         }
     }
 
     @Test
-    public void testSwipe() {
-        for (int i = 0; i < 10; i++) {
-            try {
-                iosDriver.swipe(50, 256, 100, 256);
-                iosDriver.swipe(100, 256, 50, 256);
-            } catch (SonicRespException e) {
-                e.printStackTrace();
-            }
-        }
+    public void testTap() throws SonicRespException {
+        iosDriver.tap(150, 81);
+    }
+
+    @Test
+    public void testTouchAndHold() throws SonicRespException {
+        iosDriver.touchAndHold(150, 81, 3000);
     }
 
     @AfterClass
-    public void after() {
+    public static void after() throws SonicRespException {
         iosDriver.closeDriver();
     }
 }

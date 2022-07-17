@@ -16,13 +16,17 @@
  */
 package org.cloud.sonic.core.ios.service;
 
+import com.alibaba.fastjson.JSONObject;
 import org.cloud.sonic.core.tool.SonicRespException;
 
 /**
  * @author Eason
  * wda client interface
  */
-public interface WDAClient {
+public interface WdaClient {
+
+    //Session handler.
+
     String getRemoteUrl();
 
     void setRemoteUrl(String remoteUrl);
@@ -31,9 +35,15 @@ public interface WDAClient {
 
     void setSessionId(String sessionId);
 
-    void newSession() throws SonicRespException;
+    void newSession(JSONObject capabilities) throws SonicRespException;
 
-    void closeSession();
+    void closeSession() throws SonicRespException;
+
+    //touch handler.
+
+    void tap(int x,int y) throws SonicRespException;
+
+    void touchAndHold(int x,int y,int second) throws SonicRespException;
 
     void swipe(int fromX, int fromY, int toX, int toY) throws SonicRespException;
 }
