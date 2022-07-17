@@ -6,25 +6,21 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import org.cloud.sonic.core.ios.models.BaseResp;
 import org.cloud.sonic.core.ios.models.ErrorMsg;
+import org.cloud.sonic.core.ios.service.WdaClient;
 import org.cloud.sonic.core.tool.SonicRespException;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class RespHandler {
-    private static final int REQUEST_TIMEOUT = 5000;
+    private static final int REQUEST_TIMEOUT = 15000;
 
     public static BaseResp getResp(HttpRequest httpRequest) throws SonicRespException {
         return getResp(httpRequest, REQUEST_TIMEOUT);
     }
 
     public static BaseResp getResp(HttpRequest httpRequest, int timeout) throws SonicRespException {
-        synchronized (RespHandler.class) {
-            try {
-                Thread.sleep(100);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+        synchronized (WdaClient.class) {
             try {
                 return initResp(httpRequest.addHeaders(initHeader()).timeout(timeout).execute().body());
             } catch (HttpException e) {
