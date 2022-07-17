@@ -26,6 +26,7 @@ public class IOSDriverTest {
     public static void before() throws SonicRespException {
         iosDriver = new IOSDriver("http://localhost:8100");
         Assert.assertEquals("http://localhost:8100", iosDriver.getWdaClient().getRemoteUrl());
+        Assert.assertTrue(iosDriver.getSessionId().length() > 0);
     }
 
     @Test

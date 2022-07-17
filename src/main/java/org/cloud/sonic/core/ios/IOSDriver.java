@@ -21,6 +21,10 @@ import org.cloud.sonic.core.ios.service.WdaClient;
 import org.cloud.sonic.core.ios.service.impl.WdaClientImpl;
 import org.cloud.sonic.core.tool.SonicRespException;
 
+/**
+ * @author Eason
+ * ios driver
+ */
 public class IOSDriver {
     private WdaClient wdaClient;
 

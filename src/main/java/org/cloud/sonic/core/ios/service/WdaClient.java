@@ -17,6 +17,8 @@
 package org.cloud.sonic.core.ios.service;
 
 import com.alibaba.fastjson.JSONObject;
+import org.cloud.sonic.core.ios.models.TouchAction;
+import org.cloud.sonic.core.ios.models.W3CAction;
 import org.cloud.sonic.core.tool.SonicRespException;
 
 /**
@@ -41,9 +43,13 @@ public interface WdaClient {
 
     //touch handler.
 
-    void tap(int x,int y) throws SonicRespException;
+    void tap(int x, int y) throws SonicRespException;
 
-    void touchAndHold(int x,int y,int second) throws SonicRespException;
+    void touchAndHold(int x, int y, int second) throws SonicRespException;
 
     void swipe(int fromX, int fromY, int toX, int toY) throws SonicRespException;
+
+    void performTouchAction(TouchAction touchAction) throws SonicRespException;
+
+    void performW3CAction(W3CAction w3CAction) throws SonicRespException;
 }

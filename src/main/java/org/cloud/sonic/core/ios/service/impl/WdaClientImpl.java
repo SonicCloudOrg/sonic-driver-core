@@ -24,6 +24,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.cloud.sonic.core.ios.models.BaseResp;
 import org.cloud.sonic.core.ios.models.SessionInfo;
 import org.cloud.sonic.core.ios.RespHandler;
+import org.cloud.sonic.core.ios.models.TouchAction;
+import org.cloud.sonic.core.ios.models.W3CAction;
 import org.cloud.sonic.core.ios.service.WdaClient;
 import org.cloud.sonic.core.tool.SonicRespException;
 
@@ -32,22 +34,27 @@ public class WdaClientImpl implements WdaClient {
     private String remoteUrl;
     private String sessionId;
 
+    @Override
     public String getRemoteUrl() {
         return remoteUrl;
     }
 
+    @Override
     public void setRemoteUrl(String remoteUrl) {
         this.remoteUrl = remoteUrl;
     }
 
+    @Override
     public String getSessionId() {
         return sessionId;
     }
 
+    @Override
     public void setSessionId(String sessionId) {
         this.sessionId = sessionId;
     }
 
+    @Override
     public void newSession(JSONObject capabilities) throws SonicRespException {
         JSONObject data = new JSONObject();
         data.put("capabilities", capabilities);
@@ -62,6 +69,7 @@ public class WdaClientImpl implements WdaClient {
         }
     }
 
+    @Override
     public void closeSession() throws SonicRespException {
         RespHandler.getResp(HttpUtil.createRequest(Method.DELETE, remoteUrl + "/session/" + sessionId));
         log.info("close session successful!");
@@ -108,6 +116,7 @@ public class WdaClientImpl implements WdaClient {
         }
     }
 
+    @Override
     public void swipe(int fromX, int fromY, int toX, int toY) throws SonicRespException {
         if (sessionId != null) {
             JSONObject data = new JSONObject();
@@ -128,6 +137,16 @@ public class WdaClientImpl implements WdaClient {
             log.error("sessionId not found.");
             throw new SonicRespException("sessionId not found.");
         }
+    }
+
+    @Override
+    public void performTouchAction(TouchAction touchAction) throws SonicRespException {
+
+    }
+
+    @Override
+    public void performW3CAction(W3CAction w3CAction) throws SonicRespException {
+
     }
 
 
