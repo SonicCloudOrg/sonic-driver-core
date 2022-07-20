@@ -44,9 +44,19 @@ public interface WdaClient {
 
     void tap(int x, int y) throws SonicRespException;
 
-    void touchAndHold(int x, int y, int second) throws SonicRespException;
+    void longPress(int x, int y, int second) throws SonicRespException;
 
     void swipe(int fromX, int fromY, int toX, int toY) throws SonicRespException;
 
     void performW3CAction(W3CAction w3CAction) throws SonicRespException;
+
+    //button handler.
+    void pressButton(String buttonName) throws SonicRespException;
+
+    //keyboard handler.
+    void sendKeys(String text,Integer frequency)throws SonicRespException;
+
+    void setPasteboard(String contentType,String content)throws SonicRespException;
+
+    byte[] getPasteboard(String contentType)throws SonicRespException;
 }

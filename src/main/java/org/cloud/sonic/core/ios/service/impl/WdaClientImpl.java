@@ -33,6 +33,13 @@ public class WdaClientImpl implements WdaClient {
     private String remoteUrl;
     private String sessionId;
 
+    private void checkSessionId() throws SonicRespException {
+        if (sessionId == null || sessionId.length() == 0) {
+            log.error("sessionId not found.");
+            throw new SonicRespException("sessionId not found.");
+        }
+    }
+
     @Override
     public String getRemoteUrl() {
         return remoteUrl;
@@ -70,77 +77,111 @@ public class WdaClientImpl implements WdaClient {
 
     @Override
     public void closeSession() throws SonicRespException {
+        checkSessionId();
         RespHandler.getResp(HttpUtil.createRequest(Method.DELETE, remoteUrl + "/session/" + sessionId));
         log.info("close session successful!");
     }
 
     @Override
     public void tap(int x, int y) throws SonicRespException {
-        if (sessionId != null) {
-            JSONObject data = new JSONObject();
-            data.put("x", (float) x);
-            data.put("y", (float) y);
-            BaseResp b = RespHandler.getResp(HttpUtil.createPost(remoteUrl + "/session/" + sessionId + "/wda/tap/0")
-                    .body(data.toJSONString()));
-            if (b.getErr() == null) {
-                log.info("tap {} {}.", x, y);
-            } else {
-                log.error("tap failed.");
-                throw new SonicRespException(b.getErr().getMessage());
-            }
+        checkSessionId();
+        JSONObject data = new JSONObject();
+        data.put("x", (float) x);
+        data.put("y", (float) y);
+        BaseResp b = RespHandler.getResp(HttpUtil.createPost(remoteUrl + "/session/" + sessionId + "/wda/tap/0")
+                .body(data.toJSONString()));
+        if (b.getErr() == null) {
+            log.info("tap {} {}.", x, y);
         } else {
-            log.error("sessionId not found.");
-            throw new SonicRespException("sessionId not found.");
+            log.error("tap failed.");
+            throw new SonicRespException(b.getErr().getMessage());
         }
     }
 
+    //bug
     @Override
-    public void touchAndHold(int x, int y, int second) throws SonicRespException {
-        if (sessionId != null) {
-            JSONObject data = new JSONObject();
-            data.put("x", (float) x);
-            data.put("y", (float) y);
-            data.put("duration", (float) second);
-            BaseResp b = RespHandler.getResp(HttpUtil.createPost(remoteUrl + "/session/" + sessionId + "/wda/touchAndHold")
-                    .body(data.toJSONString()));
-            if (b.getErr() == null) {
-                log.info("touch {} {} and hold {}ms.", x, y, second);
-            } else {
-                log.error("touch and hold failed.");
-                throw new SonicRespException(b.getErr().getMessage());
-            }
+    public void longPress(int x, int y, int second) throws SonicRespException {
+        checkSessionId();
+        JSONObject data = new JSONObject();
+        data.put("fromX", (float) x);
+        data.put("fromY", (float) y);
+        data.put("toX", (float) x);
+        data.put("toY", (float) y);
+        data.put("duration", second);
+        BaseResp b = RespHandler.getResp(HttpUtil.createPost(remoteUrl + "/session/" + sessionId + "/wda/dragfromtoforduration")
+                .body(data.toJSONString()));
+        if (b.getErr() == null) {
+            log.info("touch {} {} and hold {}ms.", x, y, second);
         } else {
-            log.error("sessionId not found.");
-            throw new SonicRespException("sessionId not found.");
+            log.error("touch and hold failed.");
+            throw new SonicRespException(b.getErr().getMessage());
         }
     }
 
     @Override
     public void swipe(int fromX, int fromY, int toX, int toY) throws SonicRespException {
-        if (sessionId != null) {
-            JSONObject data = new JSONObject();
-            data.put("fromX", (float) fromX);
-            data.put("fromY", (float) fromY);
-            data.put("toX", (float) toX);
-            data.put("toY", (float) toY);
-            data.put("duration", 0);
-            BaseResp b = RespHandler.getResp(HttpUtil.createPost(remoteUrl + "/session/" + sessionId + "/wda/dragfromtoforduration")
-                    .body(data.toJSONString()));
-            if (b.getErr() == null) {
-                log.info("swipe {} {} to {} {}.", fromX, fromY, toX, toY);
-            } else {
-                log.error("swipe failed.");
-                throw new SonicRespException(b.getErr().getMessage());
-            }
+        checkSessionId();
+        JSONObject data = new JSONObject();
+        data.put("fromX", (float) fromX);
+        data.put("fromY", (float) fromY);
+        data.put("toX", (float) toX);
+        data.put("toY", (float) toY);
+        data.put("duration", 0);
+        BaseResp b = RespHandler.getResp(HttpUtil.createPost(remoteUrl + "/session/" + sessionId + "/wda/dragfromtoforduration")
+                .body(data.toJSONString()));
+        if (b.getErr() == null) {
+            log.info("swipe {} {} to {} {}.", fromX, fromY, toX, toY);
         } else {
-            log.error("sessionId not found.");
-            throw new SonicRespException("sessionId not found.");
+            log.error("swipe failed.");
+            throw new SonicRespException(b.getErr().getMessage());
+        }
+    }
+
+    // TODO: 2022/7/20  
+    @Override
+    public void performW3CAction(W3CAction w3CAction) throws SonicRespException {
+
+    }
+
+    @Override
+    public void pressButton(String buttonName) throws SonicRespException {
+        checkSessionId();
+        JSONObject data = new JSONObject();
+        data.put("name", buttonName);
+        BaseResp b = RespHandler.getResp(HttpUtil.createPost(remoteUrl + "/session/" + sessionId + "/wda/pressButton")
+                .body(data.toJSONString()));
+        if (b.getErr() == null) {
+            log.info("press button {} .", buttonName);
+        } else {
+            log.error("press button failed.");
+            throw new SonicRespException(b.getErr().getMessage());
         }
     }
 
     @Override
-    public void performW3CAction(W3CAction w3CAction) throws SonicRespException {
+    public void sendKeys(String text, Integer frequency) throws SonicRespException {
+        checkSessionId();
+        JSONObject data = new JSONObject();
+        data.put("value", text.split(""));
+        data.put("frequency", frequency);
+        BaseResp b = RespHandler.getResp(HttpUtil.createPost(remoteUrl + "/session/" + sessionId + "/wda/keys")
+                .body(data.toJSONString()));
+        if (b.getErr() == null) {
+            log.info("send key {} .", text);
+        } else {
+            log.error("send key failed.");
+            throw new SonicRespException(b.getErr().getMessage());
+        }
+    }
 
+    @Override
+    public void setPasteboard(String contentType, String content) throws SonicRespException {
+
+    }
+
+    @Override
+    public byte[] getPasteboard(String contentType) throws SonicRespException {
+        return new byte[0];
     }
 
 

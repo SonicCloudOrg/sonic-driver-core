@@ -16,11 +16,20 @@
  */
 package org.cloud.sonic.core.ios;
 
+import org.cloud.sonic.core.ios.models.SystemButton;
 import org.cloud.sonic.core.tool.SonicRespException;
 import org.junit.*;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
 
+@RunWith(Parameterized.class)
 public class IOSDriverTest {
     static IOSDriver iosDriver;
+
+    @Parameterized.Parameters
+    public static Object[][] data() {
+        return new Object[10][0];
+    }
 
     @BeforeClass
     public static void before() throws SonicRespException {
@@ -30,19 +39,42 @@ public class IOSDriverTest {
     }
 
     @Test
-    public void testSwipe() throws SonicRespException {
+    public void testSwipe() throws SonicRespException, InterruptedException {
         iosDriver.swipe(50, 256, 100, 256);
+        Thread.sleep(500);
         iosDriver.swipe(100, 256, 50, 256);
+        Thread.sleep(500);
     }
 
     @Test
-    public void testTap() throws SonicRespException {
+    public void testTap() throws SonicRespException, InterruptedException {
         iosDriver.tap(150, 81);
+        Thread.sleep(500);
+        iosDriver.pressButton(SystemButton.HOME);
+        Thread.sleep(2000);
     }
 
     @Test
-    public void testTouchAndHold() throws SonicRespException {
-        iosDriver.touchAndHold(150, 81, 3000);
+    @Ignore
+    public void testLongPress() throws SonicRespException {
+        iosDriver.longPress(150, 81, 1500);
+        iosDriver.pressButton(SystemButton.HOME);
+    }
+
+    @Test
+    public void testPressButton() throws SonicRespException, InterruptedException {
+        iosDriver.pressButton(SystemButton.HOME);
+        Thread.sleep(1000);
+        iosDriver.pressButton(SystemButton.VolumeDown);
+        Thread.sleep(1000);
+        iosDriver.pressButton(SystemButton.VolumeUp);
+        Thread.sleep(1000);
+    }
+
+    @Test
+    @Ignore
+    public void testSendKeys() throws SonicRespException {
+        iosDriver.sendKeys("123", 0);
     }
 
     @AfterClass
