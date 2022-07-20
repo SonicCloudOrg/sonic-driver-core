@@ -24,7 +24,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.cloud.sonic.core.ios.models.BaseResp;
 import org.cloud.sonic.core.ios.models.SessionInfo;
 import org.cloud.sonic.core.ios.RespHandler;
-import org.cloud.sonic.core.ios.models.TouchAction;
 import org.cloud.sonic.core.ios.models.W3CAction;
 import org.cloud.sonic.core.ios.service.WdaClient;
 import org.cloud.sonic.core.tool.SonicRespException;
@@ -137,11 +136,6 @@ public class WdaClientImpl implements WdaClient {
             log.error("sessionId not found.");
             throw new SonicRespException("sessionId not found.");
         }
-    }
-
-    @Override
-    public void performTouchAction(TouchAction touchAction) throws SonicRespException {
-
     }
 
     @Override
