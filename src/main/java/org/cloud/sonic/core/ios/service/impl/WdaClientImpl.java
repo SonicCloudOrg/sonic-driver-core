@@ -28,6 +28,8 @@ import org.cloud.sonic.core.ios.models.W3CAction;
 import org.cloud.sonic.core.ios.service.WdaClient;
 import org.cloud.sonic.core.tool.SonicRespException;
 
+import java.util.Arrays;
+
 @Slf4j
 public class WdaClientImpl implements WdaClient {
     private String remoteUrl;
@@ -103,12 +105,10 @@ public class WdaClientImpl implements WdaClient {
     public void longPress(int x, int y, int second) throws SonicRespException {
         checkSessionId();
         JSONObject data = new JSONObject();
-        data.put("fromX", (float) x);
-        data.put("fromY", (float) y);
-        data.put("toX", (float) x);
-        data.put("toY", (float) y);
-        data.put("duration", second);
-        BaseResp b = RespHandler.getResp(HttpUtil.createPost(remoteUrl + "/session/" + sessionId + "/wda/dragfromtoforduration")
+        data.put("x", (float) x);
+        data.put("y", (float) y);
+        data.put("duration", (float) second);
+        BaseResp b = RespHandler.getResp(HttpUtil.createPost(remoteUrl + "/session/" + sessionId + "/wda/touchAndHold")
                 .body(data.toJSONString()));
         if (b.getErr() == null) {
             log.info("touch {} {} and hold {}ms.", x, y, second);

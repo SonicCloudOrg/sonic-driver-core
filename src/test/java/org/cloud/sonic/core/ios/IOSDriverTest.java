@@ -28,14 +28,19 @@ public class IOSDriverTest {
 
     @Parameterized.Parameters
     public static Object[][] data() {
-        return new Object[200][0];
+        return new Object[1][0];
     }
 
     @BeforeClass
-    public static void before() throws SonicRespException {
+    public static void beforeClass() throws SonicRespException {
         iosDriver = new IOSDriver("http://localhost:8100");
         Assert.assertEquals("http://localhost:8100", iosDriver.getWdaClient().getRemoteUrl());
         Assert.assertTrue(iosDriver.getSessionId().length() > 0);
+    }
+
+    @Before
+    public void before() throws InterruptedException {
+        Thread.sleep(2000);
     }
 
     @Test
@@ -43,7 +48,6 @@ public class IOSDriverTest {
         iosDriver.swipe(50, 256, 100, 256);
         Thread.sleep(500);
         iosDriver.swipe(100, 256, 50, 256);
-        Thread.sleep(500);
     }
 
     @Test
@@ -51,13 +55,12 @@ public class IOSDriverTest {
         iosDriver.tap(150, 81);
         Thread.sleep(500);
         iosDriver.pressButton(SystemButton.HOME);
-        Thread.sleep(2000);
     }
 
     @Test
     @Ignore
     public void testLongPress() throws SonicRespException {
-        iosDriver.longPress(150, 81, 1500);
+        iosDriver.longPress(150, 281, 1500);
         iosDriver.pressButton(SystemButton.HOME);
     }
 
@@ -68,7 +71,6 @@ public class IOSDriverTest {
         iosDriver.pressButton(SystemButton.VolumeDown);
         Thread.sleep(1000);
         iosDriver.pressButton(SystemButton.VolumeUp);
-        Thread.sleep(1000);
     }
 
     @Test
