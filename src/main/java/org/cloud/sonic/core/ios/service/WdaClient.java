@@ -48,8 +48,6 @@ public interface WdaClient {
 
     void swipe(int fromX, int fromY, int toX, int toY) throws SonicRespException;
 
-    void performW3CAction(W3CAction w3CAction) throws SonicRespException;
-
     //button handler.
     void pressButton(String buttonName) throws SonicRespException;
 

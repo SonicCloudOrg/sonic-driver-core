@@ -137,12 +137,6 @@ public class WdaClientImpl implements WdaClient {
         }
     }
 
-    // TODO: 2022/7/20  
-    @Override
-    public void performW3CAction(W3CAction w3CAction) throws SonicRespException {
-
-    }
-
     @Override
     public void pressButton(String buttonName) throws SonicRespException {
         checkSessionId();
