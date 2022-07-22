@@ -100,7 +100,7 @@ public class WdaClientImpl implements WdaClient {
         }
     }
 
-    //bug
+    //bug should be touchaction
     @Override
     public void longPress(int x, int y, int second) throws SonicRespException {
         checkSessionId();
