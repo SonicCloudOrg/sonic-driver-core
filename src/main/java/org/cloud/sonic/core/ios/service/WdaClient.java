@@ -48,9 +48,12 @@ public interface WdaClient {
     void pressButton(String buttonName) throws SonicRespException;
 
     //keyboard handler.
-    void sendKeys(String text,Integer frequency)throws SonicRespException;
+    void sendKeys(String text, Integer frequency) throws SonicRespException;
 
-    void setPasteboard(String contentType,String content)throws SonicRespException;
+    void setPasteboard(String contentType, String content) throws SonicRespException;
 
-    byte[] getPasteboard(String contentType)throws SonicRespException;
+    byte[] getPasteboard(String contentType) throws SonicRespException;
+
+    //source
+    String pageSource() throws SonicRespException;
 }

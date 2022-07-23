@@ -29,7 +29,7 @@ public class IOSDriverTest {
 
     @Parameterized.Parameters
     public static Object[][] data() {
-        return new Object[200][0];
+        return new Object[1][0];
     }
 
     @BeforeClass
@@ -84,6 +84,11 @@ public class IOSDriverTest {
     @Ignore
     public void testSendKeys() throws SonicRespException {
         iosDriver.sendKeys("123", 0);
+    }
+
+    @Test
+    public void testGetPageSource() throws SonicRespException {
+        Assert.assertTrue(iosDriver.getPageSource().contains("XCUIElementTypeApplication"));
     }
 
     @AfterClass

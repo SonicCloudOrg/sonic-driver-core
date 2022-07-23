@@ -134,4 +134,13 @@ public class IOSDriver {
     public void sendKeys(String text, int frequency) throws SonicRespException {
         wdaClient.sendKeys(text, frequency);
     }
+
+    /**
+     * get page source
+     * @return
+     * @throws SonicRespException
+     */
+    public String getPageSource() throws SonicRespException {
+        return wdaClient.pageSource();
+    }
 }

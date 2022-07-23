@@ -88,9 +88,9 @@ public class WdaClientImpl implements WdaClient {
         BaseResp b = RespHandler.getResp(HttpUtil.createPost(remoteUrl + "/session/" + sessionId + "/wda/touch/multi/perform")
                 .body(String.valueOf(JSONObject.toJSON(touchActions))));
         if (b.getErr() == null) {
-            log.info("swipe action {}.", touchActions);
+            log.info("perform action {}.", touchActions);
         } else {
-            log.error("swipe failed.");
+            log.error("perform failed.");
             throw new SonicRespException(b.getErr().getMessage());
         }
     }
@@ -134,6 +134,19 @@ public class WdaClientImpl implements WdaClient {
     @Override
     public byte[] getPasteboard(String contentType) throws SonicRespException {
         return new byte[0];
+    }
+
+    @Override
+    public String pageSource() throws SonicRespException {
+        checkSessionId();
+        BaseResp b = RespHandler.getResp(HttpUtil.createGet(remoteUrl + "/session/" + sessionId + "/source"), 60000);
+        if (b.getErr() == null) {
+            log.info("get page source.");
+            return b.getValue().toString();
+        } else {
+            log.error("get page source failed.");
+            throw new SonicRespException(b.getErr().getMessage());
+        }
     }
 
 
