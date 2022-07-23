@@ -27,7 +27,6 @@ import org.cloud.sonic.core.tool.SonicRespException;
 public interface WdaClient {
 
     //Session handler.
-
     String getRemoteUrl();
 
     void setRemoteUrl(String remoteUrl);
