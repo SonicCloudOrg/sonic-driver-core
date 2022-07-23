@@ -6,15 +6,19 @@
 
     <groupId>io.github.soniccloudorg</groupId>
     <artifactId>sonic-driver-core</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.0-alpha</version>
+
+    <name>sonic-driver-core</name>
+    <description>The Sonic Project UIAutomation Driver Core for Android, iOS, Windows, Mac and so on.</description>
+    <url>https://github.com/SonicCloudOrg/sonic-driver-core</url>
 
     <properties>
-        <maven.compiler.source>17</maven.compiler.source>
-        <maven.compiler.target>17</maven.compiler.target>
+        <maven.compiler.source>8</maven.compiler.source>
+        <maven.compiler.target>8</maven.compiler.target>
     </properties>
 
     <scm>
-        <tag>master</tag>
+        <tag>main</tag>
         <url>https://github.com/SonicCloudOrg/sonic-driver-core</url>
         <connection>https://github.com/SonicCloudOrg/sonic-driver-core</connection>
         <developerConnection>https://github.com/SonicCloudOrg/sonic-driver-core</developerConnection>
