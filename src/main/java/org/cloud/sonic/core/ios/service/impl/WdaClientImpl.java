@@ -24,11 +24,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.cloud.sonic.core.ios.models.BaseResp;
 import org.cloud.sonic.core.ios.models.SessionInfo;
 import org.cloud.sonic.core.ios.RespHandler;
-import org.cloud.sonic.core.ios.models.W3CAction;
 import org.cloud.sonic.core.ios.service.WdaClient;
 import org.cloud.sonic.core.tool.SonicRespException;
-
-import java.util.Arrays;
 
 @Slf4j
 public class WdaClientImpl implements WdaClient {
@@ -127,7 +124,7 @@ public class WdaClientImpl implements WdaClient {
         data.put("toX", (float) toX);
         data.put("toY", (float) toY);
         data.put("duration", 0);
-        BaseResp b = RespHandler.getResp(HttpUtil.createPost(remoteUrl + "/session/" + sessionId + "/wda/dragfromtoforduration")
+        BaseResp b = RespHandler.getResp(HttpUtil.createPost(remoteUrl + "/session/" + sessionId + "/wda/touch/multi/perform")
                 .body(data.toJSONString()));
         if (b.getErr() == null) {
             log.info("swipe {} {} to {} {}.", fromX, fromY, toX, toY);

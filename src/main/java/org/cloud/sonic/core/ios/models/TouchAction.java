@@ -16,6 +16,9 @@
  */
 package org.cloud.sonic.core.ios.models;
 
-public class W3CAction {
-
+public class TouchAction {
+    private String action;
+    private Integer x;
+    private Integer y;
+    private Integer ms;
 }
