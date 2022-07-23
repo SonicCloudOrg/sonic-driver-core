@@ -18,6 +18,7 @@ package org.cloud.sonic.core.ios;
 
 import com.alibaba.fastjson.JSONObject;
 import org.cloud.sonic.core.ios.models.SystemButton;
+import org.cloud.sonic.core.ios.models.TouchActions;
 import org.cloud.sonic.core.ios.service.WdaClient;
 import org.cloud.sonic.core.ios.service.impl.WdaClientImpl;
 import org.cloud.sonic.core.tool.SonicRespException;
@@ -71,11 +72,18 @@ public class IOSDriver {
      * @throws SonicRespException
      */
     public void tap(int x, int y) throws SonicRespException {
-        wdaClient.tap(x, y);
+        wdaClient.performTouchAction(new TouchActions().press(x,y).release());
     }
 
-    public void longPress(int x, int y, int second) throws SonicRespException {
-        wdaClient.longPress(x, y, second);
+    /**
+     * long press position on screen
+     * @param x
+     * @param y
+     * @param ms
+     * @throws SonicRespException
+     */
+    public void longPress(int x, int y, int ms) throws SonicRespException {
+        wdaClient.performTouchAction(new TouchActions().press(x,y).wait(ms).release());
     }
 
     /**
@@ -87,7 +95,16 @@ public class IOSDriver {
      * @throws SonicRespException
      */
     public void swipe(int fromX, int fromY, int toX, int toY) throws SonicRespException {
-        wdaClient.swipe(fromX, fromY, toX, toY);
+        wdaClient.performTouchAction(new TouchActions().press(fromX,fromY).wait(50).move(toX,toY).wait(10).release());
+    }
+
+    /**
+     * perform touch action
+     * @param touchActions
+     * @throws SonicRespException
+     */
+    public void performTouchAction(TouchActions touchActions) throws SonicRespException {
+        wdaClient.performTouchAction(touchActions);
     }
 
     /**

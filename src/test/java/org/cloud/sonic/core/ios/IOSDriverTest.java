@@ -17,6 +17,7 @@
 package org.cloud.sonic.core.ios;
 
 import org.cloud.sonic.core.ios.models.SystemButton;
+import org.cloud.sonic.core.ios.models.TouchActions;
 import org.cloud.sonic.core.tool.SonicRespException;
 import org.junit.*;
 import org.junit.runner.RunWith;
@@ -28,7 +29,7 @@ public class IOSDriverTest {
 
     @Parameterized.Parameters
     public static Object[][] data() {
-        return new Object[1][0];
+        return new Object[200][0];
     }
 
     @BeforeClass
@@ -45,9 +46,9 @@ public class IOSDriverTest {
 
     @Test
     public void testSwipe() throws SonicRespException, InterruptedException {
-        iosDriver.swipe(50, 256, 100, 256);
-        Thread.sleep(500);
         iosDriver.swipe(100, 256, 50, 256);
+        Thread.sleep(500);
+        iosDriver.swipe(50, 256, 100, 256);
     }
 
     @Test
@@ -58,19 +59,25 @@ public class IOSDriverTest {
     }
 
     @Test
-    @Ignore
     public void testLongPress() throws SonicRespException {
         iosDriver.longPress(150, 281, 1500);
         iosDriver.pressButton(SystemButton.HOME);
     }
 
     @Test
+    public void testPerformTouchAction() throws SonicRespException, InterruptedException {
+        iosDriver.performTouchAction(new TouchActions().press(100, 256).wait(50).move(50, 256).wait(10).release());
+        Thread.sleep(500);
+        iosDriver.performTouchAction(new TouchActions().press(50, 256).wait(50).move(100, 256).wait(10).release());
+    }
+
+    @Test
     public void testPressButton() throws SonicRespException, InterruptedException {
         iosDriver.pressButton(SystemButton.HOME);
         Thread.sleep(1000);
-        iosDriver.pressButton(SystemButton.VolumeDown);
+        iosDriver.pressButton(SystemButton.VOLUME_DOWN);
         Thread.sleep(1000);
-        iosDriver.pressButton(SystemButton.VolumeUp);
+        iosDriver.pressButton(SystemButton.VOLUME_UP);
     }
 
     @Test

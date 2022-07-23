@@ -18,8 +18,8 @@ package org.cloud.sonic.core.ios.models;
 
 public enum SystemButton {
     HOME("home"),
-    VolumeUp("volumeUp"),
-    VolumeDown("volumeDown");
+    VOLUME_UP("volumeUp"),
+    VOLUME_DOWN("volumeDown");
 
     private final String button;
     SystemButton(String button) {

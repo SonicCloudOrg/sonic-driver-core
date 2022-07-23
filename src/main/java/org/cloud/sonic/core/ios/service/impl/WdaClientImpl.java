@@ -24,6 +24,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.cloud.sonic.core.ios.models.BaseResp;
 import org.cloud.sonic.core.ios.models.SessionInfo;
 import org.cloud.sonic.core.ios.RespHandler;
+import org.cloud.sonic.core.ios.models.TouchActions;
 import org.cloud.sonic.core.ios.service.WdaClient;
 import org.cloud.sonic.core.tool.SonicRespException;
 
@@ -82,52 +83,12 @@ public class WdaClientImpl implements WdaClient {
     }
 
     @Override
-    public void tap(int x, int y) throws SonicRespException {
+    public void performTouchAction(TouchActions touchActions) throws SonicRespException {
         checkSessionId();
-        JSONObject data = new JSONObject();
-        data.put("x", (float) x);
-        data.put("y", (float) y);
-        BaseResp b = RespHandler.getResp(HttpUtil.createPost(remoteUrl + "/session/" + sessionId + "/wda/tap/0")
-                .body(data.toJSONString()));
-        if (b.getErr() == null) {
-            log.info("tap {} {}.", x, y);
-        } else {
-            log.error("tap failed.");
-            throw new SonicRespException(b.getErr().getMessage());
-        }
-    }
-
-    //bug should be touchaction
-    @Override
-    public void longPress(int x, int y, int second) throws SonicRespException {
-        checkSessionId();
-        JSONObject data = new JSONObject();
-        data.put("x", (float) x);
-        data.put("y", (float) y);
-        data.put("duration", (float) second);
-        BaseResp b = RespHandler.getResp(HttpUtil.createPost(remoteUrl + "/session/" + sessionId + "/wda/touchAndHold")
-                .body(data.toJSONString()));
-        if (b.getErr() == null) {
-            log.info("touch {} {} and hold {}ms.", x, y, second);
-        } else {
-            log.error("touch and hold failed.");
-            throw new SonicRespException(b.getErr().getMessage());
-        }
-    }
-
-    @Override
-    public void swipe(int fromX, int fromY, int toX, int toY) throws SonicRespException {
-        checkSessionId();
-        JSONObject data = new JSONObject();
-        data.put("fromX", (float) fromX);
-        data.put("fromY", (float) fromY);
-        data.put("toX", (float) toX);
-        data.put("toY", (float) toY);
-        data.put("duration", 0);
         BaseResp b = RespHandler.getResp(HttpUtil.createPost(remoteUrl + "/session/" + sessionId + "/wda/touch/multi/perform")
-                .body(data.toJSONString()));
+                .body(String.valueOf(JSONObject.toJSON(touchActions))));
         if (b.getErr() == null) {
-            log.info("swipe {} {} to {} {}.", fromX, fromY, toX, toY);
+            log.info("swipe action {}.", touchActions);
         } else {
             log.error("swipe failed.");
             throw new SonicRespException(b.getErr().getMessage());
