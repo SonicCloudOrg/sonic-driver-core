@@ -35,6 +35,11 @@ public class IOSDriverTest {
     @BeforeClass
     public static void before() throws InterruptedException, SonicRespException {
         try {
+            iosDriver.lock();
+        } catch (SonicRespException e) {
+            Assert.assertEquals(e.getMessage(), "sessionId not found.");
+        }
+        try {
             new IOSDriver("http://localhost:8100", null);
         } catch (SonicRespException e) {
             Assert.assertEquals(e.getMessage(), "'capabilities' is mandatory to create a new session");
