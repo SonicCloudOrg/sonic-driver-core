@@ -52,14 +52,14 @@
 <dependency>
     <groupId>io.github.soniccloudorg</groupId>
     <artifactId>sonic-driver-core</artifactId>
-    <version>1.0.1</version>
+    <version>1.0.2</version>
 </dependency>
 ```
 
 ### Gradle
 
 ```
-implementation 'io.github.soniccloudorg:sonic-driver-core:1.0.1'
+implementation 'io.github.soniccloudorg:sonic-driver-core:1.0.2'
 ```
 
 ## Sponsors
