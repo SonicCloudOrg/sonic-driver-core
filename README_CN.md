@@ -41,8 +41,14 @@
 >
 > 如果你想支持，可以给我一个star。⭐
 
+## sonic-driver-core是什么？
+
+sonic-driver-core可以脱离Appium，直接与WebDriverAgent或UIautomator2交互，减少了Appium的通信层，让测试更快更稳定。
+
 ## 在你的Java代码中使用
-### Maven
+
+### 引用库
+#### Maven
 ```xml
 <dependency>
     <groupId>io.github.soniccloudorg</groupId>
@@ -50,9 +56,32 @@
     <version>1.0.3</version>
 </dependency>
 ```
-### Gradle
+#### Gradle
 ```
 implementation 'io.github.soniccloudorg:sonic-driver-core:1.0.3'
+```
+
+### 代码
+
+```java
+package org.cloud.sonic.core.ios;
+
+import org.cloud.sonic.core.tool.SonicRespException;
+
+public class MyTest {
+
+    public void test() throws SonicRespException {
+        IOSDriver iosDriver = new IOSDriver("http://localhost:8100");
+
+        //touch
+        iosDriver.swipe(100, 256, 50, 256);
+        iosDriver.tap(150, 81);
+        iosDriver.longPress(150, 281, 1500);
+        iosDriver.performTouchAction(new TouchActions().press(50, 256).wait(50).move(100, 256).wait(10).release());
+        
+        //更多...
+    }
+}
 ```
 
 ## 赞助商

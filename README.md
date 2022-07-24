@@ -43,9 +43,14 @@
 >
 >If you want to support, you can give me a star. ⭐
 
+## What is sonic-driver-core?
+
+sonic-driver-core can be separated from appium and interact directly with webdriveragent or uiautomator2, which reduces the communication layer of appium and makes the test faster and more stable.
+
 ## Use in Java code
 
-### Maven Central
+### Add dependency
+#### Maven Central
 
 ```xml
 
@@ -56,10 +61,33 @@
 </dependency>
 ```
 
-### Gradle
+#### Gradle
 
 ```
 implementation 'io.github.soniccloudorg:sonic-driver-core:1.0.3'
+```
+
+### Code
+
+```java
+package org.cloud.sonic.core.ios;
+
+import org.cloud.sonic.core.tool.SonicRespException;
+
+public class MyTest {
+
+    public void test() throws SonicRespException {
+        IOSDriver iosDriver = new IOSDriver("http://localhost:8100");
+
+        //touch
+        iosDriver.swipe(100, 256, 50, 256);
+        iosDriver.tap(150, 81);
+        iosDriver.longPress(150, 281, 1500);
+        iosDriver.performTouchAction(new TouchActions().press(50, 256).wait(50).move(100, 256).wait(10).release());
+        
+        //more...
+    }
+}
 ```
 
 ## Sponsors
