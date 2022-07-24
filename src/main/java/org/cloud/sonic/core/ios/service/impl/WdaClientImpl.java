@@ -28,16 +28,25 @@ import org.cloud.sonic.core.ios.models.TouchActions;
 import org.cloud.sonic.core.ios.service.WdaClient;
 import org.cloud.sonic.core.tool.SonicRespException;
 
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
+
 @Slf4j
 public class WdaClientImpl implements WdaClient {
     private String remoteUrl;
     private String sessionId;
+    private RespHandler respHandler = new RespHandler();
 
     private void checkSessionId() throws SonicRespException {
         if (sessionId == null || sessionId.length() == 0) {
             log.error("sessionId not found.");
             throw new SonicRespException("sessionId not found.");
         }
+    }
+
+    @Override
+    public void setGlobalTimeOut(int timeOut) {
+        respHandler.setRequestTimeOut(timeOut);
     }
 
     @Override
@@ -64,7 +73,7 @@ public class WdaClientImpl implements WdaClient {
     public void newSession(JSONObject capabilities) throws SonicRespException {
         JSONObject data = new JSONObject();
         data.put("capabilities", capabilities);
-        BaseResp b = RespHandler.getResp(HttpUtil.createPost(remoteUrl + "/session").body(data.toJSONString()));
+        BaseResp b = respHandler.getResp(HttpUtil.createPost(remoteUrl + "/session").body(data.toJSONString()));
         if (b.getErr() == null) {
             SessionInfo sessionInfo = JSON.parseObject(b.getValue().toString(), SessionInfo.class);
             setSessionId(sessionInfo.getSessionId());
@@ -78,14 +87,51 @@ public class WdaClientImpl implements WdaClient {
     @Override
     public void closeSession() throws SonicRespException {
         checkSessionId();
-        RespHandler.getResp(HttpUtil.createRequest(Method.DELETE, remoteUrl + "/session/" + sessionId));
+        respHandler.getResp(HttpUtil.createRequest(Method.DELETE, remoteUrl + "/session/" + sessionId));
         log.info("close session successful!");
+    }
+
+    @Override
+    public boolean isLocked() throws SonicRespException {
+        checkSessionId();
+        BaseResp b = respHandler.getResp(HttpUtil.createGet(remoteUrl + "/session/" + sessionId + "/wda/locked"));
+        if (b.getErr() == null) {
+            log.info("device lock status: {}.", b.getValue());
+            return (boolean) b.getValue();
+        } else {
+            log.error("get device lock status failed.");
+            throw new SonicRespException(b.getErr().getMessage());
+        }
+    }
+
+    @Override
+    public void lock() throws SonicRespException {
+        checkSessionId();
+        BaseResp b = respHandler.getResp(HttpUtil.createPost(remoteUrl + "/session/" + sessionId + "/wda/lock"));
+        if (b.getErr() == null) {
+            log.info("lock device.");
+        } else {
+            log.error("lock device failed.");
+            throw new SonicRespException(b.getErr().getMessage());
+        }
+    }
+
+    @Override
+    public void unlock() throws SonicRespException {
+        checkSessionId();
+        BaseResp b = respHandler.getResp(HttpUtil.createPost(remoteUrl + "/session/" + sessionId + "/wda/unlock"));
+        if (b.getErr() == null) {
+            log.info("unlock device.");
+        } else {
+            log.error("unlock device failed.");
+            throw new SonicRespException(b.getErr().getMessage());
+        }
     }
 
     @Override
     public void performTouchAction(TouchActions touchActions) throws SonicRespException {
         checkSessionId();
-        BaseResp b = RespHandler.getResp(HttpUtil.createPost(remoteUrl + "/session/" + sessionId + "/wda/touch/multi/perform")
+        BaseResp b = respHandler.getResp(HttpUtil.createPost(remoteUrl + "/session/" + sessionId + "/wda/touch/multi/perform")
                 .body(String.valueOf(JSONObject.toJSON(touchActions))));
         if (b.getErr() == null) {
             log.info("perform action {}.", touchActions);
@@ -100,7 +146,7 @@ public class WdaClientImpl implements WdaClient {
         checkSessionId();
         JSONObject data = new JSONObject();
         data.put("name", buttonName);
-        BaseResp b = RespHandler.getResp(HttpUtil.createPost(remoteUrl + "/session/" + sessionId + "/wda/pressButton")
+        BaseResp b = respHandler.getResp(HttpUtil.createPost(remoteUrl + "/session/" + sessionId + "/wda/pressButton")
                 .body(data.toJSONString()));
         if (b.getErr() == null) {
             log.info("press button {} .", buttonName);
@@ -116,7 +162,7 @@ public class WdaClientImpl implements WdaClient {
         JSONObject data = new JSONObject();
         data.put("value", text.split(""));
         data.put("frequency", frequency);
-        BaseResp b = RespHandler.getResp(HttpUtil.createPost(remoteUrl + "/session/" + sessionId + "/wda/keys")
+        BaseResp b = respHandler.getResp(HttpUtil.createPost(remoteUrl + "/session/" + sessionId + "/wda/keys")
                 .body(data.toJSONString()));
         if (b.getErr() == null) {
             log.info("send key {} .", text);
@@ -127,19 +173,9 @@ public class WdaClientImpl implements WdaClient {
     }
 
     @Override
-    public void setPasteboard(String contentType, String content) throws SonicRespException {
-
-    }
-
-    @Override
-    public byte[] getPasteboard(String contentType) throws SonicRespException {
-        return new byte[0];
-    }
-
-    @Override
     public String pageSource() throws SonicRespException {
         checkSessionId();
-        BaseResp b = RespHandler.getResp(HttpUtil.createGet(remoteUrl + "/session/" + sessionId + "/source"), 60000);
+        BaseResp b = respHandler.getResp(HttpUtil.createGet(remoteUrl + "/session/" + sessionId + "/source"), 60000);
         if (b.getErr() == null) {
             log.info("get page source.");
             return b.getValue().toString();

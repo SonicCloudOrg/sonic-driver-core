@@ -25,6 +25,8 @@ import org.cloud.sonic.core.tool.SonicRespException;
  * wda client interface
  */
 public interface WdaClient {
+    //Client Setting
+    void setGlobalTimeOut(int timeOut);
 
     //Session handler.
     String getRemoteUrl();
@@ -39,8 +41,14 @@ public interface WdaClient {
 
     void closeSession() throws SonicRespException;
 
-    //perform handler.
+    //lock handler.
+    boolean isLocked() throws SonicRespException;
 
+    void lock() throws SonicRespException;
+
+    void unlock() throws SonicRespException;
+
+    //perform handler.
     void performTouchAction(TouchActions touchActions) throws SonicRespException;
 
     //button handler.
@@ -48,10 +56,6 @@ public interface WdaClient {
 
     //keyboard handler.
     void sendKeys(String text, Integer frequency) throws SonicRespException;
-
-    void setPasteboard(String contentType, String content) throws SonicRespException;
-
-    byte[] getPasteboard(String contentType) throws SonicRespException;
 
     //source
     String pageSource() throws SonicRespException;

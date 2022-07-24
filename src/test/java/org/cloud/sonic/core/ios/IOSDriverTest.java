@@ -29,7 +29,7 @@ public class IOSDriverTest {
 
     @Parameterized.Parameters
     public static Object[][] data() {
-        return new Object[1][0];
+        return new Object[10][0];
     }
 
     @BeforeClass
@@ -89,6 +89,14 @@ public class IOSDriverTest {
     @Test
     public void testGetPageSource() throws SonicRespException {
         Assert.assertTrue(iosDriver.getPageSource().contains("XCUIElementTypeApplication"));
+    }
+
+    @Test
+    public void testLock() throws SonicRespException {
+        iosDriver.lock();
+        Assert.assertTrue(iosDriver.isLocked());
+        iosDriver.unlock();
+        Assert.assertFalse(iosDriver.isLocked());
     }
 
     @AfterClass
