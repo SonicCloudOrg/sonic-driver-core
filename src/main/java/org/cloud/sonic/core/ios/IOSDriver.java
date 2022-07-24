@@ -48,10 +48,33 @@ public class IOSDriver {
      * @throws SonicRespException
      */
     public IOSDriver(String url, int timeOut) throws SonicRespException {
+        this(url, timeOut, new JSONObject());
+    }
+
+    /**
+     * Init ios driver
+     *
+     * @param url
+     * @param cap
+     * @throws SonicRespException
+     */
+    public IOSDriver(String url, JSONObject cap) throws SonicRespException {
+        this(url, RespHandler.DEFAULT_REQUEST_TIMEOUT, cap);
+    }
+
+    /**
+     * Init ios driver
+     *
+     * @param url
+     * @param timeOut
+     * @param cap
+     * @throws SonicRespException
+     */
+    public IOSDriver(String url, int timeOut, JSONObject cap) throws SonicRespException {
         wdaClient = new WdaClientImpl();
         wdaClient.setRemoteUrl(url);
         wdaClient.setGlobalTimeOut(timeOut);
-        wdaClient.newSession(new JSONObject());
+        wdaClient.newSession(cap);
     }
 
     /**
@@ -83,6 +106,7 @@ public class IOSDriver {
 
     /**
      * get device lock status
+     *
      * @return
      * @throws SonicRespException
      */
@@ -92,6 +116,7 @@ public class IOSDriver {
 
     /**
      * lock device
+     *
      * @throws SonicRespException
      */
     public void lock() throws SonicRespException {
@@ -100,6 +125,7 @@ public class IOSDriver {
 
     /**
      * unlock device
+     *
      * @throws SonicRespException
      */
     public void unlock() throws SonicRespException {
@@ -158,8 +184,18 @@ public class IOSDriver {
      * @param systemButton
      * @throws SonicRespException
      */
+    public void pressButton(String systemButton) throws SonicRespException {
+        wdaClient.pressButton(systemButton);
+    }
+
+    /**
+     * press system button.
+     *
+     * @param systemButton
+     * @throws SonicRespException
+     */
     public void pressButton(SystemButton systemButton) throws SonicRespException {
-        wdaClient.pressButton(systemButton.getButton());
+        pressButton(systemButton.getButton());
     }
 
     /**

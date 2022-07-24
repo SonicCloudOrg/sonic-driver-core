@@ -78,8 +78,10 @@ public class WdaClientImpl implements WdaClient {
             SessionInfo sessionInfo = JSON.parseObject(b.getValue().toString(), SessionInfo.class);
             setSessionId(sessionInfo.getSessionId());
             log.info("start session successful!");
+            log.info("session capabilities : {}", sessionInfo.getCapabilities());
         } else {
             log.error("start session failed.");
+            log.error("cause: {}",b.getErr());
             throw new SonicRespException(b.getErr().getMessage());
         }
     }

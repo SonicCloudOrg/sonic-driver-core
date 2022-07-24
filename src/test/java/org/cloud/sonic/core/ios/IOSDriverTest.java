@@ -33,14 +33,15 @@ public class IOSDriverTest {
     }
 
     @BeforeClass
-    public static void beforeClass() throws SonicRespException {
+    public static void before() throws InterruptedException, SonicRespException {
+        try {
+            new IOSDriver("http://localhost:8100", null);
+        } catch (SonicRespException e) {
+            Assert.assertEquals(e.getMessage(), "'capabilities' is mandatory to create a new session");
+        }
         iosDriver = new IOSDriver("http://localhost:8100");
         Assert.assertEquals("http://localhost:8100", iosDriver.getWdaClient().getRemoteUrl());
         Assert.assertTrue(iosDriver.getSessionId().length() > 0);
-    }
-
-    @Before
-    public void before() throws InterruptedException {
         Thread.sleep(2000);
     }
 
@@ -78,6 +79,8 @@ public class IOSDriverTest {
         iosDriver.pressButton(SystemButton.VOLUME_DOWN);
         Thread.sleep(1000);
         iosDriver.pressButton(SystemButton.VOLUME_UP);
+        Thread.sleep(1000);
+        iosDriver.pressButton("home");
     }
 
     @Test
