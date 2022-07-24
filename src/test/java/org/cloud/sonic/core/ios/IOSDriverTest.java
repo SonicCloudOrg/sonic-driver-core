@@ -102,13 +102,20 @@ public class IOSDriverTest {
         Assert.assertFalse(iosDriver.isLocked());
     }
 
-    @AfterClass
-    public static void after() throws SonicRespException {
-        iosDriver.closeDriver();
+    @Test
+    public void testSession() {
+        String sessionId = iosDriver.getSessionId();
+        iosDriver.getWdaClient().setSessionId(null);
         try {
-            iosDriver.lock();
+            iosDriver.getWdaClient().lock();
         } catch (SonicRespException e) {
             Assert.assertEquals(e.getMessage(), "sessionId not found.");
         }
+        iosDriver.getWdaClient().setSessionId(sessionId);
+    }
+
+    @AfterClass
+    public static void after() throws SonicRespException {
+        iosDriver.closeDriver();
     }
 }
