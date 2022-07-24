@@ -12,15 +12,23 @@
   <a href="#">  
     <img src="https://img.shields.io/maven-central/v/io.github.soniccloudorg/sonic-driver-core">
   </a>
-</p>
-<p align="center">
   <a href="#">  
     <img src="https://img.shields.io/github/commit-activity/m/SonicCloudOrg/sonic-driver-core">
   </a>
 </p>
+<p align="center">
+  <a href="https://www.oscs1024.com/project/SonicCloudOrg/sonic-driver-core?ref=badge_small">  
+    <img src="https://www.oscs1024.com/platform/badge/SonicCloudOrg/sonic-driver-core.svg?size=small">
+  </a>
+ <a href="https://codecov.io/gh/SonicCloudOrg/sonic-driver-core">  
+    <img src="https://codecov.io/gh/SonicCloudOrg/sonic-driver-core/branch/main/graph/badge.svg?token=PZ5295WQP1">
+  </a>
+</p>
 
 ### Official Website
+
 [Sonic Official Website](https://sonic-cloud.gitee.io)
+
 ## Background
 
 #### What is sonic ?
@@ -36,17 +44,22 @@
 >If you want to support, you can give me a star. ⭐
 
 ## Use in Java code
+
 ### Maven Central
+
 ```xml
+
 <dependency>
     <groupId>io.github.soniccloudorg</groupId>
     <artifactId>sonic-driver-core</artifactId>
-    <version>1.0.1</version>
+    <version>1.0.2</version>
 </dependency>
 ```
+
 ### Gradle
+
 ```
-implementation 'io.github.soniccloudorg:sonic-driver-core:1.0.1'
+implementation 'io.github.soniccloudorg:sonic-driver-core:1.0.2'
 ```
 
 ## Sponsors
