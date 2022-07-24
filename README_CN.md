@@ -46,7 +46,7 @@
 ```
 ### Gradle
 ```
-implementation 'io.github.soniccloudorg:sonic-driver-core:1.0.0-alpha'
+implementation 'io.github.soniccloudorg:sonic-driver-core:1.0.0'
 ```
 
 ## 赞助商
