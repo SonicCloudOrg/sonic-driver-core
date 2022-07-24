@@ -13,13 +13,18 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class RespHandler {
-    private static final int REQUEST_TIMEOUT = 15000;
+    public static final int DEFAULT_REQUEST_TIMEOUT = 15000;
+    private int requestTimeout = 15000;
 
-    public static BaseResp getResp(HttpRequest httpRequest) throws SonicRespException {
-        return getResp(httpRequest, REQUEST_TIMEOUT);
+    public void setRequestTimeOut(int timeOut) {
+        requestTimeout = timeOut;
     }
 
-    public static BaseResp getResp(HttpRequest httpRequest, int timeout) throws SonicRespException {
+    public BaseResp getResp(HttpRequest httpRequest) throws SonicRespException {
+        return getResp(httpRequest, requestTimeout);
+    }
+
+    public BaseResp getResp(HttpRequest httpRequest, int timeout) throws SonicRespException {
         synchronized (WdaClient.class) {
             try {
                 return initResp(httpRequest.addHeaders(initHeader()).timeout(timeout).execute().body());
@@ -29,7 +34,7 @@ public class RespHandler {
         }
     }
 
-    public static BaseResp initResp(String response) {
+    public BaseResp initResp(String response) {
         if (response.contains("traceback")) {
             return initErrorMsg(response);
         } else {
@@ -37,13 +42,13 @@ public class RespHandler {
         }
     }
 
-    public static Map<String, String> initHeader() {
+    public Map<String, String> initHeader() {
         Map<String, String> headers = new HashMap<>();
         headers.put("Content-Type", "application/json; charset=utf-8");
         return headers;
     }
 
-    public static BaseResp initErrorMsg(String resp) {
+    public BaseResp initErrorMsg(String resp) {
         BaseResp err = JSON.parseObject(resp, BaseResp.class);
         ErrorMsg errorMsg = JSONObject.parseObject(err.getValue().toString(), ErrorMsg.class);
         err.setErr(errorMsg);

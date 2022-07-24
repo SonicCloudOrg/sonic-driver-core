@@ -32,17 +32,31 @@ public class IOSDriver {
 
     /**
      * Init ios driver
+     *
      * @param url
      * @throws SonicRespException
      */
     public IOSDriver(String url) throws SonicRespException {
+        this(url, RespHandler.DEFAULT_REQUEST_TIMEOUT);
+    }
+
+    /**
+     * Init ios driver
+     *
+     * @param url
+     * @param timeOut
+     * @throws SonicRespException
+     */
+    public IOSDriver(String url, int timeOut) throws SonicRespException {
         wdaClient = new WdaClientImpl();
         wdaClient.setRemoteUrl(url);
+        wdaClient.setGlobalTimeOut(timeOut);
         wdaClient.newSession(new JSONObject());
     }
 
     /**
      * Get wda client
+     *
      * @return
      */
     public WdaClient getWdaClient() {
@@ -51,6 +65,7 @@ public class IOSDriver {
 
     /**
      * get wda sessionId
+     *
      * @return
      */
     public String getSessionId() {
@@ -59,6 +74,7 @@ public class IOSDriver {
 
     /**
      * destroy sessionId
+     *
      * @throws SonicRespException
      */
     public void closeDriver() throws SonicRespException {
@@ -66,28 +82,56 @@ public class IOSDriver {
     }
 
     /**
+     * get device lock status
+     * @return
+     * @throws SonicRespException
+     */
+    public boolean isLocked() throws SonicRespException {
+        return wdaClient.isLocked();
+    }
+
+    /**
+     * lock device
+     * @throws SonicRespException
+     */
+    public void lock() throws SonicRespException {
+        wdaClient.lock();
+    }
+
+    /**
+     * unlock device
+     * @throws SonicRespException
+     */
+    public void unlock() throws SonicRespException {
+        wdaClient.unlock();
+    }
+
+    /**
      * tap position on screen
+     *
      * @param x
      * @param y
      * @throws SonicRespException
      */
     public void tap(int x, int y) throws SonicRespException {
-        wdaClient.performTouchAction(new TouchActions().press(x,y).release());
+        wdaClient.performTouchAction(new TouchActions().press(x, y).release());
     }
 
     /**
      * long press position on screen
+     *
      * @param x
      * @param y
      * @param ms
      * @throws SonicRespException
      */
     public void longPress(int x, int y, int ms) throws SonicRespException {
-        wdaClient.performTouchAction(new TouchActions().press(x,y).wait(ms).release());
+        wdaClient.performTouchAction(new TouchActions().press(x, y).wait(ms).release());
     }
 
     /**
      * swipe position on screen
+     *
      * @param fromX
      * @param fromY
      * @param toX
@@ -95,11 +139,12 @@ public class IOSDriver {
      * @throws SonicRespException
      */
     public void swipe(int fromX, int fromY, int toX, int toY) throws SonicRespException {
-        wdaClient.performTouchAction(new TouchActions().press(fromX,fromY).wait(50).move(toX,toY).wait(10).release());
+        wdaClient.performTouchAction(new TouchActions().press(fromX, fromY).wait(50).move(toX, toY).wait(10).release());
     }
 
     /**
      * perform touch action
+     *
      * @param touchActions
      * @throws SonicRespException
      */
@@ -109,6 +154,7 @@ public class IOSDriver {
 
     /**
      * press system button.
+     *
      * @param systemButton
      * @throws SonicRespException
      */
@@ -118,6 +164,7 @@ public class IOSDriver {
 
     /**
      * send key without element
+     *
      * @param text
      * @throws SonicRespException
      */
@@ -127,6 +174,7 @@ public class IOSDriver {
 
     /**
      * send key without element
+     *
      * @param text
      * @param frequency
      * @throws SonicRespException
@@ -137,6 +185,7 @@ public class IOSDriver {
 
     /**
      * get page source
+     *
      * @return
      * @throws SonicRespException
      */
