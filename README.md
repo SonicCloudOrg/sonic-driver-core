@@ -15,13 +15,13 @@
   <a href="#">  
     <img src="https://img.shields.io/github/commit-activity/m/SonicCloudOrg/sonic-driver-core">
   </a>
+  <a href="https://codecov.io/gh/SonicCloudOrg/sonic-driver-core">  
+    <img src="https://codecov.io/gh/SonicCloudOrg/sonic-driver-core/branch/main/graph/badge.svg?token=PZ5295WQP1">
+  </a>
 </p>
 <p align="center">
-  <a href="https://www.oscs1024.com/project/SonicCloudOrg/sonic-driver-core?ref=badge_small">  
-    <img src="https://www.oscs1024.com/platform/badge/SonicCloudOrg/sonic-driver-core.svg?size=small">
-  </a>
- <a href="https://codecov.io/gh/SonicCloudOrg/sonic-driver-core">  
-    <img src="https://codecov.io/gh/SonicCloudOrg/sonic-driver-core/branch/main/graph/badge.svg?token=PZ5295WQP1">
+  <a href="https://github.com/SonicCloudOrg/sonic-driver-core">  
+    <img src="https://www.oscs1024.com/platform/badge/SonicCloudOrg/sonic-driver-core.svg?size=large">
   </a>
 </p>
 

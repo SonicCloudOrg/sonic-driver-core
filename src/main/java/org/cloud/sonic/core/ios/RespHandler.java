@@ -16,6 +16,7 @@
  */
 package org.cloud.sonic.core.ios;
 
+import cn.hutool.core.io.IORuntimeException;
 import cn.hutool.http.HttpException;
 import cn.hutool.http.HttpRequest;
 import com.alibaba.fastjson.JSON;
@@ -44,7 +45,7 @@ public class RespHandler {
         synchronized (WdaClient.class) {
             try {
                 return initResp(httpRequest.addHeaders(initHeader()).timeout(timeout).execute().body());
-            } catch (HttpException e) {
+            } catch (HttpException | IORuntimeException e) {
                 throw new SonicRespException(e.getMessage());
             }
         }
