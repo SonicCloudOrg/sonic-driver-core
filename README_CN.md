@@ -41,7 +41,7 @@
 <dependency>
     <groupId>io.github.soniccloudorg</groupId>
     <artifactId>sonic-driver-core</artifactId>
-    <version>1.0.0-alpha</version>
+    <version>1.0.0</version>
 </dependency>
 ```
 ### Gradle
