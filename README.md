@@ -15,6 +15,7 @@
   <a href="#">  
     <img src="https://img.shields.io/github/commit-activity/m/SonicCloudOrg/sonic-driver-core">
   </a>
+<a href="https://app.fossa.com/projects/git%2Bgithub.com%2FSonicCloudOrg%2Fsonic-driver-core?ref=badge_shield" alt="FOSSA Status"><img src="https://app.fossa.com/api/projects/git%2Bgithub.com%2FSonicCloudOrg%2Fsonic-driver-core.svg?type=shield"/></a>
   <a href="https://codecov.io/gh/SonicCloudOrg/sonic-driver-core">  
     <img src="https://codecov.io/gh/SonicCloudOrg/sonic-driver-core/branch/main/graph/badge.svg?token=PZ5295WQP1">
   </a>
@@ -101,3 +102,6 @@ Thank you to all our sponsors!
 ## LICENSE
 
 [License](LICENSE)
+
+
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FSonicCloudOrg%2Fsonic-driver-core.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2FSonicCloudOrg%2Fsonic-driver-core?ref=badge_large)
