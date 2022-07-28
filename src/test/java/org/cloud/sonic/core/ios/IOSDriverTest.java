@@ -102,6 +102,7 @@ public class IOSDriverTest {
     @Test
     public void test_07_SendKeys() throws SonicRespException {
         iosDriver.sendKeys("123", 0);
+        iosDriver.sendKeys("123");
     }
 
     @Test
@@ -122,6 +123,16 @@ public class IOSDriverTest {
         String sessionId = iosDriver.getSessionId();
         iosDriver.getWdaClient().setSessionId(null);
         Boolean hasThrow = false;
+        try {
+            iosDriver.getWdaClient().lock();
+        } catch (Throwable e) {
+            hasThrow = true;
+            Assert.assertEquals(SonicRespException.class, e.getClass());
+            Assert.assertEquals("sessionId not found.", e.getMessage());
+        }
+        Assert.assertTrue(hasThrow);
+        iosDriver.getWdaClient().setSessionId("");
+        hasThrow = false;
         try {
             iosDriver.getWdaClient().lock();
         } catch (Throwable e) {

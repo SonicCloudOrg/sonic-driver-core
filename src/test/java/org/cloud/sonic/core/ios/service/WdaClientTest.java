@@ -125,4 +125,17 @@ public class WdaClientTest {
         }
         Assert.assertTrue(hasThrow);
     }
+
+    @Test
+    public void testPressButton() {
+        Boolean hasThrow = false;
+        try {
+            wdaClient.pressButton("home");
+        } catch (Throwable e) {
+            hasThrow = true;
+            Assert.assertEquals(SonicRespException.class, e.getClass());
+            Assert.assertEquals(e.getMessage(),ERROR_MSG);
+        }
+        Assert.assertTrue(hasThrow);
+    }
 }
