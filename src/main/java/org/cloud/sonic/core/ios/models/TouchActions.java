@@ -16,17 +16,26 @@
  */
 package org.cloud.sonic.core.ios.models;
 
+import lombok.Getter;
+import lombok.ToString;
+
 import java.util.ArrayList;
 import java.util.List;
 
+@Getter
+@ToString
 public class TouchActions {
 
     private List<TouchAction> actions;
 
+    @Getter
+    @ToString
     public class TouchAction {
         private String action;
         private Options options;
 
+        @Getter
+        @ToString
         public class Options {
             private Integer x;
             private Integer y;
