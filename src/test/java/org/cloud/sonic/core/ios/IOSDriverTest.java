@@ -26,7 +26,6 @@ import org.junit.runners.MethodSorters;
 import org.junit.runners.Parameterized;
 
 @RunWith(Parameterized.class)
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class IOSDriverTest {
     static IOSDriver iosDriver;
 
@@ -40,8 +39,8 @@ public class IOSDriverTest {
         Thread.sleep(2000);
     }
 
-    @Test
-    public void test_01_driver() throws SonicRespException {
+    @BeforeClass
+    public static void beforeClass() throws SonicRespException {
         Boolean hasThrow = false;
         try {
             new IOSDriver("http://localhost:8100", null);
@@ -62,34 +61,48 @@ public class IOSDriverTest {
     }
 
     @Test
-    public void test_02_Swipe() throws SonicRespException, InterruptedException {
+    public void testApp() throws SonicRespException {
+        iosDriver.appActivate("developer.apple.wwdc-Release");
+    }
+
+    @Test
+    public void testSiriAndSendKeys() throws SonicRespException, InterruptedException {
+        iosDriver.sendSiriCommand("打开提醒事项");
+        Thread.sleep(4000);
+        iosDriver.tap(150, 181);
+        iosDriver.sendKeys("123", 0);
+        iosDriver.sendKeys("123");
+    }
+
+    @Test
+    public void testSwipe() throws SonicRespException, InterruptedException {
         iosDriver.swipe(100, 256, 50, 256);
         Thread.sleep(500);
         iosDriver.swipe(50, 256, 100, 256);
     }
 
     @Test
-    public void test_03_Tap() throws SonicRespException, InterruptedException {
+    public void testTap() throws SonicRespException, InterruptedException {
         iosDriver.tap(150, 81);
         Thread.sleep(500);
         iosDriver.pressButton(SystemButton.HOME);
     }
 
     @Test
-    public void test_04_LongPress() throws SonicRespException {
+    public void testLongPress() throws SonicRespException {
         iosDriver.longPress(150, 281, 1500);
         iosDriver.pressButton(SystemButton.HOME);
     }
 
     @Test
-    public void test_05_PerformTouchAction() throws SonicRespException, InterruptedException {
+    public void testPerformTouchAction() throws SonicRespException, InterruptedException {
         iosDriver.performTouchAction(new TouchActions().press(100, 256).wait(50).move(50, 256).wait(10).release());
         Thread.sleep(500);
         iosDriver.performTouchAction(new TouchActions().press(50, 256).wait(50).move(100, 256).wait(10).release());
     }
 
     @Test
-    public void test_06_PressButton() throws SonicRespException, InterruptedException {
+    public void testPressButton() throws SonicRespException, InterruptedException {
         iosDriver.pressButton(SystemButton.HOME);
         Thread.sleep(1000);
         iosDriver.pressButton(SystemButton.VOLUME_DOWN);
@@ -100,18 +113,12 @@ public class IOSDriverTest {
     }
 
     @Test
-    public void test_07_SendKeys() throws SonicRespException {
-        iosDriver.sendKeys("123", 0);
-        iosDriver.sendKeys("123");
-    }
-
-    @Test
-    public void test_08_GetPageSource() throws SonicRespException {
+    public void testGetPageSource() throws SonicRespException {
         Assert.assertTrue(iosDriver.getPageSource().contains("XCUIElementTypeApplication"));
     }
 
     @Test
-    public void test_09_Lock() throws SonicRespException {
+    public void testLock() throws SonicRespException {
         iosDriver.lock();
         Assert.assertTrue(iosDriver.isLocked());
         iosDriver.unlock();
@@ -119,7 +126,7 @@ public class IOSDriverTest {
     }
 
     @Test
-    public void test_10_Session() {
+    public void testSession() {
         String sessionId = iosDriver.getSessionId();
         iosDriver.getWdaClient().setSessionId(null);
         Boolean hasThrow = false;

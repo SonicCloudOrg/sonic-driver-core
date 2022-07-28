@@ -57,6 +57,12 @@ public interface WdaClient {
     //keyboard handler.
     void sendKeys(String text, Integer frequency) throws SonicRespException;
 
-    //source
+    //source handler.
     String pageSource() throws SonicRespException;
+
+    //siri handler.
+    void sendSiriCommand(String command) throws SonicRespException;
+
+    //app handler.
+    void appActivate(String bundleId) throws SonicRespException;
 }

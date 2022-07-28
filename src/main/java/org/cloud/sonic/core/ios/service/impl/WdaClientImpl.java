@@ -48,6 +48,13 @@ public class WdaClientImpl implements WdaClient {
         }
     }
 
+    private void checkBundleId(String bundleId) throws SonicRespException {
+        if (bundleId == null || bundleId.length() == 0) {
+            log.error("bundleId not found.");
+            throw new SonicRespException("bundleId not found.");
+        }
+    }
+
     @Override
     public void setGlobalTimeOut(int timeOut) {
         respHandler.setRequestTimeOut(timeOut);
@@ -188,6 +195,42 @@ public class WdaClientImpl implements WdaClient {
             return b.getValue().toString();
         } else {
             log.error("get page source failed.");
+            throw new SonicRespException(b.getErr().getMessage());
+        }
+    }
+
+    @Override
+    public void sendSiriCommand(String command) throws SonicRespException {
+        if (command != null || command.length() == 0) {
+            checkSessionId();
+            JSONObject data = new JSONObject();
+            data.put("text", command);
+            BaseResp b = respHandler.getResp(HttpUtil.createPost(remoteUrl + "/session/" + sessionId + "/wda/siri/activate")
+                    .body(data.toJSONString()));
+            if (b.getErr() == null) {
+                log.info("send siri command: {}", command);
+            } else {
+                log.error("send siri command [{}] failed.", command);
+                throw new SonicRespException(b.getErr().getMessage());
+            }
+        } else {
+            log.error("siri command is null!");
+            throw new SonicRespException("siri command is null!");
+        }
+    }
+
+    @Override
+    public void appActivate(String bundleId) throws SonicRespException {
+        checkSessionId();
+        checkBundleId(bundleId);
+        JSONObject data = new JSONObject();
+        data.put("bundleId", bundleId);
+        BaseResp b = respHandler.getResp(HttpUtil.createPost(remoteUrl + "/session/" + sessionId + "/wda/apps/activate")
+                .body(data.toJSONString()));
+        if (b.getErr() == null) {
+            log.info("activate app {}.", bundleId);
+        } else {
+            log.error("activate app {} failed.", bundleId);
             throw new SonicRespException(b.getErr().getMessage());
         }
     }

@@ -31,7 +31,7 @@ public class IOSDriver {
     private WdaClient wdaClient;
 
     /**
-     * Init ios driver
+     * Init ios driver.
      *
      * @param url
      * @throws SonicRespException
@@ -41,7 +41,7 @@ public class IOSDriver {
     }
 
     /**
-     * Init ios driver
+     * Init ios driver.
      *
      * @param url
      * @param timeOut
@@ -52,7 +52,7 @@ public class IOSDriver {
     }
 
     /**
-     * Init ios driver
+     * Init ios driver.
      *
      * @param url
      * @param cap
@@ -63,7 +63,7 @@ public class IOSDriver {
     }
 
     /**
-     * Init ios driver
+     * Init ios driver.
      *
      * @param url
      * @param timeOut
@@ -78,7 +78,7 @@ public class IOSDriver {
     }
 
     /**
-     * Get wda client
+     * Get wda client.
      *
      * @return
      */
@@ -87,7 +87,7 @@ public class IOSDriver {
     }
 
     /**
-     * get wda sessionId
+     * get wda sessionId.
      *
      * @return
      */
@@ -96,7 +96,7 @@ public class IOSDriver {
     }
 
     /**
-     * destroy sessionId
+     * destroy sessionId.
      *
      * @throws SonicRespException
      */
@@ -105,7 +105,7 @@ public class IOSDriver {
     }
 
     /**
-     * get device lock status
+     * get device lock status.
      *
      * @return
      * @throws SonicRespException
@@ -115,7 +115,7 @@ public class IOSDriver {
     }
 
     /**
-     * lock device
+     * lock device.
      *
      * @throws SonicRespException
      */
@@ -124,7 +124,7 @@ public class IOSDriver {
     }
 
     /**
-     * unlock device
+     * unlock device.
      *
      * @throws SonicRespException
      */
@@ -133,7 +133,7 @@ public class IOSDriver {
     }
 
     /**
-     * tap position on screen
+     * tap position on screen.
      *
      * @param x
      * @param y
@@ -144,7 +144,7 @@ public class IOSDriver {
     }
 
     /**
-     * long press position on screen
+     * long press position on screen.
      *
      * @param x
      * @param y
@@ -156,7 +156,7 @@ public class IOSDriver {
     }
 
     /**
-     * swipe position on screen
+     * swipe position on screen.
      *
      * @param fromX
      * @param fromY
@@ -169,7 +169,7 @@ public class IOSDriver {
     }
 
     /**
-     * perform touch action
+     * perform touch action.
      *
      * @param touchActions
      * @throws SonicRespException
@@ -199,7 +199,7 @@ public class IOSDriver {
     }
 
     /**
-     * send key without element
+     * send key without element.
      *
      * @param text
      * @throws SonicRespException
@@ -209,7 +209,7 @@ public class IOSDriver {
     }
 
     /**
-     * send key without element
+     * send key without element.
      *
      * @param text
      * @param frequency
@@ -220,12 +220,32 @@ public class IOSDriver {
     }
 
     /**
-     * get page source
+     * get page source.
      *
      * @return
      * @throws SonicRespException
      */
     public String getPageSource() throws SonicRespException {
         return wdaClient.pageSource();
+    }
+
+    /**
+     * send siri command.
+     *
+     * @param command
+     * @throws SonicRespException
+     */
+    public void sendSiriCommand(String command) throws SonicRespException {
+        wdaClient.sendSiriCommand(command);
+    }
+
+    /**
+     * activate app.
+     *
+     * @param bundleId
+     * @throws SonicRespException
+     */
+    public void appActivate(String bundleId) throws SonicRespException {
+        wdaClient.appActivate(bundleId);
     }
 }
