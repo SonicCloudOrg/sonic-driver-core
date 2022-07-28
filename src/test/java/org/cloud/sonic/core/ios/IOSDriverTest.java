@@ -42,11 +42,15 @@ public class IOSDriverTest {
 
     @Test
     public void test_01_driver() throws SonicRespException {
+        Boolean hasThrow = false;
         try {
             new IOSDriver("http://localhost:8100", null);
-        } catch (SonicRespException e) {
-            Assert.assertEquals(e.getMessage(), "'capabilities' is mandatory to create a new session");
+        } catch (Throwable e) {
+            hasThrow = true;
+            Assert.assertEquals(SonicRespException.class, e.getClass());
+            Assert.assertEquals("'capabilities' is mandatory to create a new session", e.getMessage());
         }
+        Assert.assertTrue(hasThrow);
         iosDriver = new IOSDriver("http://localhost:8100", new JSONObject());
         Assert.assertEquals("http://localhost:8100", iosDriver.getWdaClient().getRemoteUrl());
         Assert.assertTrue(iosDriver.getSessionId().length() > 0);
@@ -117,11 +121,15 @@ public class IOSDriverTest {
     public void test_10_Session() {
         String sessionId = iosDriver.getSessionId();
         iosDriver.getWdaClient().setSessionId(null);
+        Boolean hasThrow = false;
         try {
             iosDriver.getWdaClient().lock();
-        } catch (SonicRespException e) {
-            Assert.assertEquals(e.getMessage(), "sessionId not found.");
+        } catch (Throwable e) {
+            hasThrow = true;
+            Assert.assertEquals(SonicRespException.class, e.getClass());
+            Assert.assertEquals("sessionId not found.", e.getMessage());
         }
+        Assert.assertTrue(hasThrow);
         iosDriver.getWdaClient().setSessionId(sessionId);
     }
 

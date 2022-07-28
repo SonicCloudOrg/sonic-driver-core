@@ -7,13 +7,17 @@ import org.junit.Test;
 
 public class RespHandlerTest {
     @Test
-    public void testTimeOut(){
+    public void testTimeOut() {
         RespHandler respHandler = new RespHandler();
-        respHandler.setRequestTimeOut(1);
+        respHandler.setRequestTimeOut(0);
+        Boolean hasThrow = false;
         try {
             respHandler.getResp(HttpUtil.createGet("localhost:1234"));
-        }catch (SonicRespException e){
-            Assert.assertTrue(e.getMessage().contains("connect timed out"));
+        } catch (Throwable e) {
+            hasThrow = true;
+            Assert.assertEquals(SonicRespException.class, e.getClass());
+            Assert.assertTrue(e.getMessage().contains("connect"));
         }
+        Assert.assertTrue(hasThrow);
     }
 }
