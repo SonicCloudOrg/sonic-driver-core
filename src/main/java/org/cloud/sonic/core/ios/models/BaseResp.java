@@ -18,9 +18,11 @@ package org.cloud.sonic.core.ios.models;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 public class BaseResp<T> {
     private String sessionId;
     private ErrorMsg err;

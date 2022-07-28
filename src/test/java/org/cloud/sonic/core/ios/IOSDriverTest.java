@@ -124,4 +124,9 @@ public class IOSDriverTest {
         }
         iosDriver.getWdaClient().setSessionId(sessionId);
     }
+
+    @AfterClass
+    public static void after() throws SonicRespException {
+        iosDriver.closeDriver();
+    }
 }

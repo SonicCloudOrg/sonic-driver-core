@@ -35,7 +35,11 @@ import java.util.Base64;
 public class WdaClientImpl implements WdaClient {
     private String remoteUrl;
     private String sessionId;
-    private RespHandler respHandler = new RespHandler();
+    private RespHandler respHandler;
+
+    public WdaClientImpl() {
+        respHandler = new RespHandler();
+    }
 
     private void checkSessionId() throws SonicRespException {
         if (sessionId == null || sessionId.length() == 0) {
