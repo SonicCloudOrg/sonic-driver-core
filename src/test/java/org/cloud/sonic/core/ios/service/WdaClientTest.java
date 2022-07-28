@@ -41,6 +41,7 @@ public class WdaClientTest {
         RespHandler respHandler = Mockito.mock(RespHandler.class);
         BaseResp b = new BaseResp();
         b.setErr(new ErrorMsg("testErr", ERROR_MSG, "traceback"));
+        Assert.assertNull(b.getSessionId());
         Mockito.when(respHandler.getResp(Mockito.any())).thenReturn(b);
         Mockito.when(respHandler.getResp(Mockito.any(),Mockito.anyInt())).thenReturn(b);
         Field respField = wdaClient.getClass().getDeclaredField("respHandler");

@@ -16,15 +16,21 @@
  */
 package org.cloud.sonic.core.ios.models;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Data
-@AllArgsConstructor
+@Getter
 @NoArgsConstructor
 public class BaseResp<T> {
     private String sessionId;
     private ErrorMsg err;
     private T value;
+
+    public void setErr(ErrorMsg err) {
+        this.err = err;
+    }
+
+    public void setValue(T value) {
+        this.value = value;
+    }
 }
