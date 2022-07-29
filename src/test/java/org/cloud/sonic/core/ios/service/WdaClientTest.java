@@ -19,6 +19,7 @@ package org.cloud.sonic.core.ios.service;
 import org.cloud.sonic.core.ios.RespHandler;
 import org.cloud.sonic.core.ios.models.BaseResp;
 import org.cloud.sonic.core.ios.models.ErrorMsg;
+import org.cloud.sonic.core.ios.models.PasteboardType;
 import org.cloud.sonic.core.ios.models.TouchActions;
 import org.cloud.sonic.core.ios.service.impl.WdaClientImpl;
 import org.cloud.sonic.core.tool.SonicRespException;
@@ -43,7 +44,7 @@ public class WdaClientTest {
         b.setErr(new ErrorMsg("testErr", ERROR_MSG, "traceback"));
         Assert.assertNull(b.getSessionId());
         Mockito.when(respHandler.getResp(Mockito.any())).thenReturn(b);
-        Mockito.when(respHandler.getResp(Mockito.any(),Mockito.anyInt())).thenReturn(b);
+        Mockito.when(respHandler.getResp(Mockito.any(), Mockito.anyInt())).thenReturn(b);
         Field respField = wdaClient.getClass().getDeclaredField("respHandler");
         respField.setAccessible(true);
         respField.set(wdaClient, respHandler);
@@ -57,7 +58,7 @@ public class WdaClientTest {
         } catch (Throwable e) {
             hasThrow = true;
             Assert.assertEquals(SonicRespException.class, e.getClass());
-            Assert.assertEquals(e.getMessage(),ERROR_MSG);
+            Assert.assertEquals(e.getMessage(), ERROR_MSG);
         }
         Assert.assertTrue(hasThrow);
     }
@@ -70,7 +71,7 @@ public class WdaClientTest {
         } catch (Throwable e) {
             hasThrow = true;
             Assert.assertEquals(SonicRespException.class, e.getClass());
-            Assert.assertEquals(e.getMessage(),ERROR_MSG);
+            Assert.assertEquals(e.getMessage(), ERROR_MSG);
         }
         Assert.assertTrue(hasThrow);
     }
@@ -83,7 +84,7 @@ public class WdaClientTest {
         } catch (Throwable e) {
             hasThrow = true;
             Assert.assertEquals(SonicRespException.class, e.getClass());
-            Assert.assertEquals(e.getMessage(),ERROR_MSG);
+            Assert.assertEquals(e.getMessage(), ERROR_MSG);
         }
         Assert.assertTrue(hasThrow);
     }
@@ -96,7 +97,7 @@ public class WdaClientTest {
         } catch (Throwable e) {
             hasThrow = true;
             Assert.assertEquals(SonicRespException.class, e.getClass());
-            Assert.assertEquals(e.getMessage(),ERROR_MSG);
+            Assert.assertEquals(e.getMessage(), ERROR_MSG);
         }
         Assert.assertTrue(hasThrow);
     }
@@ -105,11 +106,37 @@ public class WdaClientTest {
     public void testSendKeys() {
         Boolean hasThrow = false;
         try {
-            wdaClient.sendKeys("test",1);
+            wdaClient.sendKeys("test", 1);
         } catch (Throwable e) {
             hasThrow = true;
             Assert.assertEquals(SonicRespException.class, e.getClass());
-            Assert.assertEquals(e.getMessage(),ERROR_MSG);
+            Assert.assertEquals(e.getMessage(), ERROR_MSG);
+        }
+        Assert.assertTrue(hasThrow);
+    }
+
+    @Test
+    public void testSetPasteboard() {
+        Boolean hasThrow = false;
+        try {
+            wdaClient.setPasteboard(PasteboardType.PLAIN_TEXT.getType(),"text");
+        } catch (Throwable e) {
+            hasThrow = true;
+            Assert.assertEquals(SonicRespException.class, e.getClass());
+            Assert.assertEquals(e.getMessage(), ERROR_MSG);
+        }
+        Assert.assertTrue(hasThrow);
+    }
+
+    @Test
+    public void testGetPasteboard() {
+        Boolean hasThrow = false;
+        try {
+            wdaClient.getPasteboard(PasteboardType.PLAIN_TEXT.getType());
+        } catch (Throwable e) {
+            hasThrow = true;
+            Assert.assertEquals(SonicRespException.class, e.getClass());
+            Assert.assertEquals(e.getMessage(), ERROR_MSG);
         }
         Assert.assertTrue(hasThrow);
     }
@@ -122,7 +149,7 @@ public class WdaClientTest {
         } catch (Throwable e) {
             hasThrow = true;
             Assert.assertEquals(SonicRespException.class, e.getClass());
-            Assert.assertEquals(e.getMessage(),ERROR_MSG);
+            Assert.assertEquals(e.getMessage(), ERROR_MSG);
         }
         Assert.assertTrue(hasThrow);
     }
@@ -135,7 +162,59 @@ public class WdaClientTest {
         } catch (Throwable e) {
             hasThrow = true;
             Assert.assertEquals(SonicRespException.class, e.getClass());
-            Assert.assertEquals(e.getMessage(),ERROR_MSG);
+            Assert.assertEquals(e.getMessage(), ERROR_MSG);
+        }
+        Assert.assertTrue(hasThrow);
+    }
+
+    @Test
+    public void testSiriCommand() {
+        Boolean hasThrow = false;
+        try {
+            wdaClient.sendSiriCommand("home");
+        } catch (Throwable e) {
+            hasThrow = true;
+            Assert.assertEquals(SonicRespException.class, e.getClass());
+            Assert.assertEquals(e.getMessage(), ERROR_MSG);
+        }
+        Assert.assertTrue(hasThrow);
+    }
+
+    @Test
+    public void testAppActivate() {
+        Boolean hasThrow = false;
+        try {
+            wdaClient.appActivate("developer.apple.wwdc-Release");
+        } catch (Throwable e) {
+            hasThrow = true;
+            Assert.assertEquals(SonicRespException.class, e.getClass());
+            Assert.assertEquals(e.getMessage(), ERROR_MSG);
+        }
+        Assert.assertTrue(hasThrow);
+    }
+
+    @Test
+    public void testAppTerminate() {
+        Boolean hasThrow = false;
+        try {
+            wdaClient.appTerminate("developer.apple.wwdc-Release");
+        } catch (Throwable e) {
+            hasThrow = true;
+            Assert.assertEquals(SonicRespException.class, e.getClass());
+            Assert.assertEquals(e.getMessage(), ERROR_MSG);
+        }
+        Assert.assertTrue(hasThrow);
+    }
+
+    @Test
+    public void testAppAuthReset() {
+        Boolean hasThrow = false;
+        try {
+            wdaClient.appAuthReset(6);
+        } catch (Throwable e) {
+            hasThrow = true;
+            Assert.assertEquals(SonicRespException.class, e.getClass());
+            Assert.assertEquals(e.getMessage(), ERROR_MSG);
         }
         Assert.assertTrue(hasThrow);
     }

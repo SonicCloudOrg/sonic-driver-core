@@ -21,9 +21,9 @@ import cn.hutool.http.Method;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import lombok.extern.slf4j.Slf4j;
+import org.cloud.sonic.core.ios.RespHandler;
 import org.cloud.sonic.core.ios.models.BaseResp;
 import org.cloud.sonic.core.ios.models.SessionInfo;
-import org.cloud.sonic.core.ios.RespHandler;
 import org.cloud.sonic.core.ios.models.TouchActions;
 import org.cloud.sonic.core.ios.service.WdaClient;
 import org.cloud.sonic.core.tool.SonicRespException;
@@ -187,6 +187,39 @@ public class WdaClientImpl implements WdaClient {
     }
 
     @Override
+    public void setPasteboard(String contentType, String content) throws SonicRespException {
+        checkSessionId();
+        JSONObject data = new JSONObject();
+        data.put("contentType", contentType);
+        data.put("content", Base64.getEncoder().encodeToString(content.getBytes(StandardCharsets.UTF_8)));
+        BaseResp b = respHandler.getResp(HttpUtil.createPost(remoteUrl + "/session/" + sessionId + "/wda/setPasteboard")
+                .body(data.toJSONString()));
+        if (b.getErr() == null) {
+            log.info("set pasteboard {} .", content);
+        } else {
+            log.error("set pasteboard failed.");
+            throw new SonicRespException(b.getErr().getMessage());
+        }
+    }
+
+    @Override
+    public byte[] getPasteboard(String contentType) throws SonicRespException {
+        checkSessionId();
+        JSONObject data = new JSONObject();
+        data.put("contentType", contentType);
+        BaseResp b = respHandler.getResp(HttpUtil.createPost(remoteUrl + "/session/" + sessionId + "/wda/getPasteboard")
+                .body(data.toJSONString()));
+        if (b.getErr() == null) {
+            byte[] result = Base64.getDecoder().decode(b.getValue().toString());
+            log.info("get pasteboard {} .", result);
+            return result;
+        } else {
+            log.error("get pasteboard failed.");
+            throw new SonicRespException(b.getErr().getMessage());
+        }
+    }
+
+    @Override
     public String pageSource() throws SonicRespException {
         checkSessionId();
         BaseResp b = respHandler.getResp(HttpUtil.createGet(remoteUrl + "/session/" + sessionId + "/source"), 60000);
@@ -201,7 +234,7 @@ public class WdaClientImpl implements WdaClient {
 
     @Override
     public void sendSiriCommand(String command) throws SonicRespException {
-        if (command != null || command.length() == 0) {
+        if (command != null && command.length() != 0) {
             checkSessionId();
             JSONObject data = new JSONObject();
             data.put("text", command);
@@ -235,5 +268,36 @@ public class WdaClientImpl implements WdaClient {
         }
     }
 
+    @Override
+    public boolean appTerminate(String bundleId) throws SonicRespException {
+        checkSessionId();
+        checkBundleId(bundleId);
+        JSONObject data = new JSONObject();
+        data.put("bundleId", bundleId);
+        BaseResp b = respHandler.getResp(HttpUtil.createPost(remoteUrl + "/session/" + sessionId + "/wda/apps/terminate")
+                .body(data.toJSONString()));
+        if (b.getErr() == null) {
+            log.info("terminate app {} status: {}.", bundleId, b.getValue());
+            return (boolean) b.getValue();
+        } else {
+            log.error("terminate app failed.", bundleId);
+            throw new SonicRespException(b.getErr().getMessage());
+        }
+    }
+
+    @Override
+    public void appAuthReset(int resource) throws SonicRespException {
+        checkSessionId();
+        JSONObject data = new JSONObject();
+        data.put("resource", resource);
+        BaseResp b = respHandler.getResp(HttpUtil.createPost(remoteUrl + "/session/" + sessionId + "/wda/resetAppAuth")
+                .body(data.toJSONString()));
+        if (b.getErr() == null) {
+            log.info("reset app auth {}.", resource);
+        } else {
+            log.error("reset app auth failed.");
+            throw new SonicRespException(b.getErr().getMessage());
+        }
+    }
 
 }

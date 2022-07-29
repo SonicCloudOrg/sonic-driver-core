@@ -17,8 +17,7 @@
 package org.cloud.sonic.core.ios;
 
 import com.alibaba.fastjson.JSONObject;
-import org.cloud.sonic.core.ios.models.SystemButton;
-import org.cloud.sonic.core.ios.models.TouchActions;
+import org.cloud.sonic.core.ios.models.*;
 import org.cloud.sonic.core.tool.SonicRespException;
 import org.junit.*;
 import org.junit.runner.RunWith;
@@ -63,15 +62,63 @@ public class IOSDriverTest {
     @Test
     public void testApp() throws SonicRespException {
         iosDriver.appActivate("developer.apple.wwdc-Release");
+        Boolean hasThrow = false;
+        try {
+            iosDriver.appActivate("");
+        } catch (Throwable e) {
+            hasThrow = true;
+            Assert.assertEquals(SonicRespException.class, e.getClass());
+            Assert.assertEquals("bundleId not found.", e.getMessage());
+        }
+        Assert.assertTrue(hasThrow);
+        hasThrow = false;
+        try {
+            iosDriver.appActivate(null);
+        } catch (Throwable e) {
+            hasThrow = true;
+            Assert.assertEquals(SonicRespException.class, e.getClass());
+            Assert.assertEquals("bundleId not found.", e.getMessage());
+        }
+        Assert.assertTrue(hasThrow);
+        Assert.assertTrue(iosDriver.appTerminate("developer.apple.wwdc-Release"));
+        Assert.assertFalse(iosDriver.appTerminate("developer.apple.wwdc-Release"));
+        iosDriver.appAuthReset(AuthResource.CAMERA);
     }
 
     @Test
     public void testSiriAndSendKeys() throws SonicRespException, InterruptedException {
         iosDriver.sendSiriCommand("打开提醒事项");
+        Boolean hasThrow = false;
+        try {
+            iosDriver.sendSiriCommand("");
+        } catch (Throwable e) {
+            hasThrow = true;
+            Assert.assertEquals(SonicRespException.class, e.getClass());
+            Assert.assertEquals("siri command is null!", e.getMessage());
+        }
+        Assert.assertTrue(hasThrow);
+        hasThrow = false;
+        try {
+            iosDriver.sendSiriCommand(null);
+        } catch (Throwable e) {
+            hasThrow = true;
+            Assert.assertEquals(SonicRespException.class, e.getClass());
+            Assert.assertEquals("siri command is null!", e.getMessage());
+        }
+        Assert.assertTrue(hasThrow);
         Thread.sleep(4000);
         iosDriver.tap(150, 181);
-        iosDriver.sendKeys("123", 0);
-        iosDriver.sendKeys("123");
+        iosDriver.sendKeys("12");
+        iosDriver.sendKeys(TextKey.DELETE);
+        iosDriver.sendKeys(TextKey.BACK_SPACE);
+    }
+
+    @Test
+    @Ignore
+    public void testPasteboard() throws SonicRespException {
+        iosDriver.setPasteboard(PasteboardType.PLAIN_TEXT, "sdc");
+        iosDriver.appActivate("com.apple.springboard");
+        Assert.assertEquals("sdc", new String(iosDriver.getPasteboard(PasteboardType.PLAIN_TEXT.getType())));
     }
 
     @Test

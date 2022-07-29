@@ -57,6 +57,10 @@ public interface WdaClient {
     //keyboard handler.
     void sendKeys(String text, Integer frequency) throws SonicRespException;
 
+    void setPasteboard(String contentType, String content) throws SonicRespException;
+
+    byte[] getPasteboard(String contentType) throws SonicRespException;
+
     //source handler.
     String pageSource() throws SonicRespException;
 
@@ -65,4 +69,8 @@ public interface WdaClient {
 
     //app handler.
     void appActivate(String bundleId) throws SonicRespException;
+
+    boolean appTerminate(String bundleId) throws SonicRespException;
+
+    void appAuthReset(int resource) throws SonicRespException;
 }

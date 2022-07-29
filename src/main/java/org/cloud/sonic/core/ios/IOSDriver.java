@@ -17,8 +17,7 @@
 package org.cloud.sonic.core.ios;
 
 import com.alibaba.fastjson.JSONObject;
-import org.cloud.sonic.core.ios.models.SystemButton;
-import org.cloud.sonic.core.ios.models.TouchActions;
+import org.cloud.sonic.core.ios.models.*;
 import org.cloud.sonic.core.ios.service.WdaClient;
 import org.cloud.sonic.core.ios.service.impl.WdaClientImpl;
 import org.cloud.sonic.core.tool.SonicRespException;
@@ -140,7 +139,7 @@ public class IOSDriver {
      * @throws SonicRespException
      */
     public void tap(int x, int y) throws SonicRespException {
-        wdaClient.performTouchAction(new TouchActions().press(x, y).release());
+        performTouchAction(new TouchActions().press(x, y).release());
     }
 
     /**
@@ -152,7 +151,7 @@ public class IOSDriver {
      * @throws SonicRespException
      */
     public void longPress(int x, int y, int ms) throws SonicRespException {
-        wdaClient.performTouchAction(new TouchActions().press(x, y).wait(ms).release());
+        performTouchAction(new TouchActions().press(x, y).wait(ms).release());
     }
 
     /**
@@ -165,7 +164,7 @@ public class IOSDriver {
      * @throws SonicRespException
      */
     public void swipe(int fromX, int fromY, int toX, int toY) throws SonicRespException {
-        wdaClient.performTouchAction(new TouchActions().press(fromX, fromY).wait(50).move(toX, toY).wait(10).release());
+        performTouchAction(new TouchActions().press(fromX, fromY).wait(50).move(toX, toY).wait(10).release());
     }
 
     /**
@@ -220,6 +219,71 @@ public class IOSDriver {
     }
 
     /**
+     * send key without element.
+     *
+     * @param text
+     * @throws SonicRespException
+     */
+    public void sendKeys(TextKey text) throws SonicRespException {
+        sendKeys(text, 3);
+    }
+
+    /**
+     * send key without element.
+     *
+     * @param text
+     * @param frequency
+     * @throws SonicRespException
+     */
+    public void sendKeys(TextKey text, int frequency) throws SonicRespException {
+        sendKeys(text.getKey(), frequency);
+    }
+
+    /**
+     * set pasteboard.
+     *
+     * @param contentType
+     * @param content
+     * @throws SonicRespException
+     */
+    public void setPasteboard(String contentType, String content) throws SonicRespException {
+        wdaClient.setPasteboard(contentType, content);
+    }
+
+    /**
+     * set pasteboard.
+     *
+     * @param pasteboardType
+     * @param content
+     * @throws SonicRespException
+     */
+    public void setPasteboard(PasteboardType pasteboardType, String content) throws SonicRespException {
+        setPasteboard(pasteboardType.getType(), content);
+    }
+
+    /**
+     * get pasteboard.
+     *
+     * @param contentType
+     * @return
+     * @throws SonicRespException
+     */
+    public byte[] getPasteboard(String contentType) throws SonicRespException {
+        return wdaClient.getPasteboard(contentType);
+    }
+
+    /**
+     * get pasteboard.
+     *
+     * @param pasteboardType
+     * @return
+     * @throws SonicRespException
+     */
+    public byte[] getPasteboard(PasteboardType pasteboardType) throws SonicRespException {
+        return getPasteboard(pasteboardType.getType());
+    }
+
+    /**
      * get page source.
      *
      * @return
@@ -247,5 +311,36 @@ public class IOSDriver {
      */
     public void appActivate(String bundleId) throws SonicRespException {
         wdaClient.appActivate(bundleId);
+    }
+
+    /**
+     * terminate app and get status.
+     *
+     * @param bundleId
+     * @return
+     * @throws SonicRespException
+     */
+    public boolean appTerminate(String bundleId) throws SonicRespException {
+        return wdaClient.appTerminate(bundleId);
+    }
+
+    /**
+     * reset app auth source.
+     *
+     * @param resource
+     * @throws SonicRespException
+     */
+    public void appAuthReset(int resource) throws SonicRespException {
+        wdaClient.appAuthReset(resource);
+    }
+
+    /**
+     * reset app auth source.
+     *
+     * @param authResource
+     * @throws SonicRespException
+     */
+    public void appAuthReset(AuthResource authResource) throws SonicRespException {
+        appAuthReset(authResource.getResource());
     }
 }
