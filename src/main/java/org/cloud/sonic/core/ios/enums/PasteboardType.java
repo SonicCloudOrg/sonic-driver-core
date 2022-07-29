@@ -14,19 +14,19 @@
  *  limitations under the License.
  *
  */
-package org.cloud.sonic.core.ios.models;
+package org.cloud.sonic.core.ios.enums;
 
-public enum TextKey {
-    BACK_SPACE("\u0008"),
-    DELETE("\u007F");
+public enum PasteboardType {
+    PLAIN_TEXT("plaintext"),
+    IMAGE("image"),
+    URL("url");
 
-    private final String key;
-
-    TextKey(String key) {
-        this.key = key;
+    private final String type;
+    PasteboardType(String pasteboardType) {
+        this.type = pasteboardType;
     }
 
-    public String getKey() {
-        return key;
+    public String getType() {
+        return type;
     }
 }

@@ -25,6 +25,7 @@ import org.cloud.sonic.core.ios.RespHandler;
 import org.cloud.sonic.core.ios.models.BaseResp;
 import org.cloud.sonic.core.ios.models.SessionInfo;
 import org.cloud.sonic.core.ios.models.TouchActions;
+import org.cloud.sonic.core.ios.models.WebElement;
 import org.cloud.sonic.core.ios.service.WdaClient;
 import org.cloud.sonic.core.tool.SonicRespException;
 
@@ -298,6 +299,15 @@ public class WdaClientImpl implements WdaClient {
             log.error("reset app auth failed.");
             throw new SonicRespException(b.getErr().getMessage());
         }
+    }
+
+    @Override
+    public WebElement findElement() {
+        //debug
+        WebElement webElement = new WebElement();
+        webElement.setId("xx");
+        webElement.setWdaClient(this);
+        return webElement;
     }
 
 }

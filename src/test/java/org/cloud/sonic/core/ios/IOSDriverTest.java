@@ -17,11 +17,14 @@
 package org.cloud.sonic.core.ios;
 
 import com.alibaba.fastjson.JSONObject;
+import org.cloud.sonic.core.ios.enums.AuthResource;
+import org.cloud.sonic.core.ios.enums.PasteboardType;
+import org.cloud.sonic.core.ios.enums.SystemButton;
+import org.cloud.sonic.core.ios.enums.TextKey;
 import org.cloud.sonic.core.ios.models.*;
 import org.cloud.sonic.core.tool.SonicRespException;
 import org.junit.*;
 import org.junit.runner.RunWith;
-import org.junit.runners.MethodSorters;
 import org.junit.runners.Parameterized;
 
 @RunWith(Parameterized.class)

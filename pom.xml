@@ -77,7 +77,7 @@
         <dependency>
             <groupId>cn.hutool</groupId>
             <artifactId>hutool-http</artifactId>
-            <version>5.8.4</version>
+            <version>5.8.5</version>
         </dependency>
         <dependency>
             <groupId>com.alibaba</groupId>

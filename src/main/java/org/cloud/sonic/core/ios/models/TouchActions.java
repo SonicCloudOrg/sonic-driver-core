@@ -18,6 +18,7 @@ package org.cloud.sonic.core.ios.models;
 
 import lombok.Getter;
 import lombok.ToString;
+import org.cloud.sonic.core.ios.enums.ActionType;
 
 import java.util.ArrayList;
 import java.util.List;

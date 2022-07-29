@@ -16,31 +16,13 @@
  */
 package org.cloud.sonic.core.ios.models;
 
-public enum AuthResource {
-    CONTACTS(1),
-    CALENDAR(2),
-    REMINDERS(3),
-    PHOTOS(4),
-    MICROPHONE(5),
-    CAMERA(6),
-    MEDIA_LIBRARY(7),
-    HOME_KIT(8),
-    SYSTEM_ROOT_DIRECTORY(0x40000000),
-    USER_DESKTOP_DIRECTORY(0x40000001),
-    USER_DOWNLOADS_DIRECTORY(0x40000002),
-    USER_DOCUMENTS_DIRECTORY(0x40000003),
-    BLUETOOTH(-0x40000000),
-    KEYBOARD_NETWORK(-0x40000001),
-    LOCATION(-0x40000002),
-    HEALTH(-0x40000003);
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.cloud.sonic.core.ios.service.WdaClient;
 
-    private final int resource;
-
-    AuthResource(int resource) {
-        this.resource = resource;
-    }
-
-    public int getResource() {
-        return resource;
-    }
+@Setter
+@NoArgsConstructor
+public class WebElement {
+    private String id;
+    private WdaClient wdaClient;
 }

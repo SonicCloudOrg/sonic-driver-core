@@ -14,19 +14,19 @@
  *  limitations under the License.
  *
  */
-package org.cloud.sonic.core.ios.models;
+package org.cloud.sonic.core.ios.enums;
 
-public enum PasteboardType {
-    PLAIN_TEXT("plaintext"),
-    IMAGE("image"),
-    URL("url");
+public enum SystemButton {
+    HOME("home"),
+    VOLUME_UP("volumeUp"),
+    VOLUME_DOWN("volumeDown");
 
-    private final String type;
-    PasteboardType(String pasteboardType) {
-        this.type = pasteboardType;
+    private final String button;
+    SystemButton(String button) {
+        this.button = button;
     }
 
-    public String getType() {
-        return type;
+    public String getButton() {
+        return button;
     }
 }

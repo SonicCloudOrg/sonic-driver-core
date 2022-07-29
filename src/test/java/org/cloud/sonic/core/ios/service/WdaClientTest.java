@@ -19,7 +19,7 @@ package org.cloud.sonic.core.ios.service;
 import org.cloud.sonic.core.ios.RespHandler;
 import org.cloud.sonic.core.ios.models.BaseResp;
 import org.cloud.sonic.core.ios.models.ErrorMsg;
-import org.cloud.sonic.core.ios.models.PasteboardType;
+import org.cloud.sonic.core.ios.enums.PasteboardType;
 import org.cloud.sonic.core.ios.models.TouchActions;
 import org.cloud.sonic.core.ios.service.impl.WdaClientImpl;
 import org.cloud.sonic.core.tool.SonicRespException;

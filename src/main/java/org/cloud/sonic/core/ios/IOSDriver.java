@@ -17,6 +17,10 @@
 package org.cloud.sonic.core.ios;
 
 import com.alibaba.fastjson.JSONObject;
+import org.cloud.sonic.core.ios.enums.AuthResource;
+import org.cloud.sonic.core.ios.enums.PasteboardType;
+import org.cloud.sonic.core.ios.enums.SystemButton;
+import org.cloud.sonic.core.ios.enums.TextKey;
 import org.cloud.sonic.core.ios.models.*;
 import org.cloud.sonic.core.ios.service.WdaClient;
 import org.cloud.sonic.core.ios.service.impl.WdaClientImpl;

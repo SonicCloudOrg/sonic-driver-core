@@ -14,7 +14,7 @@
  *  limitations under the License.
  *
  */
-package org.cloud.sonic.core.ios.models;
+package org.cloud.sonic.core.ios.enums;
 
 public enum ActionType {
     PRESS("press"),

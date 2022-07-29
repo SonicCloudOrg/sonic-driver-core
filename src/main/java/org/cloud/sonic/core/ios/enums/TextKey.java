@@ -14,19 +14,19 @@
  *  limitations under the License.
  *
  */
-package org.cloud.sonic.core.ios.models;
+package org.cloud.sonic.core.ios.enums;
 
-public enum SystemButton {
-    HOME("home"),
-    VOLUME_UP("volumeUp"),
-    VOLUME_DOWN("volumeDown");
+public enum TextKey {
+    BACK_SPACE("\u0008"),
+    DELETE("\u007F");
 
-    private final String button;
-    SystemButton(String button) {
-        this.button = button;
+    private final String key;
+
+    TextKey(String key) {
+        this.key = key;
     }
 
-    public String getButton() {
-        return button;
+    public String getKey() {
+        return key;
     }
 }
