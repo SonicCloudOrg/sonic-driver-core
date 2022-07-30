@@ -17,10 +17,7 @@
 package org.cloud.sonic.core.ios;
 
 import com.alibaba.fastjson.JSONObject;
-import org.cloud.sonic.core.ios.enums.AuthResource;
-import org.cloud.sonic.core.ios.enums.PasteboardType;
-import org.cloud.sonic.core.ios.enums.SystemButton;
-import org.cloud.sonic.core.ios.enums.TextKey;
+import org.cloud.sonic.core.ios.enums.*;
 import org.cloud.sonic.core.ios.models.*;
 import org.cloud.sonic.core.tool.SonicRespException;
 import org.junit.*;
@@ -200,6 +197,11 @@ public class IOSDriverTest {
         }
         Assert.assertTrue(hasThrow);
         iosDriver.getWdaClient().setSessionId(sessionId);
+    }
+
+    @Test
+    public void testFindElement() throws SonicRespException {
+        iosDriver.findElement(IOSSelector.ACCESSIBILITY_ID.getSelector(),"地图");
     }
 
     @AfterClass

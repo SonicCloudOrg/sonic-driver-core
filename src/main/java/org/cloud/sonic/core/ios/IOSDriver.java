@@ -23,6 +23,7 @@ import org.cloud.sonic.core.ios.enums.SystemButton;
 import org.cloud.sonic.core.ios.enums.TextKey;
 import org.cloud.sonic.core.ios.models.*;
 import org.cloud.sonic.core.ios.service.WdaClient;
+import org.cloud.sonic.core.ios.service.WebElement;
 import org.cloud.sonic.core.ios.service.impl.WdaClientImpl;
 import org.cloud.sonic.core.tool.SonicRespException;
 
@@ -346,5 +347,17 @@ public class IOSDriver {
      */
     public void appAuthReset(AuthResource authResource) throws SonicRespException {
         appAuthReset(authResource.getResource());
+    }
+
+    /**
+     * find element in device.
+     *
+     * @param selector
+     * @param value
+     * @return
+     * @throws SonicRespException
+     */
+    public WebElement findElement(String selector, String value) throws SonicRespException {
+        return wdaClient.findElement(selector, value);
     }
 }

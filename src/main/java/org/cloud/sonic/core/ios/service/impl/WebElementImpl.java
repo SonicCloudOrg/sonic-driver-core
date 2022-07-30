@@ -14,27 +14,27 @@
  *  limitations under the License.
  *
  */
-package org.cloud.sonic.core.ios.enums;
+package org.cloud.sonic.core.ios.service.impl;
 
-public enum ElementSelector {
-    CLASS_NAME("class name"),
-    NAME("name"),
-    Id("id"),
-    ACCESSIBILITY_ID("accessibility id"),
+import lombok.extern.slf4j.Slf4j;
+import org.cloud.sonic.core.ios.service.WebElement;
+import org.cloud.sonic.core.tool.SonicRespException;
 
-    XPATH("xpath"),
-    PREDICATE("predicate string"),
+@Slf4j
+public class WebElementImpl extends WdaClientImpl implements WebElement{
+    private String id;
 
-    CLASS_CHAIN("class chain"),
-    LINK_TEXT("link text"),
-    PARTIAL_LINK_TEXT("partial link text");
-
-    private final String selector;
-    ElementSelector(String selector) {
-        this.selector = selector;
+    public WebElementImpl(String id){
+        this.id = id;
     }
 
-    public String getSelector() {
-        return selector;
+    @Override
+    public String getId() {
+        return id;
+    }
+
+    @Override
+    public void click() throws SonicRespException {
+        super.elementClick(this);
     }
 }

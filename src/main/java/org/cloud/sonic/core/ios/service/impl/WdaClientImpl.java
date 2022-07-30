@@ -25,34 +25,50 @@ import org.cloud.sonic.core.ios.RespHandler;
 import org.cloud.sonic.core.ios.models.BaseResp;
 import org.cloud.sonic.core.ios.models.SessionInfo;
 import org.cloud.sonic.core.ios.models.TouchActions;
-import org.cloud.sonic.core.ios.models.WebElement;
+import org.cloud.sonic.core.ios.service.WebElement;
 import org.cloud.sonic.core.ios.service.WdaClient;
 import org.cloud.sonic.core.tool.SonicRespException;
 
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import java.util.Base64;
+import java.util.List;
 
 @Slf4j
 public class WdaClientImpl implements WdaClient {
     private String remoteUrl;
     private String sessionId;
     private RespHandler respHandler;
+    private final String LEGACY_WEB_ELEMENT_IDENTIFIER = "ELEMENT";
+    private final String WEB_ELEMENT_IDENTIFIER = "element-6066-11e4-a52e-4f735466cecf";
 
     public WdaClientImpl() {
         respHandler = new RespHandler();
-    }
-
-    private void checkSessionId() throws SonicRespException {
-        if (sessionId == null || sessionId.length() == 0) {
-            log.error("sessionId not found.");
-            throw new SonicRespException("sessionId not found.");
-        }
     }
 
     private void checkBundleId(String bundleId) throws SonicRespException {
         if (bundleId == null || bundleId.length() == 0) {
             log.error("bundleId not found.");
             throw new SonicRespException("bundleId not found.");
+        }
+    }
+
+    private String parseElementId(Object o) {
+        JSONObject jsonObject = (JSONObject) o;
+        List<String> identifier = Arrays.asList(LEGACY_WEB_ELEMENT_IDENTIFIER, WEB_ELEMENT_IDENTIFIER);
+        for (String i : identifier) {
+            String result = jsonObject.getString(i);
+            if (result != null && result.length() > 0) {
+                return result;
+            }
+        }
+        return "";
+    }
+
+    private void checkSessionId() throws SonicRespException {
+        if (sessionId == null || sessionId.length() == 0) {
+            log.error("sessionId not found.");
+            throw new SonicRespException("sessionId not found.");
         }
     }
 
@@ -302,12 +318,38 @@ public class WdaClientImpl implements WdaClient {
     }
 
     @Override
-    public WebElement findElement() {
-        //debug
-        WebElement webElement = new WebElement();
-        webElement.setId("xx");
-        webElement.setWdaClient(this);
-        return webElement;
+    public WebElement findElement(String selector, String value) throws SonicRespException {
+        checkSessionId();
+        JSONObject data = new JSONObject();
+        data.put("using", selector);
+        data.put("value", value);
+        BaseResp b = respHandler.getResp(HttpUtil.createPost(remoteUrl + "/session/" + sessionId + "/element")
+                .body(data.toJSONString()));
+        if (b.getErr() == null) {
+            log.info("find element successful.");
+            String id = parseElementId(b.getValue());
+            if (id.length() > 0) {
+                WebElement webElement = new WebElementImpl(id);
+                return webElement;
+            } else {
+                log.error("parse element id {} failed.", b.getValue());
+                return null;
+            }
+        } else {
+            log.error("element not found.");
+            throw new SonicRespException(b.getErr().getMessage());
+        }
+    }
+
+    protected void elementClick(WebElement webElement) throws SonicRespException {
+        checkSessionId();
+        BaseResp b = respHandler.getResp(HttpUtil.createPost(remoteUrl + "/session/" + sessionId + "/element/" + webElement.getId() + "/click"));
+        if (b.getErr() == null) {
+            log.info("click element {}.", webElement.getId());
+        } else {
+            log.error("click element {} failed.", webElement.getId());
+            throw new SonicRespException(b.getErr().getMessage());
+        }
     }
 
 }

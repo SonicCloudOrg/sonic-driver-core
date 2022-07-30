@@ -18,7 +18,6 @@ package org.cloud.sonic.core.ios.service;
 
 import com.alibaba.fastjson.JSONObject;
 import org.cloud.sonic.core.ios.models.TouchActions;
-import org.cloud.sonic.core.ios.models.WebElement;
 import org.cloud.sonic.core.tool.SonicRespException;
 
 /**
@@ -76,5 +75,5 @@ public interface WdaClient {
     void appAuthReset(int resource) throws SonicRespException;
 
     //element handler.
-    WebElement findElement();
+    WebElement findElement(String selector, String value) throws SonicRespException;
 }

@@ -14,15 +14,27 @@
  *  limitations under the License.
  *
  */
-package org.cloud.sonic.core.ios.models;
+package org.cloud.sonic.core.ios.enums;
 
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import org.cloud.sonic.core.ios.service.WdaClient;
+public enum IOSSelector {
+    CLASS_NAME("class name"),
+    NAME("name"),
+    Id("id"),
+    ACCESSIBILITY_ID("accessibility id"),
 
-@Setter
-@NoArgsConstructor
-public class WebElement {
-    private String id;
-    private WdaClient wdaClient;
+    XPATH("xpath"),
+    PREDICATE("predicate string"),
+
+    CLASS_CHAIN("class chain"),
+    LINK_TEXT("link text"),
+    PARTIAL_LINK_TEXT("partial link text");
+
+    private final String selector;
+    IOSSelector(String selector) {
+        this.selector = selector;
+    }
+
+    public String getSelector() {
+        return selector;
+    }
 }
