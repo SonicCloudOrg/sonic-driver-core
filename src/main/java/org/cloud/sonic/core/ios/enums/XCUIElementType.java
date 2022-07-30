@@ -31,16 +31,87 @@ public enum XCUIElementType {
     POP_UP_BUTTON("XCUIElementTypePopUpButton"),
     COMBO_BOX("XCUIElementTypeComboBox"),
     MENU_BUTTON("XCUIElementTypeMenuButton"),
-    RADIO_BUTTON("XCUIElementTypeRadioButton"),
-    RADIO_GROUP("XCUIElementTypeRadioGroup"),
     TOOLBAR_BUTTON("XCUIElementTypeToolbarButton"),
     POPOVER("XCUIElementTypePopover"),
     KEYBOARD("XCUIElementTypeKeyboard"),
     NAVIGATION_BAR("XCUIElementTypeNavigationBar"),
+    KEY("XCUIElementTypeKey"),
+    STATUS_BAR("XCUIElementTypeStatusBar"),
+    SWITCH("XCUIElementTypeSwitch"),
+    TOGGLE("XCUIElementTypeToggle"),
+    LINK("XCUIElementTypeLink"),
+    IMAGE("XCUIElementTypeImage"),
+    ICON("XCUIElementTypeIcon"),
+    SEARCH_FIELD("XCUIElementTypeSearchField"),
+    STATIC_TEXT("XCUIElementTypeStaticText"),
+    CHECK_BOX("XCUIElementTypeCheckBox"),
+    TEXT_VIEW("XCUIElementTypeTextView"),
+    SEGMENTED_CONTROL("XCUIElementTypeSegmentedControl"),
+    BROWSER("XCUIElementTypeBrowser"),
+    COLLECTION_VIEW("XCUIElementTypeCollectionView"),
+    SLIDER("XCUIElementTypeSlider"),
+    MAP("XCUIElementTypeMap"),
+    WEB_VIEW("XCUIElementTypeWebView"),
+    TIME_LINE("XCUIElementTypeTimeline"),
+    COLOR_WELL("XCUIElementTypeColorWell"),
+    HELP_TAG("XCUIElementTypeHelpTag"),
+    MATTE("XCUIElementTypeMatte"),
+    DOCK_ITEM("XCUIElementTypeDockItem"),
+    GRID("XCUIElementTypeGrid"),
+    CELL("XCUIElementTypeCell"),
+    HANDLE("XCUIElementTypeHandle"),
+    STEPPER("XCUIElementTypeStepper"),
+    TAB("XCUIElementTypeTab"),
+    TOUCH_BAR("XCUIElementTypeTouchBar"),
+    STATUS_ITEM("XCUIElementTypeStatusItem"),
+
+    LAYOUT_AREA("XCUIElementTypeLayoutArea"),
+    LAYOUT_ITEM("XCUIElementTypeLayoutItem"),
+
+    RULER("XCUIElementTypeRuler"),
+    RULER_MARKER("XCUIElementTypeRulerMarker"),
+
+    RADIO_BUTTON("XCUIElementTypeRadioButton"),
+    RADIO_GROUP("XCUIElementTypeRadioGroup"),
+
     TAB_BAR("XCUIElementTypeTabBar"),
     TAB_GROUP("XCUIElementTypeTabGroup"),
-    KEY("XCUIElementTypeKey"),
-    CHECK_BOX("XCUIElementTypeCheckBox");
+
+    TABLE("XCUIElementTypeTable"),
+    TABLE_ROW("XCUIElementTypeTableRow"),
+    TABLE_COLUMN("XCUIElementTypeTableColumn"),
+
+    OUTLINE("XCUIElementTypeOutline"),
+    OUTLINE_ROW("XCUIElementTypeOutlineRow"),
+
+    PAGE_INDICATOR("XCUIElementTypePageIndicator"),
+    PROGRESS_INDICATOR("XCUIElementTypeProgressIndicator"),
+    ACTIVITY_INDICATOR("XCUIElementTypeActivityIndicator"),
+    RATING_INDICATOR("XCUIElementTypeRatingIndicator"),
+    VALUE_INDICATOR("XCUIElementTypeValueIndicator"),
+    RELEVANCE_INDICATOR("XCUIElementTypeRelevanceIndicator"),
+    LEVEL_INDICATOR("XCUIElementTypeLevelIndicator"),
+
+    SPLIT_GROUP("XCUIElementTypeSplitGroup"),
+    SPLITTER("XCUIElementTypeSplitter"),
+
+    PICKER("XCUIElementTypePicker"),
+    PICKER_WHEEL("XCUIElementTypePickerWheel"),
+    DATE_PICKER("XCUIElementTypeDatePicker"),
+
+    SCROLL_VIEW("XCUIElementTypeScrollView"),
+    SCROLL_BAR("XCUIElementTypeScrollBar"),
+
+    TEXT_FIELD("XCUIElementTypeTextField"),
+    SECURE_TEXT_FIELD("XCUIElementTypeSecureTextField"),
+
+    MENU("XCUIElementTypeMenu"),
+    MENU_ITEM("XCUIElementTypeMenuItem"),
+    MENU_BAR("XCUIElementTypeMenuBar"),
+    MENU_BAR_ITEM("XCUIElementTypeMenuBarItem"),
+
+    INCREMENT_ARROW("XCUIElementTypeIncrementArrow"),
+    DECREMENT_ARROW("XCUIElementTypeDecrementArrow"),;
 
     private final String type;
 
