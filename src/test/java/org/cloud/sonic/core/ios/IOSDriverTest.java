@@ -25,6 +25,9 @@ import org.junit.*;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
+import javax.imageio.stream.FileImageOutputStream;
+import java.io.File;
+import java.io.IOException;
 import java.util.UUID;
 
 @RunWith(Parameterized.class)
@@ -83,6 +86,7 @@ public class IOSDriverTest {
             Assert.assertEquals("bundleId not found.", e.getMessage());
         }
         Assert.assertTrue(hasThrow);
+        iosDriver.appRunBackground(5);
         Assert.assertTrue(iosDriver.appTerminate("developer.apple.wwdc-Release"));
         Assert.assertFalse(iosDriver.appTerminate("developer.apple.wwdc-Release"));
         iosDriver.appAuthReset(AuthResource.CAMERA);
@@ -207,7 +211,7 @@ public class IOSDriverTest {
     }
 
     @Test
-    public void testFindElement() throws SonicRespException, InterruptedException {
+    public void testFindElement() throws SonicRespException, InterruptedException, IOException {
         iosDriver.pressButton(SystemButton.HOME);
         Thread.sleep(2000);
         iosDriver.findElement("accessibility id", "地图").click();
@@ -229,6 +233,12 @@ public class IOSDriverTest {
         Assert.assertTrue(iosRect.getY() > 0);
         Assert.assertTrue(iosRect.getWidth() > 0);
         Assert.assertTrue(iosRect.getHeight() > 0);
+        byte[] bt = w.screenshot();
+        File output = new File("./" + UUID.randomUUID() + ".png");
+        FileImageOutputStream imageOutput = new FileImageOutputStream(output);
+        imageOutput.write(bt, 0, bt.length);
+        imageOutput.close();
+        output.delete();
         iosDriver.findElement(IOSSelector.ACCESSIBILITY_ID, "取消").click();
         iosDriver.pressButton(SystemButton.HOME);
     }
@@ -236,8 +246,18 @@ public class IOSDriverTest {
     @Test
     public void testFindElementList() throws SonicRespException {
         int eleSize = iosDriver.findElementList(XCUIElementType.WINDOW).size();
-        Assert.assertEquals(eleSize,iosDriver.findElementList("class name","XCUIElementTypeWindow").size());
-        Assert.assertEquals(eleSize,iosDriver.findElementList(IOSSelector.CLASS_NAME,"XCUIElementTypeWindow").size());
+        Assert.assertEquals(eleSize, iosDriver.findElementList("class name", "XCUIElementTypeWindow").size());
+        Assert.assertEquals(eleSize, iosDriver.findElementList(IOSSelector.CLASS_NAME, "XCUIElementTypeWindow").size());
+    }
+
+    @Test
+    public void testScreenshot() throws IOException, SonicRespException {
+        byte[] bt = iosDriver.screenshot();
+        File output = new File("./" + UUID.randomUUID() + ".png");
+        FileImageOutputStream imageOutput = new FileImageOutputStream(output);
+        imageOutput.write(bt, 0, bt.length);
+        imageOutput.close();
+        output.delete();
     }
 
     @AfterClass

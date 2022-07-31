@@ -329,6 +329,16 @@ public class IOSDriver {
     }
 
     /**
+     * run app background in seconds.
+     *
+     * @param duration
+     * @throws SonicRespException
+     */
+    public void appRunBackground(int duration) throws SonicRespException {
+        wdaClient.appRunBackground(duration);
+    }
+
+    /**
      * reset app auth source.
      *
      * @param resource
@@ -574,5 +584,15 @@ public class IOSDriver {
      */
     public List<WebElement> findElementList(String selector, String value, Integer retry, Integer interval) throws SonicRespException {
         return wdaClient.findElementList(selector, value, retry, interval);
+    }
+
+    /**
+     * get screenshot.
+     *
+     * @return
+     * @throws SonicRespException
+     */
+    public byte[] screenshot() throws SonicRespException {
+        return wdaClient.screenshot();
     }
 }

@@ -317,6 +317,21 @@ public class WdaClientImpl implements WdaClient {
     }
 
     @Override
+    public void appRunBackground(int duration) throws SonicRespException {
+        checkSessionId();
+        JSONObject data = new JSONObject();
+        data.put("duration", duration);
+        BaseResp b = respHandler.getResp(HttpUtil.createPost(remoteUrl + "/session/" + sessionId + "/wda/deactivateApp")
+                .body(data.toJSONString()));
+        if (b.getErr() == null) {
+            log.info("run app background in {} seconds.", duration);
+        } else {
+            log.error("run app background failed.");
+            throw new SonicRespException(b.getErr().getMessage());
+        }
+    }
+
+    @Override
     public void appAuthReset(int resource) throws SonicRespException {
         checkSessionId();
         JSONObject data = new JSONObject();
@@ -417,5 +432,19 @@ public class WdaClientImpl implements WdaClient {
             throw new SonicRespException(errMsg);
         }
         return webElementList;
+    }
+
+    @Override
+    public byte[] screenshot() throws SonicRespException {
+        checkSessionId();
+        BaseResp b = respHandler.getResp(
+                HttpUtil.createGet(remoteUrl + "/session/" + sessionId + "/screenshot"));
+        if (b.getErr() == null) {
+            log.info("get screenshot.");
+            return Base64.getMimeDecoder().decode(b.getValue().toString());
+        } else {
+            log.error("get screenshot failed.");
+            throw new SonicRespException(b.getErr().getMessage());
+        }
     }
 }

@@ -36,4 +36,6 @@ public interface WebElement {
     String getText() throws SonicRespException;
 
     IOSRect getRect() throws SonicRespException;
+
+    byte[] screenshot() throws SonicRespException;
 }
