@@ -16,25 +16,39 @@
  */
 package org.cloud.sonic.core.ios.service.impl;
 
+import cn.hutool.http.HttpUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.cloud.sonic.core.ios.models.BaseResp;
+import org.cloud.sonic.core.ios.service.WdaClient;
 import org.cloud.sonic.core.ios.service.WebElement;
 import org.cloud.sonic.core.tool.SonicRespException;
 
 @Slf4j
-public class WebElementImpl extends WdaClientImpl implements WebElement{
+public class WebElementImpl implements WebElement {
     private String id;
+    private WdaClient wdaClient;
 
-    public WebElementImpl(String id){
+    public WebElementImpl(String id, WdaClient wdaClient) {
         this.id = id;
-    }
-
-    @Override
-    public String getId() {
-        return id;
+        this.wdaClient = wdaClient;
     }
 
     @Override
     public void click() throws SonicRespException {
-        super.elementClick(this);
+        wdaClient.checkSessionId();
+        BaseResp b = wdaClient.getRespHandler().getResp(
+                HttpUtil.createPost(wdaClient.getRemoteUrl() + "/session/"
+                        + wdaClient.getSessionId() + "/element/" + id + "/click"));
+        if (b.getErr() == null) {
+            log.info("click element {}.", id);
+        } else {
+            log.error("click element {} failed.", id);
+            throw new SonicRespException(b.getErr().getMessage());
+        }
+    }
+
+    @Override
+    public void sendKeys() throws SonicRespException {
+
     }
 }

@@ -17,6 +17,7 @@
 package org.cloud.sonic.core.ios.service;
 
 import com.alibaba.fastjson.JSONObject;
+import org.cloud.sonic.core.ios.RespHandler;
 import org.cloud.sonic.core.ios.models.TouchActions;
 import org.cloud.sonic.core.tool.SonicRespException;
 
@@ -27,6 +28,10 @@ import org.cloud.sonic.core.tool.SonicRespException;
 public interface WdaClient {
     //Client Setting
     void setGlobalTimeOut(int timeOut);
+
+    RespHandler getRespHandler();
+
+    void setRespHandler(RespHandler respHandler);
 
     //Session handler.
     String getRemoteUrl();
@@ -40,6 +45,8 @@ public interface WdaClient {
     void newSession(JSONObject capabilities) throws SonicRespException;
 
     void closeSession() throws SonicRespException;
+
+    void checkSessionId() throws SonicRespException;
 
     //lock handler.
     boolean isLocked() throws SonicRespException;
@@ -75,5 +82,5 @@ public interface WdaClient {
     void appAuthReset(int resource) throws SonicRespException;
 
     //element handler.
-    WebElement findElement(String selector, String value) throws SonicRespException;
+    WebElement findElement(String selector, String value, Integer retry, Integer interval) throws SonicRespException;
 }

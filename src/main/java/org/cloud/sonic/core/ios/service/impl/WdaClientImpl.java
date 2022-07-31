@@ -41,6 +41,8 @@ public class WdaClientImpl implements WdaClient {
     private RespHandler respHandler;
     private final String LEGACY_WEB_ELEMENT_IDENTIFIER = "ELEMENT";
     private final String WEB_ELEMENT_IDENTIFIER = "element-6066-11e4-a52e-4f735466cecf";
+    private int FIND_ELEMENT_INTERVAL = 3000;
+    private int FIND_ELEMENT_RETRY = 5;
 
     public WdaClientImpl() {
         respHandler = new RespHandler();
@@ -65,7 +67,8 @@ public class WdaClientImpl implements WdaClient {
         return "";
     }
 
-    private void checkSessionId() throws SonicRespException {
+    @Override
+    public void checkSessionId() throws SonicRespException {
         if (sessionId == null || sessionId.length() == 0) {
             log.error("sessionId not found.");
             throw new SonicRespException("sessionId not found.");
@@ -75,6 +78,16 @@ public class WdaClientImpl implements WdaClient {
     @Override
     public void setGlobalTimeOut(int timeOut) {
         respHandler.setRequestTimeOut(timeOut);
+    }
+
+    @Override
+    public RespHandler getRespHandler() {
+        return respHandler;
+    }
+
+    @Override
+    public void setRespHandler(RespHandler respHandler) {
+        this.respHandler = respHandler;
     }
 
     @Override
@@ -318,38 +331,44 @@ public class WdaClientImpl implements WdaClient {
     }
 
     @Override
-    public WebElement findElement(String selector, String value) throws SonicRespException {
-        checkSessionId();
-        JSONObject data = new JSONObject();
-        data.put("using", selector);
-        data.put("value", value);
-        BaseResp b = respHandler.getResp(HttpUtil.createPost(remoteUrl + "/session/" + sessionId + "/element")
-                .body(data.toJSONString()));
-        if (b.getErr() == null) {
-            log.info("find element successful.");
-            String id = parseElementId(b.getValue());
-            if (id.length() > 0) {
-                WebElement webElement = new WebElementImpl(id);
-                return webElement;
+    public WebElement findElement(String selector, String value, Integer retry, Integer interval) throws SonicRespException {
+        WebElement webElement = null;
+        int wait = 0;
+        int intervalInit = (interval == null ? FIND_ELEMENT_INTERVAL : interval);
+        int retryInit = (retry == null ? FIND_ELEMENT_RETRY : retry);
+        String errMsg = "";
+        while (wait < retryInit) {
+            wait++;
+            checkSessionId();
+            JSONObject data = new JSONObject();
+            data.put("using", selector);
+            data.put("value", value);
+            BaseResp b = respHandler.getResp(HttpUtil.createPost(remoteUrl + "/session/" + sessionId + "/element")
+                    .body(data.toJSONString()));
+            if (b.getErr() == null) {
+                log.info("find element successful.");
+                String id = parseElementId(b.getValue());
+                if (id.length() > 0) {
+                    webElement = new WebElementImpl(id, this);
+                    break;
+                } else {
+                    log.error("parse element id {} failed. retried {} times, retry in {} ms.", b.getValue(), wait, intervalInit);
+                }
             } else {
-                log.error("parse element id {} failed.", b.getValue());
-                return null;
+                log.error("element not found. retried {} times, retry in {} ms.", wait, intervalInit);
+                errMsg = b.getErr().getMessage();
             }
-        } else {
-            log.error("element not found.");
-            throw new SonicRespException(b.getErr().getMessage());
+            if (wait < retryInit) {
+                try {
+                    Thread.sleep(intervalInit);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
         }
-    }
-
-    protected void elementClick(WebElement webElement) throws SonicRespException {
-        checkSessionId();
-        BaseResp b = respHandler.getResp(HttpUtil.createPost(remoteUrl + "/session/" + sessionId + "/element/" + webElement.getId() + "/click"));
-        if (b.getErr() == null) {
-            log.info("click element {}.", webElement.getId());
-        } else {
-            log.error("click element {} failed.", webElement.getId());
-            throw new SonicRespException(b.getErr().getMessage());
+        if (webElement == null) {
+            throw new SonicRespException(errMsg);
         }
+        return webElement;
     }
-
 }

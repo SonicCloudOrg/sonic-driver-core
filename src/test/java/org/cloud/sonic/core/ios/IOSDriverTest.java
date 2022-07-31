@@ -24,6 +24,8 @@ import org.junit.*;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
+import java.util.UUID;
+
 @RunWith(Parameterized.class)
 public class IOSDriverTest {
     static IOSDriver iosDriver;
@@ -115,11 +117,15 @@ public class IOSDriverTest {
     }
 
     @Test
-    public void testPasteboard() throws SonicRespException {
-        iosDriver.setPasteboard(PasteboardType.PLAIN_TEXT, "sdc");
+    public void testPasteboard() throws SonicRespException, InterruptedException {
+        iosDriver.pressButton(SystemButton.HOME);
+        String text = UUID.randomUUID().toString();
         iosDriver.appActivate("com.apple.springboard");
-        iosDriver.getPasteboard(PasteboardType.PLAIN_TEXT);
-//        Assert.assertEquals("sdc", new String(iosDriver.getPasteboard(PasteboardType.PLAIN_TEXT.getType())));
+        iosDriver.findElement(IOSSelector.ACCESSIBILITY_ID.getSelector(), "WebDriverAgentRunner-Runner").click();
+        iosDriver.setPasteboard(PasteboardType.PLAIN_TEXT, text);
+        Thread.sleep(1000);
+        Assert.assertEquals(text, new String(iosDriver.getPasteboard(PasteboardType.PLAIN_TEXT.getType())));
+        iosDriver.pressButton(SystemButton.HOME);
     }
 
     @Test
@@ -201,7 +207,9 @@ public class IOSDriverTest {
 
     @Test
     public void testFindElement() throws SonicRespException {
-        iosDriver.findElement(IOSSelector.ACCESSIBILITY_ID.getSelector(),"地图");
+        iosDriver.pressButton(SystemButton.HOME);
+        iosDriver.findElement(IOSSelector.ACCESSIBILITY_ID.getSelector(), "地图").click();
+        iosDriver.pressButton(SystemButton.HOME);
     }
 
     @AfterClass

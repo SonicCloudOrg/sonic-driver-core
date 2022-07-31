@@ -358,6 +358,33 @@ public class IOSDriver {
      * @throws SonicRespException
      */
     public WebElement findElement(String selector, String value) throws SonicRespException {
-        return wdaClient.findElement(selector, value);
+        return findElement(selector, value, null);
+    }
+
+    /**
+     * find element in device.
+     *
+     * @param selector
+     * @param value
+     * @param retry
+     * @return
+     * @throws SonicRespException
+     */
+    public WebElement findElement(String selector, String value, Integer retry) throws SonicRespException {
+        return findElement(selector, value, retry, null);
+    }
+
+    /**
+     * find element in device.
+     *
+     * @param selector
+     * @param value
+     * @param retry
+     * @param interval
+     * @return
+     * @throws SonicRespException
+     */
+    public WebElement findElement(String selector, String value, Integer retry, Integer interval) throws SonicRespException {
+        return wdaClient.findElement(selector, value, retry, interval);
     }
 }

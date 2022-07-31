@@ -18,8 +18,13 @@ package org.cloud.sonic.core.ios.service;
 
 import org.cloud.sonic.core.tool.SonicRespException;
 
+/**
+ * @author Eason
+ * web element interface
+ */
 public interface WebElement {
-    String getId();
 
     void click() throws SonicRespException;
+
+    void sendKeys() throws SonicRespException;
 }
