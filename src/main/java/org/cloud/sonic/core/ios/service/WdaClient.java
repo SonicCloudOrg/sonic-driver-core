@@ -81,11 +81,15 @@ public interface WdaClient {
 
     boolean appTerminate(String bundleId) throws SonicRespException;
 
+    void appRunBackground(int duration) throws SonicRespException;
+
     void appAuthReset(int resource) throws SonicRespException;
 
     //element handler.
     WebElement findElement(String selector, String value, Integer retry, Integer interval) throws SonicRespException;
 
-    //element handler.
     List<WebElement> findElementList(String selector, String value, Integer retry, Integer interval) throws SonicRespException;
+
+    //screen handler.
+    byte[] screenshot() throws SonicRespException;
 }

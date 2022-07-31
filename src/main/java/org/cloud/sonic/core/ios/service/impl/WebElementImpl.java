@@ -26,6 +26,8 @@ import org.cloud.sonic.core.ios.service.WdaClient;
 import org.cloud.sonic.core.ios.service.WebElement;
 import org.cloud.sonic.core.tool.SonicRespException;
 
+import java.util.Base64;
+
 @Slf4j
 public class WebElementImpl implements WebElement {
     private String id;
@@ -110,10 +112,25 @@ public class WebElementImpl implements WebElement {
                         + wdaClient.getSessionId() + "/element/" + id + "/rect"));
         if (b.getErr() == null) {
             log.info("get {} rect {}.", id, b.getValue());
-            IOSRect iosRect = JSON.parseObject(b.getValue().toString(),IOSRect.class);
+            IOSRect iosRect = JSON.parseObject(b.getValue().toString(), IOSRect.class);
             return iosRect;
         } else {
             log.error("get {} rect failed.", id);
+            throw new SonicRespException(b.getErr().getMessage());
+        }
+    }
+
+    @Override
+    public byte[] screenshot() throws SonicRespException {
+        wdaClient.checkSessionId();
+        BaseResp b = wdaClient.getRespHandler().getResp(
+                HttpUtil.createGet(wdaClient.getRemoteUrl() + "/session/"
+                        + wdaClient.getSessionId() + "/element/" + id + "/screenshot"));
+        if (b.getErr() == null) {
+            log.info("get element {} screenshot.", id);
+            return Base64.getMimeDecoder().decode(b.getValue().toString());
+        } else {
+            log.error("get element {} screenshot failed.", id);
             throw new SonicRespException(b.getErr().getMessage());
         }
     }
