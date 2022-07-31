@@ -211,6 +211,7 @@ public class IOSDriverTest {
         iosDriver.findElement("accessibility id", "地图").click();
         iosDriver.pressButton(SystemButton.HOME);
         iosDriver.findElement(IOSSelector.ACCESSIBILITY_ID, "地图").click();
+        iosDriver.pressButton(SystemButton.HOME);
         iosDriver.findElement(XCUIElementType.ANY);
         iosDriver.pressButton(SystemButton.HOME);
     }
