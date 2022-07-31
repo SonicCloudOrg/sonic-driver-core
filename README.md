@@ -58,14 +58,14 @@ sonic-driver-core can be separated from appium and interact directly with webdri
 <dependency>
     <groupId>io.github.soniccloudorg</groupId>
     <artifactId>sonic-driver-core</artifactId>
-    <version>1.0.4</version>
+    <version>1.0.5</version>
 </dependency>
 ```
 
 #### Gradle
 
 ```
-implementation 'io.github.soniccloudorg:sonic-driver-core:1.0.4'
+implementation 'io.github.soniccloudorg:sonic-driver-core:1.0.5'
 ```
 
 ### Code
@@ -73,6 +73,7 @@ implementation 'io.github.soniccloudorg:sonic-driver-core:1.0.4'
 ```java
 package org.cloud.sonic.core.ios;
 
+import org.cloud.sonic.core.ios.enums.IOSSelector;
 import org.cloud.sonic.core.tool.SonicRespException;
 
 public class MyTest {
@@ -85,6 +86,9 @@ public class MyTest {
         iosDriver.tap(150, 81);
         iosDriver.longPress(150, 281, 1500);
         iosDriver.performTouchAction(new TouchActions().press(50, 256).wait(50).move(100, 256).wait(10).release());
+
+        //element
+        iosDriver.findElement(IOSSelector.XPATH,"//XCUIElementTypeTextField").click();
         
         //more...
     }

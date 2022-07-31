@@ -121,7 +121,7 @@ public class IOSDriverTest {
         iosDriver.pressButton(SystemButton.HOME);
         String text = UUID.randomUUID().toString();
         iosDriver.appActivate("com.apple.springboard");
-        iosDriver.findElement(IOSSelector.ACCESSIBILITY_ID.getSelector(), "WebDriverAgentRunner-Runner").click();
+        iosDriver.findElement(IOSSelector.ACCESSIBILITY_ID, "WebDriverAgentRunner-Runner").click();
         iosDriver.setPasteboard(PasteboardType.PLAIN_TEXT, text);
         Thread.sleep(1000);
         Assert.assertEquals(text, new String(iosDriver.getPasteboard(PasteboardType.PLAIN_TEXT.getType())));
@@ -208,7 +208,10 @@ public class IOSDriverTest {
     @Test
     public void testFindElement() throws SonicRespException {
         iosDriver.pressButton(SystemButton.HOME);
-        iosDriver.findElement(IOSSelector.ACCESSIBILITY_ID.getSelector(), "地图").click();
+        iosDriver.findElement("accessibility id", "地图").click();
+        iosDriver.pressButton(SystemButton.HOME);
+        iosDriver.findElement(IOSSelector.ACCESSIBILITY_ID, "地图").click();
+        iosDriver.findElement(XCUIElementType.ANY);
         iosDriver.pressButton(SystemButton.HOME);
     }
 
