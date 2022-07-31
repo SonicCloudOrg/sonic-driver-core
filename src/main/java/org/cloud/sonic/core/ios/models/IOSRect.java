@@ -18,8 +18,10 @@ package org.cloud.sonic.core.ios.models;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.ToString;
 
 @Getter
+@ToString
 @AllArgsConstructor
 public class IOSRect {
     private int x;

@@ -233,6 +233,13 @@ public class IOSDriverTest {
         iosDriver.pressButton(SystemButton.HOME);
     }
 
+    @Test
+    public void testFindElementList() throws SonicRespException {
+        int eleSize = iosDriver.findElementList(XCUIElementType.WINDOW).size();
+        Assert.assertEquals(eleSize,iosDriver.findElementList("class name","XCUIElementTypeWindow").size());
+        Assert.assertEquals(eleSize,iosDriver.findElementList(IOSSelector.CLASS_NAME,"XCUIElementTypeWindow").size());
+    }
+
     @AfterClass
     public static void after() throws SonicRespException {
         iosDriver.closeDriver();

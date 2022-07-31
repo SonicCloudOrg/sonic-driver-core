@@ -30,6 +30,7 @@ import org.cloud.sonic.core.ios.service.WdaClient;
 import org.cloud.sonic.core.tool.SonicRespException;
 
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Base64;
 import java.util.List;
@@ -370,5 +371,51 @@ public class WdaClientImpl implements WdaClient {
             throw new SonicRespException(errMsg);
         }
         return webElement;
+    }
+
+    @Override
+    public List<WebElement> findElementList(String selector, String value, Integer retry, Integer interval) throws SonicRespException {
+        List<WebElement> webElementList = new ArrayList<>();
+        int wait = 0;
+        int intervalInit = (interval == null ? FIND_ELEMENT_INTERVAL : interval);
+        int retryInit = (retry == null ? FIND_ELEMENT_RETRY : retry);
+        String errMsg = "";
+        while (wait < retryInit) {
+            wait++;
+            checkSessionId();
+            JSONObject data = new JSONObject();
+            data.put("using", selector);
+            data.put("value", value);
+            BaseResp b = respHandler.getResp(HttpUtil.createPost(remoteUrl + "/session/" + sessionId + "/elements")
+                    .body(data.toJSONString()));
+            if (b.getErr() == null) {
+                log.info("find elements successful.");
+                List<JSONObject> ids = JSON.parseObject(b.getValue().toString(), ArrayList.class);
+                for (JSONObject ele : ids) {
+                    String id = parseElementId(ele);
+                    if (id.length() > 0) {
+                        webElementList.add(new WebElementImpl(id, this));
+                    } else {
+                        log.error("parse element id {} failed.", ele);
+                        continue;
+                    }
+                }
+                break;
+            } else {
+                log.error("elements not found. retried {} times, retry in {} ms.", wait, intervalInit);
+                errMsg = b.getErr().getMessage();
+            }
+            if (wait < retryInit) {
+                try {
+                    Thread.sleep(intervalInit);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        if (webElementList.size() == 0) {
+            throw new SonicRespException(errMsg);
+        }
+        return webElementList;
     }
 }

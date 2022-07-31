@@ -24,6 +24,8 @@ import org.cloud.sonic.core.ios.service.WebElement;
 import org.cloud.sonic.core.ios.service.impl.WdaClientImpl;
 import org.cloud.sonic.core.tool.SonicRespException;
 
+import java.util.List;
+
 /**
  * @author Eason
  * ios driver
@@ -458,5 +460,119 @@ public class IOSDriver {
      */
     public WebElement findElement(String selector, String value, Integer retry, Integer interval) throws SonicRespException {
         return wdaClient.findElement(selector, value, retry, interval);
+    }
+
+    /**
+     * find element list in device.
+     *
+     * @param iosSelector
+     * @param value
+     * @return
+     * @throws SonicRespException
+     */
+    public List<WebElement> findElementList(IOSSelector iosSelector, String value) throws SonicRespException {
+        return findElementList(iosSelector, value, null);
+    }
+
+    /**
+     * find element list in device.
+     *
+     * @param xcuiElementType
+     * @return
+     * @throws SonicRespException
+     */
+    public List<WebElement> findElementList(XCUIElementType xcuiElementType) throws SonicRespException {
+        return findElementList(xcuiElementType, null);
+    }
+
+    /**
+     * find element list in device.
+     *
+     * @param selector
+     * @param value
+     * @return
+     * @throws SonicRespException
+     */
+    public List<WebElement> findElementList(String selector, String value) throws SonicRespException {
+        return findElementList(selector, value, null);
+    }
+
+    /**
+     * find element list in device.
+     *
+     * @param iosSelector
+     * @param value
+     * @param retry
+     * @return
+     * @throws SonicRespException
+     */
+    public List<WebElement> findElementList(IOSSelector iosSelector, String value, Integer retry) throws SonicRespException {
+        return findElementList(iosSelector, value, retry, null);
+    }
+
+    /**
+     * find element list in device.
+     *
+     * @param xcuiElementType
+     * @param retry
+     * @return
+     * @throws SonicRespException
+     */
+    public List<WebElement> findElementList(XCUIElementType xcuiElementType, Integer retry) throws SonicRespException {
+        return findElementList(xcuiElementType, retry, null);
+    }
+
+    /**
+     * find element list in device.
+     *
+     * @param selector
+     * @param value
+     * @param retry
+     * @return
+     * @throws SonicRespException
+     */
+    public List<WebElement> findElementList(String selector, String value, Integer retry) throws SonicRespException {
+        return findElementList(selector, value, retry, null);
+    }
+
+    /**
+     * find element list in device.
+     *
+     * @param iosSelector
+     * @param value
+     * @param retry
+     * @param interval
+     * @return
+     * @throws SonicRespException
+     */
+    public List<WebElement> findElementList(IOSSelector iosSelector, String value, Integer retry, Integer interval) throws SonicRespException {
+        return findElementList(iosSelector.getSelector(), value, retry, interval);
+    }
+
+    /**
+     * find element list in device.
+     *
+     * @param xcuiElementType
+     * @param retry
+     * @param interval
+     * @return
+     * @throws SonicRespException
+     */
+    public List<WebElement> findElementList(XCUIElementType xcuiElementType, Integer retry, Integer interval) throws SonicRespException {
+        return findElementList(IOSSelector.CLASS_NAME.getSelector(), xcuiElementType.getType(), retry, interval);
+    }
+
+    /**
+     * find element list in device.
+     *
+     * @param selector
+     * @param value
+     * @param retry
+     * @param interval
+     * @return
+     * @throws SonicRespException
+     */
+    public List<WebElement> findElementList(String selector, String value, Integer retry, Integer interval) throws SonicRespException {
+        return wdaClient.findElementList(selector, value, retry, interval);
     }
 }
