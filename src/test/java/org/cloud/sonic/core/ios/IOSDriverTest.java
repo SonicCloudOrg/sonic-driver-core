@@ -19,6 +19,7 @@ package org.cloud.sonic.core.ios;
 import com.alibaba.fastjson.JSONObject;
 import org.cloud.sonic.core.ios.enums.*;
 import org.cloud.sonic.core.ios.models.*;
+import org.cloud.sonic.core.ios.service.WebElement;
 import org.cloud.sonic.core.tool.SonicRespException;
 import org.junit.*;
 import org.junit.runner.RunWith;
@@ -124,7 +125,7 @@ public class IOSDriverTest {
         iosDriver.findElement(IOSSelector.ACCESSIBILITY_ID, "WebDriverAgentRunner-Runner").click();
         iosDriver.setPasteboard(PasteboardType.PLAIN_TEXT, text);
         Thread.sleep(1000);
-        Assert.assertEquals(text, new String(iosDriver.getPasteboard(PasteboardType.PLAIN_TEXT.getType())));
+        Assert.assertEquals(text, new String(iosDriver.getPasteboard(PasteboardType.PLAIN_TEXT)));
         iosDriver.pressButton(SystemButton.HOME);
     }
 
@@ -206,13 +207,29 @@ public class IOSDriverTest {
     }
 
     @Test
-    public void testFindElement() throws SonicRespException {
+    public void testFindElement() throws SonicRespException, InterruptedException {
         iosDriver.pressButton(SystemButton.HOME);
+        Thread.sleep(2000);
         iosDriver.findElement("accessibility id", "地图").click();
-        iosDriver.pressButton(SystemButton.HOME);
-        iosDriver.findElement(IOSSelector.ACCESSIBILITY_ID, "地图").click();
-        iosDriver.pressButton(SystemButton.HOME);
         iosDriver.findElement(XCUIElementType.ANY);
+        Thread.sleep(2000);
+        iosDriver.pressButton(SystemButton.HOME);
+        Thread.sleep(2000);
+        iosDriver.findElement(IOSSelector.ACCESSIBILITY_ID, "地图").click();
+        Thread.sleep(2000);
+        iosDriver.findElement(IOSSelector.ACCESSIBILITY_ID, "搜索地点或地址").click();
+        WebElement w = iosDriver.findElement(IOSSelector.ACCESSIBILITY_ID, "搜索地点或地址");
+        String text = UUID.randomUUID().toString();
+        w.sendKeys(text);
+        Assert.assertEquals(text, w.getText());
+        w.clear();
+        Assert.assertEquals("搜索地点或地址", w.getText());
+        IOSRect iosRect = w.getRect();
+        Assert.assertTrue(iosRect.getX() > 0);
+        Assert.assertTrue(iosRect.getY() > 0);
+        Assert.assertTrue(iosRect.getWidth() > 0);
+        Assert.assertTrue(iosRect.getHeight() > 0);
+        iosDriver.findElement(IOSSelector.ACCESSIBILITY_ID, "取消").click();
         iosDriver.pressButton(SystemButton.HOME);
     }
 
