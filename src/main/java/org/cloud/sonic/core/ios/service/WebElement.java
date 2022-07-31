@@ -26,5 +26,7 @@ public interface WebElement {
 
     void click() throws SonicRespException;
 
-    void sendKeys() throws SonicRespException;
+    void sendKeys(String text) throws SonicRespException;
+
+    void sendKeys(String text,int frequency) throws SonicRespException;
 }

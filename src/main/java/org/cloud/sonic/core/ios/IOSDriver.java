@@ -17,10 +17,7 @@
 package org.cloud.sonic.core.ios;
 
 import com.alibaba.fastjson.JSONObject;
-import org.cloud.sonic.core.ios.enums.AuthResource;
-import org.cloud.sonic.core.ios.enums.PasteboardType;
-import org.cloud.sonic.core.ios.enums.SystemButton;
-import org.cloud.sonic.core.ios.enums.TextKey;
+import org.cloud.sonic.core.ios.enums.*;
 import org.cloud.sonic.core.ios.models.*;
 import org.cloud.sonic.core.ios.service.WdaClient;
 import org.cloud.sonic.core.ios.service.WebElement;
@@ -352,6 +349,29 @@ public class IOSDriver {
     /**
      * find element in device.
      *
+     * @param iosSelector
+     * @param value
+     * @return
+     * @throws SonicRespException
+     */
+    public WebElement findElement(IOSSelector iosSelector, String value) throws SonicRespException {
+        return findElement(iosSelector, value, null);
+    }
+
+    /**
+     * find element in device.
+     *
+     * @param xcuiElementType
+     * @return
+     * @throws SonicRespException
+     */
+    public WebElement findElement(XCUIElementType xcuiElementType) throws SonicRespException {
+        return findElement(xcuiElementType, null);
+    }
+
+    /**
+     * find element in device.
+     *
      * @param selector
      * @param value
      * @return
@@ -359,6 +379,31 @@ public class IOSDriver {
      */
     public WebElement findElement(String selector, String value) throws SonicRespException {
         return findElement(selector, value, null);
+    }
+
+    /**
+     * find element in device.
+     *
+     * @param iosSelector
+     * @param value
+     * @param retry
+     * @return
+     * @throws SonicRespException
+     */
+    public WebElement findElement(IOSSelector iosSelector, String value, Integer retry) throws SonicRespException {
+        return findElement(iosSelector, value, retry, null);
+    }
+
+    /**
+     * find element in device.
+     *
+     * @param xcuiElementType
+     * @param retry
+     * @return
+     * @throws SonicRespException
+     */
+    public WebElement findElement(XCUIElementType xcuiElementType, Integer retry) throws SonicRespException {
+        return findElement(xcuiElementType, retry, null);
     }
 
     /**
@@ -372,6 +417,33 @@ public class IOSDriver {
      */
     public WebElement findElement(String selector, String value, Integer retry) throws SonicRespException {
         return findElement(selector, value, retry, null);
+    }
+
+    /**
+     * find element in device.
+     *
+     * @param iosSelector
+     * @param value
+     * @param retry
+     * @param interval
+     * @return
+     * @throws SonicRespException
+     */
+    public WebElement findElement(IOSSelector iosSelector, String value, Integer retry, Integer interval) throws SonicRespException {
+        return findElement(iosSelector.getSelector(), value, retry, interval);
+    }
+
+    /**
+     * find element in device.
+     *
+     * @param xcuiElementType
+     * @param retry
+     * @param interval
+     * @return
+     * @throws SonicRespException
+     */
+    public WebElement findElement(XCUIElementType xcuiElementType, Integer retry, Integer interval) throws SonicRespException {
+        return findElement(IOSSelector.CLASS_NAME.getSelector(), xcuiElementType.getType(), retry, interval);
     }
 
     /**

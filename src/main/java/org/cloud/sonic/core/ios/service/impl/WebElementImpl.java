@@ -17,6 +17,7 @@
 package org.cloud.sonic.core.ios.service.impl;
 
 import cn.hutool.http.HttpUtil;
+import com.alibaba.fastjson.JSONObject;
 import lombok.extern.slf4j.Slf4j;
 import org.cloud.sonic.core.ios.models.BaseResp;
 import org.cloud.sonic.core.ios.service.WdaClient;
@@ -48,7 +49,24 @@ public class WebElementImpl implements WebElement {
     }
 
     @Override
-    public void sendKeys() throws SonicRespException {
+    public void sendKeys(String text) throws SonicRespException {
+        sendKeys(text, 3);
+    }
 
+    @Override
+    public void sendKeys(String text, int frequency) throws SonicRespException {
+        wdaClient.checkSessionId();
+        JSONObject data = new JSONObject();
+        data.put("value", text.split(""));
+        data.put("frequency", frequency);
+        BaseResp b = wdaClient.getRespHandler().getResp(
+                HttpUtil.createPost(wdaClient.getRemoteUrl() + "/session/"
+                        + wdaClient.getSessionId() + "/element/" + id + "/value"));
+        if (b.getErr() == null) {
+            log.info("send key to {}.", id);
+        } else {
+            log.error("send key to {} failed.", id);
+            throw new SonicRespException(b.getErr().getMessage());
+        }
     }
 }
