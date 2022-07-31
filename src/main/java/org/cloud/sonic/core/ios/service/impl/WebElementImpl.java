@@ -18,8 +18,10 @@ package org.cloud.sonic.core.ios.service.impl;
 
 import cn.hutool.http.HttpUtil;
 import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson2.JSON;
 import lombok.extern.slf4j.Slf4j;
 import org.cloud.sonic.core.ios.models.BaseResp;
+import org.cloud.sonic.core.ios.models.IOSRect;
 import org.cloud.sonic.core.ios.service.WdaClient;
 import org.cloud.sonic.core.ios.service.WebElement;
 import org.cloud.sonic.core.tool.SonicRespException;
@@ -61,11 +63,57 @@ public class WebElementImpl implements WebElement {
         data.put("frequency", frequency);
         BaseResp b = wdaClient.getRespHandler().getResp(
                 HttpUtil.createPost(wdaClient.getRemoteUrl() + "/session/"
-                        + wdaClient.getSessionId() + "/element/" + id + "/value"));
+                        + wdaClient.getSessionId() + "/element/" + id + "/value")
+                        .body(data.toJSONString()), 60000);
         if (b.getErr() == null) {
             log.info("send key to {}.", id);
         } else {
             log.error("send key to {} failed.", id);
+            throw new SonicRespException(b.getErr().getMessage());
+        }
+    }
+
+    @Override
+    public void clear() throws SonicRespException {
+        wdaClient.checkSessionId();
+        BaseResp b = wdaClient.getRespHandler().getResp(
+                HttpUtil.createPost(wdaClient.getRemoteUrl() + "/session/"
+                        + wdaClient.getSessionId() + "/element/" + id + "/clear"), 60000);
+        if (b.getErr() == null) {
+            log.info("clear {}.", id);
+        } else {
+            log.error("clear {} failed.", id);
+            throw new SonicRespException(b.getErr().getMessage());
+        }
+    }
+
+    @Override
+    public String getText() throws SonicRespException {
+        wdaClient.checkSessionId();
+        BaseResp b = wdaClient.getRespHandler().getResp(
+                HttpUtil.createGet(wdaClient.getRemoteUrl() + "/session/"
+                        + wdaClient.getSessionId() + "/element/" + id + "/text"));
+        if (b.getErr() == null) {
+            log.info("get {} text {}.", id, b.getValue());
+            return b.getValue().toString();
+        } else {
+            log.error("get {} text failed.", id);
+            throw new SonicRespException(b.getErr().getMessage());
+        }
+    }
+
+    @Override
+    public IOSRect getRect() throws SonicRespException {
+        wdaClient.checkSessionId();
+        BaseResp b = wdaClient.getRespHandler().getResp(
+                HttpUtil.createGet(wdaClient.getRemoteUrl() + "/session/"
+                        + wdaClient.getSessionId() + "/element/" + id + "/rect"));
+        if (b.getErr() == null) {
+            log.info("get {} rect {}.", id, b.getValue());
+            IOSRect iosRect = JSON.parseObject(b.getValue().toString(),IOSRect.class);
+            return iosRect;
+        } else {
+            log.error("get {} rect failed.", id);
             throw new SonicRespException(b.getErr().getMessage());
         }
     }

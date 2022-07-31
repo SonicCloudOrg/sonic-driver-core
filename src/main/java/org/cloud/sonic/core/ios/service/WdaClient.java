@@ -21,6 +21,8 @@ import org.cloud.sonic.core.ios.RespHandler;
 import org.cloud.sonic.core.ios.models.TouchActions;
 import org.cloud.sonic.core.tool.SonicRespException;
 
+import java.util.List;
+
 /**
  * @author Eason
  * wda client interface
@@ -83,4 +85,7 @@ public interface WdaClient {
 
     //element handler.
     WebElement findElement(String selector, String value, Integer retry, Integer interval) throws SonicRespException;
+
+    //element handler.
+    List<WebElement> findElementList(String selector, String value, Integer retry, Integer interval) throws SonicRespException;
 }

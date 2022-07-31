@@ -14,26 +14,18 @@
  *  limitations under the License.
  *
  */
-package org.cloud.sonic.core.ios.service;
+package org.cloud.sonic.core.ios.models;
 
-import org.cloud.sonic.core.ios.models.IOSRect;
-import org.cloud.sonic.core.tool.SonicRespException;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.ToString;
 
-/**
- * @author Eason
- * web element interface
- */
-public interface WebElement {
-
-    void click() throws SonicRespException;
-
-    void sendKeys(String text) throws SonicRespException;
-
-    void sendKeys(String text,int frequency) throws SonicRespException;
-
-    void clear() throws SonicRespException;
-
-    String getText() throws SonicRespException;
-
-    IOSRect getRect() throws SonicRespException;
+@Getter
+@ToString
+@AllArgsConstructor
+public class IOSRect {
+    private int x;
+    private int y;
+    private int width;
+    private int height;
 }
