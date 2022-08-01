@@ -233,6 +233,8 @@ public class IOSDriverTest {
         Assert.assertTrue(iosRect.getY() > 0);
         Assert.assertTrue(iosRect.getWidth() > 0);
         Assert.assertTrue(iosRect.getHeight() > 0);
+        Assert.assertTrue(iosRect.getCenter().getX()>0);
+        Assert.assertTrue(iosRect.getCenter().getY()>0);
         byte[] bt = w.screenshot();
         File output = new File("./" + UUID.randomUUID() + ".png");
         FileImageOutputStream imageOutput = new FileImageOutputStream(output);
@@ -258,6 +260,14 @@ public class IOSDriverTest {
         imageOutput.write(bt, 0, bt.length);
         imageOutput.close();
         output.delete();
+    }
+
+    @Test
+    public void testGetWindowSize() throws SonicRespException {
+        WindowSize size = iosDriver.getWindowSize();
+        Assert.assertNotNull(size);
+        Assert.assertTrue(size.getHeight() > 0);
+        Assert.assertTrue(size.getWidth() > 0);
     }
 
     @AfterClass

@@ -58,14 +58,14 @@ sonic-driver-core can be separated from appium and interact directly with webdri
 <dependency>
     <groupId>io.github.soniccloudorg</groupId>
     <artifactId>sonic-driver-core</artifactId>
-    <version>1.0.7</version>
+    <version>1.0.8</version>
 </dependency>
 ```
 
 #### Gradle
 
 ```
-implementation 'io.github.soniccloudorg:sonic-driver-core:1.0.7'
+implementation 'io.github.soniccloudorg:sonic-driver-core:1.0.8'
 ```
 
 ### Code
