@@ -108,6 +108,16 @@ public class IOSDriver {
     }
 
     /**
+     * get device window size.
+     *
+     * @return
+     * @throws SonicRespException
+     */
+    public WindowSize getWindowSize() throws SonicRespException {
+        return wdaClient.getWindowSize();
+    }
+
+    /**
      * get device lock status.
      *
      * @return

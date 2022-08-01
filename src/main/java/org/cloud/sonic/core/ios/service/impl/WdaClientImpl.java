@@ -25,6 +25,7 @@ import org.cloud.sonic.core.ios.RespHandler;
 import org.cloud.sonic.core.ios.models.BaseResp;
 import org.cloud.sonic.core.ios.models.SessionInfo;
 import org.cloud.sonic.core.ios.models.TouchActions;
+import org.cloud.sonic.core.ios.models.WindowSize;
 import org.cloud.sonic.core.ios.service.WebElement;
 import org.cloud.sonic.core.ios.service.WdaClient;
 import org.cloud.sonic.core.tool.SonicRespException;
@@ -44,6 +45,7 @@ public class WdaClientImpl implements WdaClient {
     private final String WEB_ELEMENT_IDENTIFIER = "element-6066-11e4-a52e-4f735466cecf";
     private int FIND_ELEMENT_INTERVAL = 3000;
     private int FIND_ELEMENT_RETRY = 5;
+    private WindowSize size;
 
     public WdaClientImpl() {
         respHandler = new RespHandler();
@@ -66,14 +68,6 @@ public class WdaClientImpl implements WdaClient {
             }
         }
         return "";
-    }
-
-    @Override
-    public void checkSessionId() throws SonicRespException {
-        if (sessionId == null || sessionId.length() == 0) {
-            log.error("sessionId not found.");
-            throw new SonicRespException("sessionId not found.");
-        }
     }
 
     @Override
@@ -134,6 +128,30 @@ public class WdaClientImpl implements WdaClient {
         checkSessionId();
         respHandler.getResp(HttpUtil.createRequest(Method.DELETE, remoteUrl + "/session/" + sessionId));
         log.info("close session successful!");
+    }
+
+    @Override
+    public void checkSessionId() throws SonicRespException {
+        if (sessionId == null || sessionId.length() == 0) {
+            log.error("sessionId not found.");
+            throw new SonicRespException("sessionId not found.");
+        }
+    }
+
+    @Override
+    public WindowSize getWindowSize() throws SonicRespException {
+        if (size == null) {
+            checkSessionId();
+            BaseResp b = respHandler.getResp(HttpUtil.createGet(remoteUrl + "/session/" + sessionId + "/window/size"));
+            if (b.getErr() == null) {
+                log.info("get window size {}.", b.getValue());
+                size = JSON.parseObject(b.getValue().toString(), WindowSize.class);
+            } else {
+                log.error("get window size failed.");
+                throw new SonicRespException(b.getErr().getMessage());
+            }
+        }
+        return size;
     }
 
     @Override

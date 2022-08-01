@@ -23,21 +23,7 @@ import lombok.ToString;
 @Getter
 @ToString
 @AllArgsConstructor
-public class IOSRect {
-    private int x;
-    private int y;
+public class WindowSize {
     private int width;
     private int height;
-
-    @Getter
-    @ToString
-    @AllArgsConstructor
-    public class IOSRectCenter {
-        private int x;
-        private int y;
-    }
-
-    public IOSRectCenter getCenter() {
-        return new IOSRectCenter(x / 2, y / 2);
-    }
 }

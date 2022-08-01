@@ -19,6 +19,7 @@ package org.cloud.sonic.core.ios.service;
 import com.alibaba.fastjson.JSONObject;
 import org.cloud.sonic.core.ios.RespHandler;
 import org.cloud.sonic.core.ios.models.TouchActions;
+import org.cloud.sonic.core.ios.models.WindowSize;
 import org.cloud.sonic.core.tool.SonicRespException;
 
 import java.util.List;
@@ -49,6 +50,9 @@ public interface WdaClient {
     void closeSession() throws SonicRespException;
 
     void checkSessionId() throws SonicRespException;
+
+    //window handler.
+    WindowSize getWindowSize() throws SonicRespException;
 
     //lock handler.
     boolean isLocked() throws SonicRespException;
