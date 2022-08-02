@@ -28,6 +28,7 @@ import org.junit.runners.Parameterized;
 import javax.imageio.stream.FileImageOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.UUID;
 
 @RunWith(Parameterized.class)
@@ -129,7 +130,7 @@ public class IOSDriverTest {
         iosDriver.findElement(IOSSelector.ACCESSIBILITY_ID, "WebDriverAgentRunner-Runner").click();
         iosDriver.setPasteboard(PasteboardType.PLAIN_TEXT, text);
         Thread.sleep(1000);
-        Assert.assertEquals(text, new String(iosDriver.getPasteboard(PasteboardType.PLAIN_TEXT)));
+        Assert.assertEquals(text.getBytes(StandardCharsets.UTF_8), new String(iosDriver.getPasteboard(PasteboardType.PLAIN_TEXT)).getBytes(StandardCharsets.UTF_8));
         iosDriver.pressButton(SystemButton.HOME);
     }
 
