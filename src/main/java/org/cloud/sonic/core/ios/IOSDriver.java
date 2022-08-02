@@ -605,4 +605,14 @@ public class IOSDriver {
     public byte[] screenshot() throws SonicRespException {
         return wdaClient.screenshot();
     }
+
+    /**
+     * set appium settings.
+     *
+     * @param settings
+     * @throws SonicRespException
+     */
+    public void setAppiumSettings(JSONObject settings) throws SonicRespException {
+        wdaClient.setAppiumSettings(settings);
+    }
 }

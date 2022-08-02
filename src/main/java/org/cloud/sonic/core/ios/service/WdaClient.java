@@ -96,4 +96,7 @@ public interface WdaClient {
 
     //screen handler.
     byte[] screenshot() throws SonicRespException;
+
+    //appium setting handler.
+    void setAppiumSettings(JSONObject settings) throws SonicRespException;
 }

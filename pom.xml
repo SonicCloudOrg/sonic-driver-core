@@ -6,7 +6,7 @@
 
     <groupId>io.github.soniccloudorg</groupId>
     <artifactId>sonic-driver-core</artifactId>
-    <version>1.0.8</version>
+    <version>1.0.9</version>
 
     <name>sonic-driver-core</name>
     <description>The Sonic Project UIAutomation Driver Core for Android, iOS, Windows, Mac and so on.</description>
@@ -60,9 +60,9 @@
 
     <dependencies>
         <dependency>
-            <groupId>ch.qos.logback</groupId>
-            <artifactId>logback-classic</artifactId>
-            <version>1.2.11</version>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <version>1.7.32</version>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>

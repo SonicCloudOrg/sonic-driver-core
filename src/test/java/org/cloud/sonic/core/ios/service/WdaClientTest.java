@@ -16,7 +16,9 @@
  */
 package org.cloud.sonic.core.ios.service;
 
+import com.alibaba.fastjson.JSONObject;
 import org.cloud.sonic.core.ios.RespHandler;
+import org.cloud.sonic.core.ios.enums.IOSSelector;
 import org.cloud.sonic.core.ios.models.BaseResp;
 import org.cloud.sonic.core.ios.models.ErrorMsg;
 import org.cloud.sonic.core.ios.enums.PasteboardType;
@@ -48,6 +50,19 @@ public class WdaClientTest {
         Field respField = wdaClient.getClass().getDeclaredField("respHandler");
         respField.setAccessible(true);
         respField.set(wdaClient, respHandler);
+    }
+
+    @Test
+    public void testGetWindowSize() {
+        Boolean hasThrow = false;
+        try {
+            wdaClient.getWindowSize();
+        } catch (Throwable e) {
+            hasThrow = true;
+            Assert.assertEquals(SonicRespException.class, e.getClass());
+            Assert.assertEquals(e.getMessage(), ERROR_MSG);
+        }
+        Assert.assertTrue(hasThrow);
     }
 
     @Test
@@ -119,7 +134,7 @@ public class WdaClientTest {
     public void testSetPasteboard() {
         Boolean hasThrow = false;
         try {
-            wdaClient.setPasteboard(PasteboardType.PLAIN_TEXT.getType(),"text");
+            wdaClient.setPasteboard(PasteboardType.PLAIN_TEXT.getType(), "text");
         } catch (Throwable e) {
             hasThrow = true;
             Assert.assertEquals(SonicRespException.class, e.getClass());
@@ -207,10 +222,75 @@ public class WdaClientTest {
     }
 
     @Test
+    public void testAppRunBackground() {
+        Boolean hasThrow = false;
+        try {
+            wdaClient.appRunBackground(10);
+        } catch (Throwable e) {
+            hasThrow = true;
+            Assert.assertEquals(SonicRespException.class, e.getClass());
+            Assert.assertEquals(e.getMessage(), ERROR_MSG);
+        }
+        Assert.assertTrue(hasThrow);
+    }
+
+    @Test
     public void testAppAuthReset() {
         Boolean hasThrow = false;
         try {
             wdaClient.appAuthReset(6);
+        } catch (Throwable e) {
+            hasThrow = true;
+            Assert.assertEquals(SonicRespException.class, e.getClass());
+            Assert.assertEquals(e.getMessage(), ERROR_MSG);
+        }
+        Assert.assertTrue(hasThrow);
+    }
+
+    @Test
+    public void testFindElement() {
+        Boolean hasThrow = false;
+        try {
+            wdaClient.findElement(IOSSelector.ACCESSIBILITY_ID.getSelector(), "abc", 10, 10);
+        } catch (Throwable e) {
+            hasThrow = true;
+            Assert.assertEquals(SonicRespException.class, e.getClass());
+            Assert.assertEquals(e.getMessage(), ERROR_MSG);
+        }
+        Assert.assertTrue(hasThrow);
+    }
+
+    @Test
+    public void testFindElements() {
+        Boolean hasThrow = false;
+        try {
+            wdaClient.findElementList(IOSSelector.ACCESSIBILITY_ID.getSelector(), "abc", 10, 10);
+        } catch (Throwable e) {
+            hasThrow = true;
+            Assert.assertEquals(SonicRespException.class, e.getClass());
+            Assert.assertEquals(e.getMessage(), ERROR_MSG);
+        }
+        Assert.assertTrue(hasThrow);
+    }
+
+    @Test
+    public void testSetAppiumSettings() {
+        Boolean hasThrow = false;
+        try {
+            wdaClient.setAppiumSettings(new JSONObject());
+        } catch (Throwable e) {
+            hasThrow = true;
+            Assert.assertEquals(SonicRespException.class, e.getClass());
+            Assert.assertEquals(e.getMessage(), ERROR_MSG);
+        }
+        Assert.assertTrue(hasThrow);
+    }
+
+    @Test
+    public void testScreenShot() {
+        Boolean hasThrow = false;
+        try {
+            wdaClient.screenshot();
         } catch (Throwable e) {
             hasThrow = true;
             Assert.assertEquals(SonicRespException.class, e.getClass());

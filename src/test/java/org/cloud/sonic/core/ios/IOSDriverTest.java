@@ -115,7 +115,7 @@ public class IOSDriverTest {
         Assert.assertTrue(hasThrow);
         Thread.sleep(4000);
         iosDriver.tap(150, 181);
-        iosDriver.sendKeys("12");
+        iosDriver.sendKeys("中文123");
         iosDriver.sendKeys(TextKey.DELETE);
         iosDriver.sendKeys(TextKey.BACK_SPACE);
         iosDriver.pressButton(SystemButton.HOME);
@@ -124,7 +124,7 @@ public class IOSDriverTest {
     @Test
     public void testPasteboard() throws SonicRespException, InterruptedException {
         iosDriver.pressButton(SystemButton.HOME);
-        String text = UUID.randomUUID().toString();
+        String text = UUID.randomUUID() + "中文";
         iosDriver.appActivate("com.apple.springboard");
         iosDriver.findElement(IOSSelector.ACCESSIBILITY_ID, "WebDriverAgentRunner-Runner").click();
         iosDriver.setPasteboard(PasteboardType.PLAIN_TEXT, text);
@@ -223,7 +223,7 @@ public class IOSDriverTest {
         Thread.sleep(2000);
         iosDriver.findElement(IOSSelector.ACCESSIBILITY_ID, "搜索地点或地址").click();
         WebElement w = iosDriver.findElement(IOSSelector.ACCESSIBILITY_ID, "搜索地点或地址");
-        String text = UUID.randomUUID().toString();
+        String text = UUID.randomUUID() + "中文";
         w.sendKeys(text);
         Assert.assertEquals(text, w.getText());
         w.clear();
@@ -233,8 +233,8 @@ public class IOSDriverTest {
         Assert.assertTrue(iosRect.getY() > 0);
         Assert.assertTrue(iosRect.getWidth() > 0);
         Assert.assertTrue(iosRect.getHeight() > 0);
-        Assert.assertTrue(iosRect.getCenter().getX()>0);
-        Assert.assertTrue(iosRect.getCenter().getY()>0);
+        Assert.assertTrue(iosRect.getCenter().getX() > 0);
+        Assert.assertTrue(iosRect.getCenter().getY() > 0);
         byte[] bt = w.screenshot();
         File output = new File("./" + UUID.randomUUID() + ".png");
         FileImageOutputStream imageOutput = new FileImageOutputStream(output);
@@ -268,6 +268,11 @@ public class IOSDriverTest {
         Assert.assertNotNull(size);
         Assert.assertTrue(size.getHeight() > 0);
         Assert.assertTrue(size.getWidth() > 0);
+    }
+
+    @Test
+    public void testSetAppiumSettings() throws SonicRespException {
+        iosDriver.setAppiumSettings(new JSONObject());
     }
 
     @AfterClass

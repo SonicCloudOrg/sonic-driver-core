@@ -228,7 +228,7 @@ public class WdaClientImpl implements WdaClient {
         BaseResp b = respHandler.getResp(HttpUtil.createPost(remoteUrl + "/session/" + sessionId + "/wda/keys")
                 .body(data.toJSONString()));
         if (b.getErr() == null) {
-            log.info("send key {} .", text);
+            log.info("send key {} .", new String(text.getBytes(StandardCharsets.UTF_8)));
         } else {
             log.error("send key failed.");
             throw new SonicRespException(b.getErr().getMessage());
@@ -244,7 +244,7 @@ public class WdaClientImpl implements WdaClient {
         BaseResp b = respHandler.getResp(HttpUtil.createPost(remoteUrl + "/session/" + sessionId + "/wda/setPasteboard")
                 .body(data.toJSONString()));
         if (b.getErr() == null) {
-            log.info("set pasteboard {} .", content);
+            log.info("set pasteboard {} .", new String(content.getBytes(StandardCharsets.UTF_8)));
         } else {
             log.error("set pasteboard failed.");
             throw new SonicRespException(b.getErr().getMessage());
@@ -290,9 +290,9 @@ public class WdaClientImpl implements WdaClient {
             BaseResp b = respHandler.getResp(HttpUtil.createPost(remoteUrl + "/session/" + sessionId + "/wda/siri/activate")
                     .body(data.toJSONString()));
             if (b.getErr() == null) {
-                log.info("send siri command: {}", command);
+                log.info("send siri command: {}", new String(command.getBytes(StandardCharsets.UTF_8)));
             } else {
-                log.error("send siri command [{}] failed.", command);
+                log.error("send siri command [{}] failed.", new String(command.getBytes(StandardCharsets.UTF_8)));
                 throw new SonicRespException(b.getErr().getMessage());
             }
         } else {
@@ -462,6 +462,21 @@ public class WdaClientImpl implements WdaClient {
             return Base64.getMimeDecoder().decode(b.getValue().toString());
         } else {
             log.error("get screenshot failed.");
+            throw new SonicRespException(b.getErr().getMessage());
+        }
+    }
+
+    @Override
+    public void setAppiumSettings(JSONObject settings) throws SonicRespException {
+        checkSessionId();
+        JSONObject data = new JSONObject();
+        data.put("settings", settings);
+        BaseResp b = respHandler.getResp(HttpUtil.createPost(remoteUrl + "/session/" + sessionId + "/appium/settings")
+                .body(data.toJSONString()));
+        if (b.getErr() == null) {
+            log.info("set appium settings {}.", settings.toJSONString());
+        } else {
+            log.error("set appium settings failed.");
             throw new SonicRespException(b.getErr().getMessage());
         }
     }

@@ -26,6 +26,7 @@ import org.cloud.sonic.core.ios.service.WdaClient;
 import org.cloud.sonic.core.ios.service.WebElement;
 import org.cloud.sonic.core.tool.SonicRespException;
 
+import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 
 @Slf4j
@@ -96,8 +97,9 @@ public class WebElementImpl implements WebElement {
                 HttpUtil.createGet(wdaClient.getRemoteUrl() + "/session/"
                         + wdaClient.getSessionId() + "/element/" + id + "/text"));
         if (b.getErr() == null) {
-            log.info("get {} text {}.", id, b.getValue());
-            return b.getValue().toString();
+            String re = b.getValue().toString();
+            log.info("get {} text {}.", id, new String(re.getBytes(StandardCharsets.UTF_8)));
+            return re;
         } else {
             log.error("get {} text failed.", id);
             throw new SonicRespException(b.getErr().getMessage());
