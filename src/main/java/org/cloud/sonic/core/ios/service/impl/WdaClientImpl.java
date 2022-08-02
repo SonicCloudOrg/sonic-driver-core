@@ -228,7 +228,7 @@ public class WdaClientImpl implements WdaClient {
         BaseResp b = respHandler.getResp(HttpUtil.createPost(remoteUrl + "/session/" + sessionId + "/wda/keys")
                 .body(data.toJSONString()));
         if (b.getErr() == null) {
-            log.info("send key {} .", new String(text.getBytes(StandardCharsets.UTF_8)));
+            log.info("send key {} .", text);
         } else {
             log.error("send key failed.");
             throw new SonicRespException(b.getErr().getMessage());
@@ -244,7 +244,7 @@ public class WdaClientImpl implements WdaClient {
         BaseResp b = respHandler.getResp(HttpUtil.createPost(remoteUrl + "/session/" + sessionId + "/wda/setPasteboard")
                 .body(data.toJSONString()));
         if (b.getErr() == null) {
-            log.info("set pasteboard {} .", new String(content.getBytes(StandardCharsets.UTF_8)));
+            log.info("set pasteboard {} .", content);
         } else {
             log.error("set pasteboard failed.");
             throw new SonicRespException(b.getErr().getMessage());
@@ -290,9 +290,9 @@ public class WdaClientImpl implements WdaClient {
             BaseResp b = respHandler.getResp(HttpUtil.createPost(remoteUrl + "/session/" + sessionId + "/wda/siri/activate")
                     .body(data.toJSONString()));
             if (b.getErr() == null) {
-                log.info("send siri command: {}", new String(command.getBytes(StandardCharsets.UTF_8)));
+                log.info("send siri command: {}", command);
             } else {
-                log.error("send siri command [{}] failed.", new String(command.getBytes(StandardCharsets.UTF_8)));
+                log.error("send siri command [{}] failed.", command);
                 throw new SonicRespException(b.getErr().getMessage());
             }
         } else {

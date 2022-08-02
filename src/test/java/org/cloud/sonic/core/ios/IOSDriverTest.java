@@ -130,7 +130,7 @@ public class IOSDriverTest {
         iosDriver.findElement(IOSSelector.ACCESSIBILITY_ID, "WebDriverAgentRunner-Runner").click();
         iosDriver.setPasteboard(PasteboardType.PLAIN_TEXT, text);
         Thread.sleep(1000);
-        Assert.assertEquals(text.getBytes(StandardCharsets.UTF_8), new String(iosDriver.getPasteboard(PasteboardType.PLAIN_TEXT)).getBytes(StandardCharsets.UTF_8));
+        Assert.assertEquals(text, new String(iosDriver.getPasteboard(PasteboardType.PLAIN_TEXT), StandardCharsets.UTF_8));
         iosDriver.pressButton(SystemButton.HOME);
     }
 
@@ -224,7 +224,7 @@ public class IOSDriverTest {
         Thread.sleep(2000);
         iosDriver.findElement(IOSSelector.ACCESSIBILITY_ID, "搜索地点或地址").click();
         WebElement w = iosDriver.findElement(IOSSelector.ACCESSIBILITY_ID, "搜索地点或地址");
-        String text = UUID.randomUUID() + "中文";
+        String text = UUID.randomUUID().toString().substring(0,6) + "中文";
         w.sendKeys(text);
         Assert.assertEquals(text, w.getText());
         w.clear();

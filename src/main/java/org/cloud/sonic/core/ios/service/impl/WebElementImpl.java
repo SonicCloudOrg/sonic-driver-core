@@ -97,9 +97,8 @@ public class WebElementImpl implements WebElement {
                 HttpUtil.createGet(wdaClient.getRemoteUrl() + "/session/"
                         + wdaClient.getSessionId() + "/element/" + id + "/text"));
         if (b.getErr() == null) {
-            String re = b.getValue().toString();
-            log.info("get {} text {}.", id, new String(re.getBytes(StandardCharsets.UTF_8)));
-            return re;
+            log.info("get {} text {}.", id, b.getValue().toString());
+            return b.getValue().toString();
         } else {
             log.error("get {} text failed.", id);
             throw new SonicRespException(b.getErr().getMessage());
