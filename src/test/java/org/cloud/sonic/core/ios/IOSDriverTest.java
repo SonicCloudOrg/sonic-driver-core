@@ -57,6 +57,7 @@ public class IOSDriverTest {
         }
         Assert.assertTrue(hasThrow);
         iosDriver = new IOSDriver("http://localhost:8100", new JSONObject());
+        iosDriver.disableLog();
         Assert.assertEquals("http://localhost:8100", iosDriver.getWdaClient().getRemoteUrl());
         Assert.assertTrue(iosDriver.getSessionId().length() > 0);
         iosDriver.closeDriver();
@@ -224,7 +225,7 @@ public class IOSDriverTest {
         Thread.sleep(2000);
         iosDriver.findElement(IOSSelector.ACCESSIBILITY_ID, "搜索地点或地址").click();
         WebElement w = iosDriver.findElement(IOSSelector.ACCESSIBILITY_ID, "搜索地点或地址");
-        String text = UUID.randomUUID().toString().substring(0,6) + "中文";
+        String text = UUID.randomUUID().toString().substring(0, 6) + "中文";
         w.sendKeys(text);
         Assert.assertEquals(text, w.getText());
         w.clear();

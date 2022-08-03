@@ -20,6 +20,7 @@ import com.alibaba.fastjson.JSONObject;
 import org.cloud.sonic.core.ios.RespHandler;
 import org.cloud.sonic.core.ios.models.TouchActions;
 import org.cloud.sonic.core.ios.models.WindowSize;
+import org.cloud.sonic.core.tool.Logger;
 import org.cloud.sonic.core.tool.SonicRespException;
 
 import java.util.List;
@@ -35,6 +36,12 @@ public interface WdaClient {
     RespHandler getRespHandler();
 
     void setRespHandler(RespHandler respHandler);
+
+    Logger getLogger();
+
+    void showLog();
+
+    void disableLog();
 
     //Session handler.
     String getRemoteUrl();

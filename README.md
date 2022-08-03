@@ -58,14 +58,14 @@ sonic-driver-core can be separated from appium and interact directly with webdri
 <dependency>
     <groupId>io.github.soniccloudorg</groupId>
     <artifactId>sonic-driver-core</artifactId>
-    <version>1.0.9</version>
+    <version>1.0.10</version>
 </dependency>
 ```
 
 #### Gradle
 
 ```
-implementation 'io.github.soniccloudorg:sonic-driver-core:1.0.9'
+implementation 'io.github.soniccloudorg:sonic-driver-core:1.0.10'
 ```
 
 ### Code
@@ -80,7 +80,8 @@ public class MyTest {
 
     public void test() throws SonicRespException {
         IOSDriver iosDriver = new IOSDriver("http://localhost:8100");
-
+        iosDriver.showLog();
+        
         //touch
         iosDriver.swipe(100, 256, 50, 256);
         iosDriver.tap(150, 81);

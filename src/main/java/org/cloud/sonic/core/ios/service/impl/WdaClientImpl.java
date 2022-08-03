@@ -20,14 +20,14 @@ import cn.hutool.http.HttpUtil;
 import cn.hutool.http.Method;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import lombok.extern.slf4j.Slf4j;
 import org.cloud.sonic.core.ios.RespHandler;
 import org.cloud.sonic.core.ios.models.BaseResp;
 import org.cloud.sonic.core.ios.models.SessionInfo;
 import org.cloud.sonic.core.ios.models.TouchActions;
 import org.cloud.sonic.core.ios.models.WindowSize;
-import org.cloud.sonic.core.ios.service.WebElement;
 import org.cloud.sonic.core.ios.service.WdaClient;
+import org.cloud.sonic.core.ios.service.WebElement;
+import org.cloud.sonic.core.tool.Logger;
 import org.cloud.sonic.core.tool.SonicRespException;
 
 import java.nio.charset.StandardCharsets;
@@ -36,11 +36,11 @@ import java.util.Arrays;
 import java.util.Base64;
 import java.util.List;
 
-@Slf4j
 public class WdaClientImpl implements WdaClient {
     private String remoteUrl;
     private String sessionId;
     private RespHandler respHandler;
+    private Logger logger;
     private final String LEGACY_WEB_ELEMENT_IDENTIFIER = "ELEMENT";
     private final String WEB_ELEMENT_IDENTIFIER = "element-6066-11e4-a52e-4f735466cecf";
     private int FIND_ELEMENT_INTERVAL = 3000;
@@ -49,11 +49,12 @@ public class WdaClientImpl implements WdaClient {
 
     public WdaClientImpl() {
         respHandler = new RespHandler();
+        logger = new Logger();
     }
 
     private void checkBundleId(String bundleId) throws SonicRespException {
         if (bundleId == null || bundleId.length() == 0) {
-            log.error("bundleId not found.");
+            logger.error("bundleId not found.");
             throw new SonicRespException("bundleId not found.");
         }
     }
@@ -86,6 +87,21 @@ public class WdaClientImpl implements WdaClient {
     }
 
     @Override
+    public Logger getLogger() {
+        return logger;
+    }
+
+    @Override
+    public void showLog() {
+        logger.showLog();
+    }
+
+    @Override
+    public void disableLog() {
+        logger.disableLog();
+    }
+
+    @Override
     public String getRemoteUrl() {
         return remoteUrl;
     }
@@ -113,12 +129,12 @@ public class WdaClientImpl implements WdaClient {
         if (b.getErr() == null) {
             SessionInfo sessionInfo = JSON.parseObject(b.getValue().toString(), SessionInfo.class);
             setSessionId(sessionInfo.getSessionId());
-            log.info("start session successful!");
-            log.info("session : {}", sessionInfo.getSessionId());
-            log.info("session capabilities : {}", sessionInfo.getCapabilities());
+            logger.info("start session successful!");
+            logger.info("session : %s", sessionInfo.getSessionId());
+            logger.info("session capabilities : %s", sessionInfo.getCapabilities().toString());
         } else {
-            log.error("start session failed.");
-            log.error("cause: {}", b.getErr());
+            logger.error("start session failed.");
+            logger.error("cause: %s", b.getErr().toString());
             throw new SonicRespException(b.getErr().getMessage());
         }
     }
@@ -127,13 +143,13 @@ public class WdaClientImpl implements WdaClient {
     public void closeSession() throws SonicRespException {
         checkSessionId();
         respHandler.getResp(HttpUtil.createRequest(Method.DELETE, remoteUrl + "/session/" + sessionId));
-        log.info("close session successful!");
+        logger.info("close session successful!");
     }
 
     @Override
     public void checkSessionId() throws SonicRespException {
         if (sessionId == null || sessionId.length() == 0) {
-            log.error("sessionId not found.");
+            logger.error("sessionId not found.");
             throw new SonicRespException("sessionId not found.");
         }
     }
@@ -144,10 +160,10 @@ public class WdaClientImpl implements WdaClient {
             checkSessionId();
             BaseResp b = respHandler.getResp(HttpUtil.createGet(remoteUrl + "/session/" + sessionId + "/window/size"));
             if (b.getErr() == null) {
-                log.info("get window size {}.", b.getValue());
                 size = JSON.parseObject(b.getValue().toString(), WindowSize.class);
+                logger.info("get window size %s.", size.toString());
             } else {
-                log.error("get window size failed.");
+                logger.error("get window size failed.");
                 throw new SonicRespException(b.getErr().getMessage());
             }
         }
@@ -159,10 +175,10 @@ public class WdaClientImpl implements WdaClient {
         checkSessionId();
         BaseResp b = respHandler.getResp(HttpUtil.createGet(remoteUrl + "/session/" + sessionId + "/wda/locked"));
         if (b.getErr() == null) {
-            log.info("device lock status: {}.", b.getValue());
+            logger.info("device lock status: %b.", b.getValue());
             return (boolean) b.getValue();
         } else {
-            log.error("get device lock status failed.");
+            logger.error("get device lock status failed.");
             throw new SonicRespException(b.getErr().getMessage());
         }
     }
@@ -172,9 +188,9 @@ public class WdaClientImpl implements WdaClient {
         checkSessionId();
         BaseResp b = respHandler.getResp(HttpUtil.createPost(remoteUrl + "/session/" + sessionId + "/wda/lock"));
         if (b.getErr() == null) {
-            log.info("lock device.");
+            logger.info("lock device.");
         } else {
-            log.error("lock device failed.");
+            logger.error("lock device failed.");
             throw new SonicRespException(b.getErr().getMessage());
         }
     }
@@ -184,9 +200,9 @@ public class WdaClientImpl implements WdaClient {
         checkSessionId();
         BaseResp b = respHandler.getResp(HttpUtil.createPost(remoteUrl + "/session/" + sessionId + "/wda/unlock"));
         if (b.getErr() == null) {
-            log.info("unlock device.");
+            logger.info("unlock device.");
         } else {
-            log.error("unlock device failed.");
+            logger.error("unlock device failed.");
             throw new SonicRespException(b.getErr().getMessage());
         }
     }
@@ -197,9 +213,9 @@ public class WdaClientImpl implements WdaClient {
         BaseResp b = respHandler.getResp(HttpUtil.createPost(remoteUrl + "/session/" + sessionId + "/wda/touch/multi/perform")
                 .body(String.valueOf(JSONObject.toJSON(touchActions))));
         if (b.getErr() == null) {
-            log.info("perform action {}.", touchActions);
+            logger.info("perform action %s.", touchActions.toString());
         } else {
-            log.error("perform failed.");
+            logger.error("perform failed.");
             throw new SonicRespException(b.getErr().getMessage());
         }
     }
@@ -212,9 +228,9 @@ public class WdaClientImpl implements WdaClient {
         BaseResp b = respHandler.getResp(HttpUtil.createPost(remoteUrl + "/session/" + sessionId + "/wda/pressButton")
                 .body(data.toJSONString()));
         if (b.getErr() == null) {
-            log.info("press button {} .", buttonName);
+            logger.info("press button %s.", buttonName);
         } else {
-            log.error("press button failed.");
+            logger.error("press button failed.");
             throw new SonicRespException(b.getErr().getMessage());
         }
     }
@@ -228,9 +244,9 @@ public class WdaClientImpl implements WdaClient {
         BaseResp b = respHandler.getResp(HttpUtil.createPost(remoteUrl + "/session/" + sessionId + "/wda/keys")
                 .body(data.toJSONString()));
         if (b.getErr() == null) {
-            log.info("send key {} .", text);
+            logger.info("send key %s.", text);
         } else {
-            log.error("send key failed.");
+            logger.error("send key failed.");
             throw new SonicRespException(b.getErr().getMessage());
         }
     }
@@ -244,9 +260,9 @@ public class WdaClientImpl implements WdaClient {
         BaseResp b = respHandler.getResp(HttpUtil.createPost(remoteUrl + "/session/" + sessionId + "/wda/setPasteboard")
                 .body(data.toJSONString()));
         if (b.getErr() == null) {
-            log.info("set pasteboard {} .", content);
+            logger.info("set pasteboard %s.", content);
         } else {
-            log.error("set pasteboard failed.");
+            logger.error("set pasteboard failed.");
             throw new SonicRespException(b.getErr().getMessage());
         }
     }
@@ -260,10 +276,10 @@ public class WdaClientImpl implements WdaClient {
                 .body(data.toJSONString()));
         if (b.getErr() == null) {
             byte[] result = Base64.getDecoder().decode(b.getValue().toString());
-            log.info("get pasteboard {} .", result);
+            logger.info("get pasteboard length: %d.", result.length);
             return result;
         } else {
-            log.error("get pasteboard failed.");
+            logger.error("get pasteboard failed.");
             throw new SonicRespException(b.getErr().getMessage());
         }
     }
@@ -273,10 +289,10 @@ public class WdaClientImpl implements WdaClient {
         checkSessionId();
         BaseResp b = respHandler.getResp(HttpUtil.createGet(remoteUrl + "/session/" + sessionId + "/source"), 60000);
         if (b.getErr() == null) {
-            log.info("get page source.");
+            logger.info("get page source.");
             return b.getValue().toString();
         } else {
-            log.error("get page source failed.");
+            logger.error("get page source failed.");
             throw new SonicRespException(b.getErr().getMessage());
         }
     }
@@ -290,13 +306,13 @@ public class WdaClientImpl implements WdaClient {
             BaseResp b = respHandler.getResp(HttpUtil.createPost(remoteUrl + "/session/" + sessionId + "/wda/siri/activate")
                     .body(data.toJSONString()));
             if (b.getErr() == null) {
-                log.info("send siri command: {}", command);
+                logger.info("send siri command: %s", command);
             } else {
-                log.error("send siri command [{}] failed.", command);
+                logger.error("send siri command [%s] failed.", command);
                 throw new SonicRespException(b.getErr().getMessage());
             }
         } else {
-            log.error("siri command is null!");
+            logger.error("siri command is null!");
             throw new SonicRespException("siri command is null!");
         }
     }
@@ -310,9 +326,9 @@ public class WdaClientImpl implements WdaClient {
         BaseResp b = respHandler.getResp(HttpUtil.createPost(remoteUrl + "/session/" + sessionId + "/wda/apps/activate")
                 .body(data.toJSONString()));
         if (b.getErr() == null) {
-            log.info("activate app {}.", bundleId);
+            logger.info("activate app %s.", bundleId);
         } else {
-            log.error("activate app {} failed.", bundleId);
+            logger.error("activate app %s failed.", bundleId);
             throw new SonicRespException(b.getErr().getMessage());
         }
     }
@@ -326,10 +342,10 @@ public class WdaClientImpl implements WdaClient {
         BaseResp b = respHandler.getResp(HttpUtil.createPost(remoteUrl + "/session/" + sessionId + "/wda/apps/terminate")
                 .body(data.toJSONString()));
         if (b.getErr() == null) {
-            log.info("terminate app {} status: {}.", bundleId, b.getValue());
+            logger.info("terminate app %s status: %b.", bundleId, b.getValue());
             return (boolean) b.getValue();
         } else {
-            log.error("terminate app failed.", bundleId);
+            logger.error("terminate app failed.", bundleId);
             throw new SonicRespException(b.getErr().getMessage());
         }
     }
@@ -342,9 +358,9 @@ public class WdaClientImpl implements WdaClient {
         BaseResp b = respHandler.getResp(HttpUtil.createPost(remoteUrl + "/session/" + sessionId + "/wda/deactivateApp")
                 .body(data.toJSONString()));
         if (b.getErr() == null) {
-            log.info("run app background in {} seconds.", duration);
+            logger.info("run app background in %d seconds.", duration);
         } else {
-            log.error("run app background failed.");
+            logger.error("run app background failed.");
             throw new SonicRespException(b.getErr().getMessage());
         }
     }
@@ -357,9 +373,9 @@ public class WdaClientImpl implements WdaClient {
         BaseResp b = respHandler.getResp(HttpUtil.createPost(remoteUrl + "/session/" + sessionId + "/wda/resetAppAuth")
                 .body(data.toJSONString()));
         if (b.getErr() == null) {
-            log.info("reset app auth {}.", resource);
+            logger.info("reset app auth %s.", resource);
         } else {
-            log.error("reset app auth failed.");
+            logger.error("reset app auth failed.");
             throw new SonicRespException(b.getErr().getMessage());
         }
     }
@@ -380,16 +396,16 @@ public class WdaClientImpl implements WdaClient {
             BaseResp b = respHandler.getResp(HttpUtil.createPost(remoteUrl + "/session/" + sessionId + "/element")
                     .body(data.toJSONString()));
             if (b.getErr() == null) {
-                log.info("find element successful.");
+                logger.info("find element successful.");
                 String id = parseElementId(b.getValue());
                 if (id.length() > 0) {
                     webElement = new WebElementImpl(id, this);
                     break;
                 } else {
-                    log.error("parse element id {} failed. retried {} times, retry in {} ms.", b.getValue(), wait, intervalInit);
+                    logger.error("parse element id %s failed. retried %d times, retry in %d ms.", b.getValue().toString(), wait, intervalInit);
                 }
             } else {
-                log.error("element not found. retried {} times, retry in {} ms.", wait, intervalInit);
+                logger.error("element not found. retried %d times, retry in %d ms.", wait, intervalInit);
                 errMsg = b.getErr().getMessage();
             }
             if (wait < retryInit) {
@@ -422,20 +438,20 @@ public class WdaClientImpl implements WdaClient {
             BaseResp b = respHandler.getResp(HttpUtil.createPost(remoteUrl + "/session/" + sessionId + "/elements")
                     .body(data.toJSONString()));
             if (b.getErr() == null) {
-                log.info("find elements successful.");
+                logger.info("find elements successful.");
                 List<JSONObject> ids = JSON.parseObject(b.getValue().toString(), ArrayList.class);
                 for (JSONObject ele : ids) {
                     String id = parseElementId(ele);
                     if (id.length() > 0) {
                         webElementList.add(new WebElementImpl(id, this));
                     } else {
-                        log.error("parse element id {} failed.", ele);
+                        logger.error("parse element id %s failed.", ele);
                         continue;
                     }
                 }
                 break;
             } else {
-                log.error("elements not found. retried {} times, retry in {} ms.", wait, intervalInit);
+                logger.error("elements not found. retried %d times, retry in %d ms.", wait, intervalInit);
                 errMsg = b.getErr().getMessage();
             }
             if (wait < retryInit) {
@@ -458,10 +474,10 @@ public class WdaClientImpl implements WdaClient {
         BaseResp b = respHandler.getResp(
                 HttpUtil.createGet(remoteUrl + "/session/" + sessionId + "/screenshot"));
         if (b.getErr() == null) {
-            log.info("get screenshot.");
+            logger.info("get screenshot.");
             return Base64.getMimeDecoder().decode(b.getValue().toString());
         } else {
-            log.error("get screenshot failed.");
+            logger.error("get screenshot failed.");
             throw new SonicRespException(b.getErr().getMessage());
         }
     }
@@ -474,9 +490,9 @@ public class WdaClientImpl implements WdaClient {
         BaseResp b = respHandler.getResp(HttpUtil.createPost(remoteUrl + "/session/" + sessionId + "/appium/settings")
                 .body(data.toJSONString()));
         if (b.getErr() == null) {
-            log.info("set appium settings {}.", settings.toJSONString());
+            logger.info("set appium settings %s.", settings.toJSONString());
         } else {
-            log.error("set appium settings failed.");
+            logger.error("set appium settings failed.");
             throw new SonicRespException(b.getErr().getMessage());
         }
     }

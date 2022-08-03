@@ -108,6 +108,20 @@ public class IOSDriver {
     }
 
     /**
+     * show log.
+     */
+    public void showLog() {
+        wdaClient.showLog();
+    }
+
+    /**
+     * disable log.
+     */
+    public void disableLog() {
+        wdaClient.disableLog();
+    }
+
+    /**
      * get device window size.
      *
      * @return

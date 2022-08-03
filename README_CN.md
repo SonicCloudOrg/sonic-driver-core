@@ -53,12 +53,12 @@ sonic-driver-core可以脱离Appium，直接与WebDriverAgent或UIautomator2交�
 <dependency>
     <groupId>io.github.soniccloudorg</groupId>
     <artifactId>sonic-driver-core</artifactId>
-    <version>1.0.9</version>
+    <version>1.0.10</version>
 </dependency>
 ```
 #### Gradle
 ```
-implementation 'io.github.soniccloudorg:sonic-driver-core:1.0.9'
+implementation 'io.github.soniccloudorg:sonic-driver-core:1.0.10'
 ```
 
 ### 代码
@@ -72,6 +72,7 @@ public class MyTest {
 
     public void test() throws SonicRespException {
         IOSDriver iosDriver = new IOSDriver("http://localhost:8100");
+        iosDriver.showLog();
 
         //touch
         iosDriver.swipe(100, 256, 50, 256);
