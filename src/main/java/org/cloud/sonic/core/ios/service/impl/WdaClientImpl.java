@@ -275,7 +275,7 @@ public class WdaClientImpl implements WdaClient {
         BaseResp b = respHandler.getResp(HttpUtil.createPost(remoteUrl + "/session/" + sessionId + "/wda/getPasteboard")
                 .body(data.toJSONString()));
         if (b.getErr() == null) {
-            byte[] result = Base64.getDecoder().decode(b.getValue().toString());
+            byte[] result = Base64.getMimeDecoder().decode(b.getValue().toString());
             logger.info("get pasteboard length: %d.", result.length);
             return result;
         } else {
