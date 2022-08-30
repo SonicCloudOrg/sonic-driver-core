@@ -472,7 +472,7 @@ public class WdaClientImpl implements WdaClient {
     public byte[] screenshot() throws SonicRespException {
         checkSessionId();
         BaseResp b = respHandler.getResp(
-                HttpUtil.createGet(remoteUrl + "/session/" + sessionId + "/screenshot"));
+                HttpUtil.createGet(remoteUrl + "/session/" + sessionId + "/screenshot"), 60000);
         if (b.getErr() == null) {
             logger.info("get screenshot.");
             return Base64.getMimeDecoder().decode(b.getValue().toString());

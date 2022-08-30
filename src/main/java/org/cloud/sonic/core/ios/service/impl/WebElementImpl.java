@@ -126,7 +126,7 @@ public class WebElementImpl implements WebElement {
         wdaClient.checkSessionId();
         BaseResp b = wdaClient.getRespHandler().getResp(
                 HttpUtil.createGet(wdaClient.getRemoteUrl() + "/session/"
-                        + wdaClient.getSessionId() + "/element/" + id + "/screenshot"));
+                        + wdaClient.getSessionId() + "/element/" + id + "/screenshot"), 60000);
         if (b.getErr() == null) {
             logger.info("get element %s screenshot.", id);
             return Base64.getMimeDecoder().decode(b.getValue().toString());
