@@ -34,6 +34,8 @@ import java.util.UUID;
 @RunWith(Parameterized.class)
 public class IOSDriverTest {
     static IOSDriver iosDriver;
+    static final String SONIC_REMOTE_URL = "SONIC_REMOTE_TEST_URL";
+    static String url = "http://localhost:8100";
 
     @Parameterized.Parameters
     public static Object[][] data() {
@@ -47,23 +49,26 @@ public class IOSDriverTest {
 
     @BeforeClass
     public static void beforeClass() throws SonicRespException {
+        if (!SONIC_REMOTE_URL.equals("SONIC_REMOTE_TEST_URL")) {
+            url = SONIC_REMOTE_URL;
+        }
         Boolean hasThrow = false;
         try {
-            new IOSDriver("http://localhost:8100", null);
+            new IOSDriver(url, null);
         } catch (Throwable e) {
             hasThrow = true;
             Assert.assertEquals(SonicRespException.class, e.getClass());
             Assert.assertEquals("'capabilities' is mandatory to create a new session", e.getMessage());
         }
         Assert.assertTrue(hasThrow);
-        iosDriver = new IOSDriver("http://localhost:8100", new JSONObject());
+        iosDriver = new IOSDriver(url, new JSONObject());
         iosDriver.disableLog();
-        Assert.assertEquals("http://localhost:8100", iosDriver.getWdaClient().getRemoteUrl());
+        Assert.assertEquals(url, iosDriver.getWdaClient().getRemoteUrl());
         Assert.assertTrue(iosDriver.getSessionId().length() > 0);
         iosDriver.closeDriver();
 
-        iosDriver = new IOSDriver("http://localhost:8100");
-        Assert.assertEquals("http://localhost:8100", iosDriver.getWdaClient().getRemoteUrl());
+        iosDriver = new IOSDriver(url);
+        Assert.assertEquals(url, iosDriver.getWdaClient().getRemoteUrl());
         Assert.assertTrue(iosDriver.getSessionId().length() > 0);
     }
 
@@ -214,6 +219,15 @@ public class IOSDriverTest {
 
     @Test
     public void testFindElement() throws SonicRespException, InterruptedException, IOException {
+        Boolean hasThrow = false;
+        try {
+            iosDriver.findElement("accessibility id", "地图1").click();
+        } catch (Throwable e) {
+            hasThrow = true;
+            Assert.assertEquals(SonicRespException.class, e.getClass());
+            Assert.assertTrue(e.getMessage().contains("unable to find an element"));
+        }
+        Assert.assertTrue(hasThrow);
         iosDriver.pressButton(SystemButton.HOME);
         Thread.sleep(2000);
         iosDriver.findElement("accessibility id", "地图").click();
