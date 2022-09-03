@@ -34,7 +34,7 @@ import java.util.UUID;
 @RunWith(Parameterized.class)
 public class IOSDriverTest {
     static IOSDriver iosDriver;
-    static final String SONIC_REMOTE_URL = "SONIC_REMOTE_TEST_URL";
+    static final String SONIC_REMOTE_URL = "https://SONIC_REMOTE_TEST_URL";
     static String url = "http://localhost:8100";
 
     @Parameterized.Parameters
@@ -49,7 +49,7 @@ public class IOSDriverTest {
 
     @BeforeClass
     public static void beforeClass() throws SonicRespException {
-        if (!SONIC_REMOTE_URL.equals("SONIC_REMOTE_TEST_URL")) {
+        if (!SONIC_REMOTE_URL.equals("https://SONIC_REMOTE_TEST_URL")) {
             url = SONIC_REMOTE_URL;
         }
         Boolean hasThrow = false;
