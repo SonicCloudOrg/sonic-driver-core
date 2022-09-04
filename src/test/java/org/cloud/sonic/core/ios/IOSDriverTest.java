@@ -163,7 +163,7 @@ public class IOSDriverTest {
     @Test
     public void testPerformTouchAction() throws SonicRespException, InterruptedException {
         iosDriver.performTouchAction(new TouchActions().press(100, 256).wait(50).move(50, 256).wait(10).release());
-        Thread.sleep(500);
+        Thread.sleep(1500);
         iosDriver.performTouchAction(new TouchActions().press(50, 256).wait(50).move(100, 256).wait(10).release());
     }
 

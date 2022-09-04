@@ -1,0 +1,10 @@
+name-template: '$NEXT_PATCH_VERSION'
+tag-template: '$NEXT_PATCH_VERSION'
+version-template: $MAJOR.$MINOR.$PATCH
+change-template: '* $TITLE (#$NUMBER) @$AUTHOR'
+template: |
+  ## What’s Changed
+  $CHANGES
+  Terms
+  Privacy
+  Security
