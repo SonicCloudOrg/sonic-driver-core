@@ -34,7 +34,7 @@ import java.util.UUID;
 @RunWith(Parameterized.class)
 public class IOSDriverTest {
     static IOSDriver iosDriver;
-    static final String SONIC_REMOTE_URL = "https://SONIC_REMOTE_TEST_URL";
+    static final String SONIC_REMOTE_URL = "http://SONIC_REMOTE_TEST_URL";
     static String url = "http://localhost:8100";
 
     @Parameterized.Parameters

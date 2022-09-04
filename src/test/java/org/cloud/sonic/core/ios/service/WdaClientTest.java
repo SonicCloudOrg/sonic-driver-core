@@ -35,7 +35,7 @@ import java.lang.reflect.Field;
 public class WdaClientTest {
     static WdaClient wdaClient;
     private static final String ERROR_MSG = "err message";
-    static final String SONIC_REMOTE_URL = "https://SONIC_REMOTE_TEST_URL";
+    static final String SONIC_REMOTE_URL = "http://SONIC_REMOTE_TEST_URL";
     static String url = "http://localhost:8100";
 
     @BeforeClass
