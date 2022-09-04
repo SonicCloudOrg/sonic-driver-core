@@ -49,7 +49,7 @@ public class IOSDriverTest {
 
     @BeforeClass
     public static void beforeClass() throws SonicRespException {
-        if (!SONIC_REMOTE_URL.equals("https://SONIC_REMOTE_TEST_URL")) {
+        if (!SONIC_REMOTE_URL.contains("SONIC_REMOTE_TEST")) {
             url = SONIC_REMOTE_URL;
         }
         Boolean hasThrow = false;
