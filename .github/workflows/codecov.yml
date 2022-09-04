@@ -1,7 +1,9 @@
 name: codecov check
 
 on:
-  workflow_dispatch:
+  push:
+    branches:
+      - main
 
 jobs:
   build:
@@ -20,3 +22,7 @@ jobs:
       - run: sed -i "s/SONIC_REMOTE_TEST_URL/${{ secrets.REMOTE_TEST_URL }}/g" src/test/java/org/cloud/sonic/core/ios/service/WdaClientTest.java
       - name: Validate and Compile with Maven
         run: mvn cobertura:cobertura
+      - name: upload codecov
+        uses: codecov/codecov-action@v3.1.0
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
