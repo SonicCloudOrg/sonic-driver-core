@@ -12,7 +12,7 @@ public class RespHandlerTest {
         respHandler.setRequestTimeOut(0);
         Boolean hasThrow = false;
         try {
-            respHandler.getResp(HttpUtil.createGet("localhost:1234"));
+            respHandler.getResp(HttpUtil.createGet("http://localhost:1234"));
         } catch (Throwable e) {
             hasThrow = true;
             Assert.assertEquals(SonicRespException.class, e.getClass());

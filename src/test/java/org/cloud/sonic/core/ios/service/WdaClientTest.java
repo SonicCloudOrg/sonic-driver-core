@@ -35,12 +35,17 @@ import java.lang.reflect.Field;
 public class WdaClientTest {
     static WdaClient wdaClient;
     private static final String ERROR_MSG = "err message";
+    static final String SONIC_REMOTE_URL = "https://SONIC_REMOTE_TEST_URL";
+    static String url = "http://localhost:8100";
 
     @BeforeClass
     public static void before() throws Exception {
+        if (!SONIC_REMOTE_URL.contains("SONIC_REMOTE_TEST")) {
+            url = SONIC_REMOTE_URL;
+        }
         wdaClient = new WdaClientImpl();
         wdaClient.setSessionId("test");
-        wdaClient.setRemoteUrl("http://localhost:8100");
+        wdaClient.setRemoteUrl(url);
         RespHandler respHandler = Mockito.mock(RespHandler.class);
         BaseResp b = new BaseResp();
         b.setErr(new ErrorMsg("testErr", ERROR_MSG, "traceback"));

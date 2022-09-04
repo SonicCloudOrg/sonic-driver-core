@@ -17,5 +17,6 @@ jobs:
           distribution: 'temurin'
           cache: maven
       - run: sed -i "s/SONIC_REMOTE_TEST_URL/${{ secrets.REMOTE_TEST_URL }}/g" src/test/java/org/cloud/sonic/core/ios/IOSDriverTest.java
+      - run: sed -i "s/SONIC_REMOTE_TEST_URL/${{ secrets.REMOTE_TEST_URL }}/g" src/test/java/org/cloud/sonic/core/ios/service/WdaClientTest.java
       - name: Validate and Compile with Maven
         run: mvn test
