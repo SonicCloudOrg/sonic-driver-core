@@ -11,6 +11,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: release-drafter/release-drafter@v5
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Checkout
+        uses: actions/checkout@v2
+      - uses: softprops/action-gh-release@v1
+        with:
+          name: text
+          draft: true
+          generate_release_notes: true
