@@ -13,7 +13,23 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+      - name: Set up Maven Central Repo
+          uses: actions/setup-java@v1
+          with:
+            java-version: 1.8
+            server-id: sonatype-nexus-staging
+            server-username: ${{ secrets.OSSRH_USER }}
+            server-password: ${{ secrets.OSSRH_PASSWORD }}
+            gpg-passphrase: ${{ secrets.GPG_PASSWORD }}
+      - name: Publish to Maven Central Repo
+          uses: samuelmeuli/action-maven-publish@v1
+          with:
+            maven_args: -Dmaven.test.skip=true
+            gpg_private_key: ${{ secrets.GPG_SECRET }}
+            gpg_passphrase: ${{ secrets.GPG_PASSWORD }}
+            nexus_username: ${{ secrets.OSSRH_USER }}
+            nexus_password: ${{ secrets.OSSRH_PASSWORD }}
       - uses: softprops/action-gh-release@v1
         with:
-          draft: true
+          draft: false
           generate_release_notes: true
