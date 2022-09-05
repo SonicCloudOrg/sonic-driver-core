@@ -2,8 +2,8 @@ name: release to github
 
 on:
   push:
-    tags:
-      - *
+    branches:
+    - main
 
 jobs:
   build:
