@@ -3,7 +3,7 @@ name: codecov check
 on:
   push:
     tags:
-      - "v*.*.*"
+      - "*.*.*"
 
 jobs:
   build:
