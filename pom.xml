@@ -6,7 +6,7 @@
 
     <groupId>io.github.soniccloudorg</groupId>
     <artifactId>sonic-driver-core</artifactId>
-    <version>1.0.13</version>
+    <version>1.0.14</version>
 
     <name>sonic-driver-core</name>
     <description>The Sonic Project UIAutomation Driver Core for Android, iOS, Windows, Mac and so on.</description>
@@ -156,6 +156,12 @@
                         <goals>
                             <goal>sign</goal>
                         </goals>
+                        <configuration>
+                            <gpgArguments>
+                                <arg>--pinentry-mode</arg>
+                                <arg>loopback</arg>
+                            </gpgArguments>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>
