@@ -2,8 +2,8 @@ name: codecov check
 
 on:
   push:
-    tags:
-      - *
+    branches:
+    - main
 
 jobs:
   build:
