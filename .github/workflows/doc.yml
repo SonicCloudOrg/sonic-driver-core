@@ -16,9 +16,9 @@ jobs:
         id: previoustag
         uses: "WyriHaximus/github-action-get-previous-tag@v1"
         
-      - name: Get previous release tag
+      - name: 'Get previous release tag'
         id: previous-release
-        uses: actions/get-previous-release-action@v1
+        uses: "actions/get-previous-release-action@v1"
         
       - run: echo '${{steps.previoustag.outputs.tag}}' && echo '${{steps.previous-release.output.release}}'
 
