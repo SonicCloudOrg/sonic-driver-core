@@ -18,7 +18,7 @@ jobs:
         
       - name: 'Get previous release tag'
         id: previous-release
-        uses: "actions/get-previous-release-action@v1"
+        uses: "sammcoe/get-previous-release-action@v1"
         
       - run: echo '${{steps.previoustag.outputs.tag}}' && echo '${{steps.previous-release.output.release}}'
 
