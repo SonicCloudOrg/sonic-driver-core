@@ -1,7 +1,8 @@
 name: update readme doc
 
 on:
-  workflow_dispatch:
+  release:
+    types: [published]
   
 jobs:
   release:
@@ -60,6 +61,7 @@ jobs:
         uses: "pascalgn/automerge-action@v0.15.3"
         env:
           MERGE_LABELS: "document"
+          MERGE_DELETE_BRANCH: true
           GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
           PULL_REQUEST: ${{ steps.cpr.outputs.pull-request-number }}
           MERGE_RETRIES: 18
