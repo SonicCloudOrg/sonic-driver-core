@@ -17,10 +17,10 @@ jobs:
         uses: "WyriHaximus/github-action-get-previous-tag@v1"
         
       - name: 'Get previous release tag'
-        id: previous-release
+        id: tag
         uses: "sammcoe/get-previous-release-action@v1"
         
-      - run: echo '${{steps.previoustag.outputs.tag}}' && echo '${{steps.previous-release.output.tag}}'
+      - run: echo '${{steps.previoustag.outputs.tag}}' && echo '${{steps.tag.output.tag}}'
 
 #       - name: Create Pull Request
 #         id: cpr
