@@ -20,7 +20,7 @@ jobs:
         id: previoustag2
         uses: "younited/get-previous-tag-action@v1.0.0"
         
-      - run: echo '{{steps.previoustag.outputs.tag}}' && echo '{{steps.previoustag2.outputs.tag}}'
+      - run: echo '${{steps.previoustag.outputs.tag}}' && echo '${{steps.previoustag2.outputs.tag}}'
 
 #       - name: Create Pull Request
 #         id: cpr
