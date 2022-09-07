@@ -20,7 +20,7 @@ jobs:
         id: previous-release
         uses: "sammcoe/get-previous-release-action@v1"
         
-      - run: echo '${{steps.previoustag.outputs.tag}}' && echo '${{steps.previous-release.output.release}}'
+      - run: echo '${{steps.previoustag.outputs.tag}}' && echo '${{steps.previous-release.output.tag}}'
 
 #       - name: Create Pull Request
 #         id: cpr
