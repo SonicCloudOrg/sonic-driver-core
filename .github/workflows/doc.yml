@@ -32,6 +32,7 @@ jobs:
           author: GitHub <noreply@github.com>
           signoff: false
           branch: doc/${{steps.previoustag.outputs.tag}}
+          labels: document
           base: main
           delete-branch: true
           title: 'doc: update README files version to ${{steps.previoustag.outputs.tag}}'
