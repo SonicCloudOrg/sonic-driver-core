@@ -1,8 +1,9 @@
 name: update readme doc
 
 on:
-  release:
-    types: [published]
+  push:
+    tags:
+      - "*.*.*"
   
 jobs:
   release:

@@ -383,6 +383,16 @@ public class IOSDriver {
     }
 
     /**
+     * set default FindElement retry time and interval.
+     *
+     * @param retry
+     * @param interval
+     */
+    public void setDefaultFindElementInterval(Integer retry, Integer interval) {
+        wdaClient.setDefaultFindElementInterval(retry, interval);
+    }
+
+    /**
      * find element in device.
      *
      * @param iosSelector

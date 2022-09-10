@@ -381,6 +381,16 @@ public class WdaClientImpl implements WdaClient {
     }
 
     @Override
+    public void setDefaultFindElementInterval(Integer retry, Integer interval) {
+        if (retry != null) {
+            FIND_ELEMENT_RETRY = retry;
+        }
+        if (interval != null) {
+            FIND_ELEMENT_INTERVAL = interval;
+        }
+    }
+
+    @Override
     public WebElement findElement(String selector, String value, Integer retry, Integer interval) throws SonicRespException {
         WebElement webElement = null;
         int wait = 0;

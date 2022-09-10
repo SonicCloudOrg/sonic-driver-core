@@ -258,6 +258,8 @@ public class IOSDriverTest {
         imageOutput.close();
         output.delete();
         iosDriver.findElement(IOSSelector.ACCESSIBILITY_ID, "取消").click();
+        iosDriver.setDefaultFindElementInterval(null, 3000);
+        iosDriver.setDefaultFindElementInterval(5, null);
         iosDriver.pressButton(SystemButton.HOME);
     }
 

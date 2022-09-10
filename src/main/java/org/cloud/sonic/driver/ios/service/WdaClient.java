@@ -97,6 +97,8 @@ public interface WdaClient {
     void appAuthReset(int resource) throws SonicRespException;
 
     //element handler.
+    void setDefaultFindElementInterval(Integer retry, Integer interval);
+
     WebElement findElement(String selector, String value, Integer retry, Integer interval) throws SonicRespException;
 
     List<WebElement> findElementList(String selector, String value, Integer retry, Integer interval) throws SonicRespException;
