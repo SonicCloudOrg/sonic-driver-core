@@ -64,9 +64,9 @@ implementation 'io.github.soniccloudorg:sonic-driver-core:1.0.16'
 ### 代码
 
 ```java
-package org.cloud.sonic.core.ios;
+package org.cloud.sonic.driver.ios;
 
-import org.cloud.sonic.core.tool.SonicRespException;
+import org.cloud.sonic.driver.tool.SonicRespException;
 
 public class MyTest {
 

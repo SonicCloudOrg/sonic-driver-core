@@ -1,0 +1,298 @@
+/*
+ *  Copyright (C) [SonicCloudOrg] Sonic Project
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ *
+ */
+package org.cloud.sonic.driver.ios;
+
+import com.alibaba.fastjson.JSONObject;
+import org.cloud.sonic.driver.ios.enums.*;
+import org.cloud.sonic.driver.ios.models.*;
+import org.cloud.sonic.driver.ios.service.WebElement;
+import org.cloud.sonic.driver.tool.SonicRespException;
+import org.junit.*;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
+
+import javax.imageio.stream.FileImageOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.util.UUID;
+
+@RunWith(Parameterized.class)
+public class IOSDriverTest {
+    static IOSDriver iosDriver;
+    static final String SONIC_REMOTE_URL = "http://SONIC_REMOTE_TEST_URL";
+    static String url = "http://localhost:8100";
+
+    @Parameterized.Parameters
+    public static Object[][] data() {
+        return new Object[1][0];
+    }
+
+    @Before
+    public void before() throws InterruptedException {
+        Thread.sleep(2000);
+    }
+
+    @BeforeClass
+    public static void beforeClass() throws SonicRespException {
+        if (!SONIC_REMOTE_URL.contains("SONIC_REMOTE_TEST")) {
+            url = SONIC_REMOTE_URL;
+        }
+        Boolean hasThrow = false;
+        try {
+            new IOSDriver(url, null);
+        } catch (Throwable e) {
+            hasThrow = true;
+            Assert.assertEquals(SonicRespException.class, e.getClass());
+            Assert.assertEquals("'capabilities' is mandatory to create a new session", e.getMessage());
+        }
+        Assert.assertTrue(hasThrow);
+        iosDriver = new IOSDriver(url, new JSONObject());
+        iosDriver.disableLog();
+        Assert.assertEquals(url, iosDriver.getWdaClient().getRemoteUrl());
+        Assert.assertTrue(iosDriver.getSessionId().length() > 0);
+        iosDriver.closeDriver();
+
+        iosDriver = new IOSDriver(url);
+        Assert.assertEquals(url, iosDriver.getWdaClient().getRemoteUrl());
+        Assert.assertTrue(iosDriver.getSessionId().length() > 0);
+    }
+
+    @Test
+    public void testApp() throws SonicRespException {
+        iosDriver.appActivate("developer.apple.wwdc-Release");
+        Boolean hasThrow = false;
+        try {
+            iosDriver.appActivate("");
+        } catch (Throwable e) {
+            hasThrow = true;
+            Assert.assertEquals(SonicRespException.class, e.getClass());
+            Assert.assertEquals("bundleId not found.", e.getMessage());
+        }
+        Assert.assertTrue(hasThrow);
+        hasThrow = false;
+        try {
+            iosDriver.appActivate(null);
+        } catch (Throwable e) {
+            hasThrow = true;
+            Assert.assertEquals(SonicRespException.class, e.getClass());
+            Assert.assertEquals("bundleId not found.", e.getMessage());
+        }
+        Assert.assertTrue(hasThrow);
+        iosDriver.appRunBackground(5);
+        Assert.assertTrue(iosDriver.appTerminate("developer.apple.wwdc-Release"));
+        Assert.assertFalse(iosDriver.appTerminate("developer.apple.wwdc-Release"));
+        iosDriver.appAuthReset(AuthResource.CAMERA);
+    }
+
+    @Test
+    public void testSiriAndSendKeys() throws SonicRespException, InterruptedException {
+        iosDriver.sendSiriCommand("打开提醒事项");
+        Boolean hasThrow = false;
+        try {
+            iosDriver.sendSiriCommand("");
+        } catch (Throwable e) {
+            hasThrow = true;
+            Assert.assertEquals(SonicRespException.class, e.getClass());
+            Assert.assertEquals("siri command is null!", e.getMessage());
+        }
+        Assert.assertTrue(hasThrow);
+        hasThrow = false;
+        try {
+            iosDriver.sendSiriCommand(null);
+        } catch (Throwable e) {
+            hasThrow = true;
+            Assert.assertEquals(SonicRespException.class, e.getClass());
+            Assert.assertEquals("siri command is null!", e.getMessage());
+        }
+        Assert.assertTrue(hasThrow);
+        Thread.sleep(4000);
+        iosDriver.tap(150, 181);
+        iosDriver.sendKeys("中文123");
+        iosDriver.sendKeys(TextKey.DELETE);
+        iosDriver.sendKeys(TextKey.BACK_SPACE);
+        iosDriver.pressButton(SystemButton.HOME);
+    }
+
+    @Test
+    public void testPasteboard() throws SonicRespException, InterruptedException {
+        iosDriver.pressButton(SystemButton.HOME);
+        String text = UUID.randomUUID() + "中文";
+        iosDriver.appActivate("com.apple.springboard");
+        iosDriver.findElement(IOSSelector.ACCESSIBILITY_ID, "WebDriverAgentRunner-Runner").click();
+        iosDriver.setPasteboard(PasteboardType.PLAIN_TEXT, text);
+        Thread.sleep(1000);
+        Assert.assertEquals(text, new String(iosDriver.getPasteboard(PasteboardType.PLAIN_TEXT), StandardCharsets.UTF_8));
+        iosDriver.pressButton(SystemButton.HOME);
+    }
+
+    @Test
+    public void testSwipe() throws SonicRespException, InterruptedException {
+        iosDriver.swipe(100, 256, 50, 256);
+        Thread.sleep(500);
+        iosDriver.swipe(50, 256, 100, 256);
+    }
+
+    @Test
+    public void testTap() throws SonicRespException, InterruptedException {
+        iosDriver.tap(150, 81);
+        Thread.sleep(500);
+        iosDriver.pressButton(SystemButton.HOME);
+    }
+
+    @Test
+    public void testLongPress() throws SonicRespException {
+        iosDriver.longPress(150, 281, 1500);
+        iosDriver.pressButton(SystemButton.HOME);
+    }
+
+    @Test
+    public void testPerformTouchAction() throws SonicRespException, InterruptedException {
+        iosDriver.performTouchAction(new TouchActions().press(100, 256).wait(50).move(50, 256).wait(10).release());
+        Thread.sleep(1500);
+        iosDriver.performTouchAction(new TouchActions().press(50, 256).wait(50).move(100, 256).wait(10).release());
+    }
+
+    @Test
+    public void testPressButton() throws SonicRespException, InterruptedException {
+        iosDriver.pressButton(SystemButton.HOME);
+        Thread.sleep(1000);
+        iosDriver.pressButton(SystemButton.VOLUME_DOWN);
+        Thread.sleep(1000);
+        iosDriver.pressButton(SystemButton.VOLUME_UP);
+        Thread.sleep(1000);
+        iosDriver.pressButton("home");
+    }
+
+    @Test
+    public void testGetPageSource() throws SonicRespException {
+        Assert.assertTrue(iosDriver.getPageSource().contains("XCUIElementTypeApplication"));
+    }
+
+    @Test
+    public void testLock() throws SonicRespException {
+        iosDriver.lock();
+        Assert.assertTrue(iosDriver.isLocked());
+        iosDriver.unlock();
+        Assert.assertFalse(iosDriver.isLocked());
+    }
+
+    @Test
+    public void testSession() {
+        String sessionId = iosDriver.getSessionId();
+        iosDriver.getWdaClient().setSessionId(null);
+        Boolean hasThrow = false;
+        try {
+            iosDriver.getWdaClient().lock();
+        } catch (Throwable e) {
+            hasThrow = true;
+            Assert.assertEquals(SonicRespException.class, e.getClass());
+            Assert.assertEquals("sessionId not found.", e.getMessage());
+        }
+        Assert.assertTrue(hasThrow);
+        iosDriver.getWdaClient().setSessionId("");
+        hasThrow = false;
+        try {
+            iosDriver.getWdaClient().lock();
+        } catch (Throwable e) {
+            hasThrow = true;
+            Assert.assertEquals(SonicRespException.class, e.getClass());
+            Assert.assertEquals("sessionId not found.", e.getMessage());
+        }
+        Assert.assertTrue(hasThrow);
+        iosDriver.getWdaClient().setSessionId(sessionId);
+    }
+
+    @Test
+    public void testFindElement() throws SonicRespException, InterruptedException, IOException {
+        Boolean hasThrow = false;
+        try {
+            iosDriver.findElement("accessibility id", "地图1").click();
+        } catch (Throwable e) {
+            hasThrow = true;
+            Assert.assertEquals(SonicRespException.class, e.getClass());
+            Assert.assertTrue(e.getMessage().contains("unable to find an element"));
+        }
+        Assert.assertTrue(hasThrow);
+        iosDriver.pressButton(SystemButton.HOME);
+        Thread.sleep(2000);
+        iosDriver.findElement("accessibility id", "地图").click();
+        iosDriver.findElement(XCUIElementType.ANY);
+        Thread.sleep(2000);
+        iosDriver.pressButton(SystemButton.HOME);
+        Thread.sleep(2000);
+        iosDriver.findElement(IOSSelector.ACCESSIBILITY_ID, "地图").click();
+        Thread.sleep(2000);
+        iosDriver.findElement(IOSSelector.ACCESSIBILITY_ID, "搜索地点或地址").click();
+        WebElement w = iosDriver.findElement(IOSSelector.ACCESSIBILITY_ID, "搜索地点或地址");
+        String text = UUID.randomUUID().toString().substring(0, 6) + "中文";
+        w.sendKeys(text);
+        Assert.assertEquals(text, w.getText());
+        w.clear();
+        Assert.assertEquals("搜索地点或地址", w.getText());
+        IOSRect iosRect = w.getRect();
+        Assert.assertTrue(iosRect.getX() > 0);
+        Assert.assertTrue(iosRect.getY() > 0);
+        Assert.assertTrue(iosRect.getWidth() > 0);
+        Assert.assertTrue(iosRect.getHeight() > 0);
+        Assert.assertTrue(iosRect.getCenter().getX() > 0);
+        Assert.assertTrue(iosRect.getCenter().getY() > 0);
+        byte[] bt = w.screenshot();
+        File output = new File("./" + UUID.randomUUID() + ".png");
+        FileImageOutputStream imageOutput = new FileImageOutputStream(output);
+        imageOutput.write(bt, 0, bt.length);
+        imageOutput.close();
+        output.delete();
+        iosDriver.findElement(IOSSelector.ACCESSIBILITY_ID, "取消").click();
+        iosDriver.pressButton(SystemButton.HOME);
+    }
+
+    @Test
+    public void testFindElementList() throws SonicRespException {
+        int eleSize = iosDriver.findElementList(XCUIElementType.WINDOW).size();
+        Assert.assertEquals(eleSize, iosDriver.findElementList("class name", "XCUIElementTypeWindow").size());
+        Assert.assertEquals(eleSize, iosDriver.findElementList(IOSSelector.CLASS_NAME, "XCUIElementTypeWindow").size());
+    }
+
+    @Test
+    public void testScreenshot() throws IOException, SonicRespException {
+        byte[] bt = iosDriver.screenshot();
+        File output = new File("./" + UUID.randomUUID() + ".png");
+        FileImageOutputStream imageOutput = new FileImageOutputStream(output);
+        imageOutput.write(bt, 0, bt.length);
+        imageOutput.close();
+        output.delete();
+    }
+
+    @Test
+    public void testGetWindowSize() throws SonicRespException {
+        WindowSize size = iosDriver.getWindowSize();
+        Assert.assertNotNull(size);
+        Assert.assertTrue(size.getHeight() > 0);
+        Assert.assertTrue(size.getWidth() > 0);
+    }
+
+    @Test
+    public void testSetAppiumSettings() throws SonicRespException {
+        iosDriver.setAppiumSettings(new JSONObject());
+    }
+
+    @AfterClass
+    public static void after() throws SonicRespException {
+        iosDriver.closeDriver();
+    }
+}
