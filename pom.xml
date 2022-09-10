@@ -66,6 +66,7 @@
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <version>1.18.20</version>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>cn.hutool</groupId>
