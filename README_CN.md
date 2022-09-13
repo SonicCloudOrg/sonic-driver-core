@@ -66,7 +66,7 @@ implementation 'io.github.soniccloudorg:sonic-driver-core:1.0.20'
 ```java
 package org.cloud.sonic.driver.ios;
 
-import org.cloud.sonic.driver.tool.SonicRespException;
+import org.cloud.sonic.driver.common.tool.SonicRespException;
 
 public class MyTest {
 
@@ -81,8 +81,8 @@ public class MyTest {
         iosDriver.performTouchAction(new TouchActions().press(50, 256).wait(50).move(100, 256).wait(10).release());
 
         //element
-        iosDriver.findElement(IOSSelector.XPATH,"//XCUIElementTypeTextField").click();
-        
+        iosDriver.findElement(IOSSelector.XPATH, "//XCUIElementTypeTextField").click();
+
         //更多...
     }
 }

@@ -18,11 +18,12 @@ package org.cloud.sonic.driver.ios.service;
 
 import com.alibaba.fastjson.JSONObject;
 import org.cloud.sonic.driver.common.service.BaseClient;
-import org.cloud.sonic.driver.tool.RespHandler;
+import org.cloud.sonic.driver.common.service.WebElement;
+import org.cloud.sonic.driver.common.tool.RespHandler;
 import org.cloud.sonic.driver.ios.models.TouchActions;
 import org.cloud.sonic.driver.ios.models.WindowSize;
-import org.cloud.sonic.driver.tool.Logger;
-import org.cloud.sonic.driver.tool.SonicRespException;
+import org.cloud.sonic.driver.common.tool.Logger;
+import org.cloud.sonic.driver.common.tool.SonicRespException;
 
 import java.util.List;
 
@@ -30,7 +31,7 @@ import java.util.List;
  * @author Eason
  * wda client interface
  */
-public interface WdaClient {
+public interface WdaClient extends BaseClient {
     //Client Setting
     void setGlobalTimeOut(int timeOut);
 

@@ -1,8 +1,6 @@
-package org.cloud.sonic.driver.ios;
+package org.cloud.sonic.driver.common.tool;
 
 import cn.hutool.http.HttpUtil;
-import org.cloud.sonic.driver.tool.RespHandler;
-import org.cloud.sonic.driver.tool.SonicRespException;
 import org.junit.Assert;
 import org.junit.Test;
 

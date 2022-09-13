@@ -14,7 +14,7 @@
  *  limitations under the License.
  *
  */
-package org.cloud.sonic.driver.tool;
+package org.cloud.sonic.driver.common.tool;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;

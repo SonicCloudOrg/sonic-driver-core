@@ -14,7 +14,7 @@
  *  limitations under the License.
  *
  */
-package org.cloud.sonic.driver.tool;
+package org.cloud.sonic.driver.common.tool;
 
 public class SonicRespException extends Exception{
     public SonicRespException(String message) {

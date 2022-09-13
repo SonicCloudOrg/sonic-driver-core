@@ -14,18 +14,15 @@
  *  limitations under the License.
  *
  */
-package org.cloud.sonic.driver.tool;
+package org.cloud.sonic.driver.common.tool;
 
 import cn.hutool.core.io.IORuntimeException;
 import cn.hutool.http.HttpException;
 import cn.hutool.http.HttpRequest;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import org.cloud.sonic.driver.android.service.UiaClient;
 import org.cloud.sonic.driver.common.models.BaseResp;
 import org.cloud.sonic.driver.common.models.ErrorMsg;
-import org.cloud.sonic.driver.ios.service.WdaClient;
-import org.cloud.sonic.driver.tool.SonicRespException;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -47,6 +44,7 @@ public class RespHandler {
             try {
                 return initResp(httpRequest.addHeaders(initHeader()).timeout(timeout).execute().body());
             } catch (HttpException | IORuntimeException e) {
+                e.printStackTrace();
                 throw new SonicRespException(e.getMessage());
             }
         }

@@ -14,10 +14,10 @@
  *  limitations under the License.
  *
  */
-package org.cloud.sonic.driver.ios.service;
+package org.cloud.sonic.driver.common.service;
 
 import org.cloud.sonic.driver.ios.models.IOSRect;
-import org.cloud.sonic.driver.tool.SonicRespException;
+import org.cloud.sonic.driver.common.tool.SonicRespException;
 
 /**
  * @author Eason
