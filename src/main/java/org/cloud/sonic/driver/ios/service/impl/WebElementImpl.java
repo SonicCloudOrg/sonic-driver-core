@@ -19,7 +19,7 @@ package org.cloud.sonic.driver.ios.service.impl;
 import cn.hutool.http.HttpUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson2.JSON;
-import org.cloud.sonic.driver.ios.models.BaseResp;
+import org.cloud.sonic.driver.common.models.BaseResp;
 import org.cloud.sonic.driver.ios.models.IOSRect;
 import org.cloud.sonic.driver.ios.service.WdaClient;
 import org.cloud.sonic.driver.ios.service.WebElement;

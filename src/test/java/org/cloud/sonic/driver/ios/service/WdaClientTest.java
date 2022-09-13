@@ -17,10 +17,10 @@
 package org.cloud.sonic.driver.ios.service;
 
 import com.alibaba.fastjson.JSONObject;
-import org.cloud.sonic.driver.ios.RespHandler;
+import org.cloud.sonic.driver.tool.RespHandler;
 import org.cloud.sonic.driver.ios.enums.IOSSelector;
-import org.cloud.sonic.driver.ios.models.BaseResp;
-import org.cloud.sonic.driver.ios.models.ErrorMsg;
+import org.cloud.sonic.driver.common.models.BaseResp;
+import org.cloud.sonic.driver.common.models.ErrorMsg;
 import org.cloud.sonic.driver.ios.enums.PasteboardType;
 import org.cloud.sonic.driver.ios.models.TouchActions;
 import org.cloud.sonic.driver.ios.service.impl.WdaClientImpl;

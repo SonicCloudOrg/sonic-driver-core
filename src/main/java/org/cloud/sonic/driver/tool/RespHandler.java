@@ -14,15 +14,16 @@
  *  limitations under the License.
  *
  */
-package org.cloud.sonic.driver.ios;
+package org.cloud.sonic.driver.tool;
 
 import cn.hutool.core.io.IORuntimeException;
 import cn.hutool.http.HttpException;
 import cn.hutool.http.HttpRequest;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import org.cloud.sonic.driver.ios.models.BaseResp;
-import org.cloud.sonic.driver.ios.models.ErrorMsg;
+import org.cloud.sonic.driver.android.service.UiaClient;
+import org.cloud.sonic.driver.common.models.BaseResp;
+import org.cloud.sonic.driver.common.models.ErrorMsg;
 import org.cloud.sonic.driver.ios.service.WdaClient;
 import org.cloud.sonic.driver.tool.SonicRespException;
 
@@ -42,7 +43,7 @@ public class RespHandler {
     }
 
     public BaseResp getResp(HttpRequest httpRequest, int timeout) throws SonicRespException {
-        synchronized (WdaClient.class) {
+        synchronized (this) {
             try {
                 return initResp(httpRequest.addHeaders(initHeader()).timeout(timeout).execute().body());
             } catch (HttpException | IORuntimeException e) {
@@ -52,8 +53,8 @@ public class RespHandler {
     }
 
     public BaseResp initResp(String response) {
-        if (response.contains("traceback")) {
-            return initErrorMsg(response);
+        if (response.contains("traceback") || response.contains("stacktrace")) {
+            return initErrorMsg(response.replace("stacktrace","traceback"));
         } else {
             return JSON.parseObject(response, BaseResp.class);
         }

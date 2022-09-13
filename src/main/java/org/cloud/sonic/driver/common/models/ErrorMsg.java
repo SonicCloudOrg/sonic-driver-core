@@ -14,16 +14,19 @@
  *  limitations under the License.
  *
  */
-package org.cloud.sonic.driver.ios.models;
+package org.cloud.sonic.driver.common.models;
 
 import lombok.AllArgsConstructor;
 import lombok.ToString;
 
 @ToString
 @AllArgsConstructor
-public class Capabilities {
-    private String device;
-    private String browserName;
-    private String sdkVersion;
-    private String CFBundleIdentifier;
+public class ErrorMsg {
+    private String error;
+    private String message;
+    private String traceback;
+
+    public String getMessage() {
+        return message;
+    }
 }
