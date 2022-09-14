@@ -63,13 +63,6 @@ public interface UiaClient extends BaseClient {
     //window handler.
     WindowSize getWindowSize() throws SonicRespException;
 
-    //lock handler.
-    boolean isLocked() throws SonicRespException;
-
-    void lock() throws SonicRespException;
-
-    void unlock() throws SonicRespException;
-
     //perform handler.
     void performTouchAction(TouchActions touchActions) throws SonicRespException;
 
@@ -85,18 +78,6 @@ public interface UiaClient extends BaseClient {
 
     //source handler.
     String pageSource() throws SonicRespException;
-
-    //siri handler.
-    void sendSiriCommand(String command) throws SonicRespException;
-
-    //app handler.
-    void appActivate(String bundleId) throws SonicRespException;
-
-    boolean appTerminate(String bundleId) throws SonicRespException;
-
-    void appRunBackground(int duration) throws SonicRespException;
-
-    void appAuthReset(int resource) throws SonicRespException;
 
     //element handler.
     void setDefaultFindElementInterval(Integer retry, Integer interval);

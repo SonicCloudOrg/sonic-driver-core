@@ -172,46 +172,9 @@ public class UiaClientImpl implements UiaClient {
     }
 
     @Override
-    public boolean isLocked() throws SonicRespException {
-        checkSessionId();
-        BaseResp b = respHandler.getResp(HttpUtil.createGet(remoteUrl + "/session/" + sessionId + "/wda/locked"));
-        if (b.getErr() == null) {
-            logger.info("device lock status: %b.", b.getValue());
-            return (boolean) b.getValue();
-        } else {
-            logger.error("get device lock status failed.");
-            throw new SonicRespException(b.getErr().getMessage());
-        }
-    }
-
-    @Override
-    public void lock() throws SonicRespException {
-        checkSessionId();
-        BaseResp b = respHandler.getResp(HttpUtil.createPost(remoteUrl + "/session/" + sessionId + "/wda/lock"));
-        if (b.getErr() == null) {
-            logger.info("lock device.");
-        } else {
-            logger.error("lock device failed.");
-            throw new SonicRespException(b.getErr().getMessage());
-        }
-    }
-
-    @Override
-    public void unlock() throws SonicRespException {
-        checkSessionId();
-        BaseResp b = respHandler.getResp(HttpUtil.createPost(remoteUrl + "/session/" + sessionId + "/wda/unlock"));
-        if (b.getErr() == null) {
-            logger.info("unlock device.");
-        } else {
-            logger.error("unlock device failed.");
-            throw new SonicRespException(b.getErr().getMessage());
-        }
-    }
-
-    @Override
     public void performTouchAction(TouchActions touchActions) throws SonicRespException {
         checkSessionId();
-        BaseResp b = respHandler.getResp(HttpUtil.createPost(remoteUrl + "/session/" + sessionId + "/wda/touch/multi/perform")
+        BaseResp b = respHandler.getResp(HttpUtil.createPost(remoteUrl + "/session/" + sessionId + "/touch/multi/perform")
                 .body(String.valueOf(JSONObject.toJSON(touchActions))));
         if (b.getErr() == null) {
             logger.info("perform action %s.", touchActions.toString());
@@ -294,89 +257,6 @@ public class UiaClientImpl implements UiaClient {
             return b.getValue().toString();
         } else {
             logger.error("get page source failed.");
-            throw new SonicRespException(b.getErr().getMessage());
-        }
-    }
-
-    @Override
-    public void sendSiriCommand(String command) throws SonicRespException {
-        if (command != null && command.length() != 0) {
-            checkSessionId();
-            JSONObject data = new JSONObject();
-            data.put("text", command);
-            BaseResp b = respHandler.getResp(HttpUtil.createPost(remoteUrl + "/session/" + sessionId + "/wda/siri/activate")
-                    .body(data.toJSONString()));
-            if (b.getErr() == null) {
-                logger.info("send siri command: %s", command);
-            } else {
-                logger.error("send siri command [%s] failed.", command);
-                throw new SonicRespException(b.getErr().getMessage());
-            }
-        } else {
-            logger.error("siri command is null!");
-            throw new SonicRespException("siri command is null!");
-        }
-    }
-
-    @Override
-    public void appActivate(String bundleId) throws SonicRespException {
-        checkSessionId();
-        checkBundleId(bundleId);
-        JSONObject data = new JSONObject();
-        data.put("bundleId", bundleId);
-        BaseResp b = respHandler.getResp(HttpUtil.createPost(remoteUrl + "/session/" + sessionId + "/wda/apps/activate")
-                .body(data.toJSONString()));
-        if (b.getErr() == null) {
-            logger.info("activate app %s.", bundleId);
-        } else {
-            logger.error("activate app %s failed.", bundleId);
-            throw new SonicRespException(b.getErr().getMessage());
-        }
-    }
-
-    @Override
-    public boolean appTerminate(String bundleId) throws SonicRespException {
-        checkSessionId();
-        checkBundleId(bundleId);
-        JSONObject data = new JSONObject();
-        data.put("bundleId", bundleId);
-        BaseResp b = respHandler.getResp(HttpUtil.createPost(remoteUrl + "/session/" + sessionId + "/wda/apps/terminate")
-                .body(data.toJSONString()));
-        if (b.getErr() == null) {
-            logger.info("terminate app %s status: %b.", bundleId, b.getValue());
-            return (boolean) b.getValue();
-        } else {
-            logger.error("terminate app failed.", bundleId);
-            throw new SonicRespException(b.getErr().getMessage());
-        }
-    }
-
-    @Override
-    public void appRunBackground(int duration) throws SonicRespException {
-        checkSessionId();
-        JSONObject data = new JSONObject();
-        data.put("duration", duration);
-        BaseResp b = respHandler.getResp(HttpUtil.createPost(remoteUrl + "/session/" + sessionId + "/wda/deactivateApp")
-                .body(data.toJSONString()));
-        if (b.getErr() == null) {
-            logger.info("run app background in %d seconds.", duration);
-        } else {
-            logger.error("run app background failed.");
-            throw new SonicRespException(b.getErr().getMessage());
-        }
-    }
-
-    @Override
-    public void appAuthReset(int resource) throws SonicRespException {
-        checkSessionId();
-        JSONObject data = new JSONObject();
-        data.put("resource", resource);
-        BaseResp b = respHandler.getResp(HttpUtil.createPost(remoteUrl + "/session/" + sessionId + "/wda/resetAppAuth")
-                .body(data.toJSONString()));
-        if (b.getErr() == null) {
-            logger.info("reset app auth %s.", resource);
-        } else {
-            logger.error("reset app auth failed.");
             throw new SonicRespException(b.getErr().getMessage());
         }
     }

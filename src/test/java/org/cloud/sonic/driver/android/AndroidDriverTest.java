@@ -3,10 +3,9 @@ package org.cloud.sonic.driver.android;
 import com.alibaba.fastjson.JSONObject;
 import org.cloud.sonic.driver.common.tool.SonicRespException;
 import org.cloud.sonic.driver.ios.enums.AuthResource;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.cloud.sonic.driver.ios.enums.SystemButton;
+import org.cloud.sonic.driver.ios.models.TouchActions;
+import org.junit.*;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
@@ -44,37 +43,42 @@ public class AndroidDriverTest {
         androidDriver.disableLog();
         Assert.assertEquals(url, androidDriver.getUiaClient().getRemoteUrl());
         Assert.assertTrue(androidDriver.getSessionId().length() > 0);
-        androidDriver.closeDriver();
+    }
 
-        androidDriver = new AndroidDriver(url);
-        Assert.assertEquals(url, androidDriver.getUiaClient().getRemoteUrl());
-        Assert.assertTrue(androidDriver.getSessionId().length() > 0);
+    @AfterClass
+    public static void afterClass() throws SonicRespException {
+        androidDriver.closeDriver();
     }
 
     @Test
-    public void testApp() throws SonicRespException {
-        androidDriver.appActivate("developer.apple.wwdc-Release");
-        Boolean hasThrow = false;
-        try {
-            androidDriver.appActivate("");
-        } catch (Throwable e) {
-            hasThrow = true;
-            Assert.assertEquals(SonicRespException.class, e.getClass());
-            Assert.assertEquals("bundleId not found.", e.getMessage());
-        }
-        Assert.assertTrue(hasThrow);
-        hasThrow = false;
-        try {
-            androidDriver.appActivate(null);
-        } catch (Throwable e) {
-            hasThrow = true;
-            Assert.assertEquals(SonicRespException.class, e.getClass());
-            Assert.assertEquals("bundleId not found.", e.getMessage());
-        }
-        Assert.assertTrue(hasThrow);
-        androidDriver.appRunBackground(5);
-        Assert.assertTrue(androidDriver.appTerminate("developer.apple.wwdc-Release"));
-        Assert.assertFalse(androidDriver.appTerminate("developer.apple.wwdc-Release"));
-        androidDriver.appAuthReset(AuthResource.CAMERA);
+    public void testSource() throws SonicRespException {
+        Assert.assertTrue(androidDriver.getPageSource().contains("android.widget.FrameLayout"));
+    }
+
+    @Test
+    public void testSwipe() throws SonicRespException, InterruptedException {
+        androidDriver.swipe(100, 256, 50, 256);
+        Thread.sleep(500);
+        androidDriver.swipe(50, 256, 100, 256);
+    }
+
+    @Test
+    public void testTap() throws SonicRespException, InterruptedException {
+        androidDriver.tap(150, 81);
+        Thread.sleep(500);
+//        androidDriver.pressButton(SystemButton.HOME);
+    }
+
+    @Test
+    public void testLongPress() throws SonicRespException {
+        androidDriver.longPress(150, 281, 1500);
+//        androidDriver.pressButton(SystemButton.HOME);
+    }
+
+    @Test
+    public void testPerformTouchAction() throws SonicRespException, InterruptedException {
+        androidDriver.performTouchAction(new TouchActions().press(100, 256).wait(50).move(50, 256).wait(10).release());
+        Thread.sleep(1500);
+        androidDriver.performTouchAction(new TouchActions().press(50, 256).wait(50).move(100, 256).wait(10).release());
     }
 }

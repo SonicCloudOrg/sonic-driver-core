@@ -134,34 +134,6 @@ public class AndroidDriver {
     }
 
     /**
-     * get device lock status.
-     *
-     * @return
-     * @throws SonicRespException
-     */
-    public boolean isLocked() throws SonicRespException {
-        return uiaClient.isLocked();
-    }
-
-    /**
-     * lock device.
-     *
-     * @throws SonicRespException
-     */
-    public void lock() throws SonicRespException {
-        uiaClient.lock();
-    }
-
-    /**
-     * unlock device.
-     *
-     * @throws SonicRespException
-     */
-    public void unlock() throws SonicRespException {
-        uiaClient.unlock();
-    }
-
-    /**
      * tap position on screen.
      *
      * @param x
@@ -321,67 +293,6 @@ public class AndroidDriver {
      */
     public String getPageSource() throws SonicRespException {
         return uiaClient.pageSource();
-    }
-
-    /**
-     * send siri command.
-     *
-     * @param command
-     * @throws SonicRespException
-     */
-    public void sendSiriCommand(String command) throws SonicRespException {
-        uiaClient.sendSiriCommand(command);
-    }
-
-    /**
-     * activate app.
-     *
-     * @param bundleId
-     * @throws SonicRespException
-     */
-    public void appActivate(String bundleId) throws SonicRespException {
-        uiaClient.appActivate(bundleId);
-    }
-
-    /**
-     * terminate app and get status.
-     *
-     * @param bundleId
-     * @return
-     * @throws SonicRespException
-     */
-    public boolean appTerminate(String bundleId) throws SonicRespException {
-        return uiaClient.appTerminate(bundleId);
-    }
-
-    /**
-     * run app background in seconds.
-     *
-     * @param duration
-     * @throws SonicRespException
-     */
-    public void appRunBackground(int duration) throws SonicRespException {
-        uiaClient.appRunBackground(duration);
-    }
-
-    /**
-     * reset app auth source.
-     *
-     * @param resource
-     * @throws SonicRespException
-     */
-    public void appAuthReset(int resource) throws SonicRespException {
-        uiaClient.appAuthReset(resource);
-    }
-
-    /**
-     * reset app auth source.
-     *
-     * @param authResource
-     * @throws SonicRespException
-     */
-    public void appAuthReset(AuthResource authResource) throws SonicRespException {
-        appAuthReset(authResource.getResource());
     }
 
     /**
