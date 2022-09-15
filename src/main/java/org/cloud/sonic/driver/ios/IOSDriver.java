@@ -17,6 +17,7 @@
 package org.cloud.sonic.driver.ios;
 
 import com.alibaba.fastjson.JSONObject;
+import org.cloud.sonic.driver.common.models.WindowSize;
 import org.cloud.sonic.driver.ios.enums.*;
 import org.cloud.sonic.driver.ios.models.*;
 import org.cloud.sonic.driver.ios.service.WdaClient;

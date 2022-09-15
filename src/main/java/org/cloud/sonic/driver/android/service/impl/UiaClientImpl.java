@@ -26,16 +26,12 @@ import org.cloud.sonic.driver.common.models.SessionInfo;
 import org.cloud.sonic.driver.common.service.WebElement;
 import org.cloud.sonic.driver.common.service.impl.WebElementImpl;
 import org.cloud.sonic.driver.common.tool.RespHandler;
-import org.cloud.sonic.driver.ios.models.TouchActions;
-import org.cloud.sonic.driver.ios.models.WindowSize;
+import org.cloud.sonic.driver.common.models.WindowSize;
 import org.cloud.sonic.driver.common.tool.Logger;
 import org.cloud.sonic.driver.common.tool.SonicRespException;
 
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Base64;
-import java.util.List;
+import java.util.*;
 
 public class UiaClientImpl implements UiaClient {
     private String remoteUrl;
@@ -159,7 +155,7 @@ public class UiaClientImpl implements UiaClient {
     public WindowSize getWindowSize() throws SonicRespException {
         if (size == null) {
             checkSessionId();
-            BaseResp b = respHandler.getResp(HttpUtil.createGet(remoteUrl + "/session/" + sessionId + "/window/size"));
+            BaseResp b = respHandler.getResp(HttpUtil.createGet(remoteUrl + "/session/" + sessionId + "/window/:windowHandle/size"));
             if (b.getErr() == null) {
                 size = JSON.parseObject(b.getValue().toString(), WindowSize.class);
                 logger.info("get window size %s.", size.toString());
@@ -172,40 +168,12 @@ public class UiaClientImpl implements UiaClient {
     }
 
     @Override
-    public void performTouchAction(TouchActions touchActions) throws SonicRespException {
-        checkSessionId();
-        BaseResp b = respHandler.getResp(HttpUtil.createPost(remoteUrl + "/session/" + sessionId + "/touch/multi/perform")
-                .body(String.valueOf(JSONObject.toJSON(touchActions))));
-        if (b.getErr() == null) {
-            logger.info("perform action %s.", touchActions.toString());
-        } else {
-            logger.error("perform failed.");
-            throw new SonicRespException(b.getErr().getMessage());
-        }
-    }
-
-    @Override
-    public void pressButton(String buttonName) throws SonicRespException {
+    public void sendKeys(String text, boolean isCover) throws SonicRespException {
         checkSessionId();
         JSONObject data = new JSONObject();
-        data.put("name", buttonName);
-        BaseResp b = respHandler.getResp(HttpUtil.createPost(remoteUrl + "/session/" + sessionId + "/wda/pressButton")
-                .body(data.toJSONString()));
-        if (b.getErr() == null) {
-            logger.info("press button %s.", buttonName);
-        } else {
-            logger.error("press button failed.");
-            throw new SonicRespException(b.getErr().getMessage());
-        }
-    }
-
-    @Override
-    public void sendKeys(String text, Integer frequency) throws SonicRespException {
-        checkSessionId();
-        JSONObject data = new JSONObject();
-        data.put("value", text.split(""));
-        data.put("frequency", frequency);
-        BaseResp b = respHandler.getResp(HttpUtil.createPost(remoteUrl + "/session/" + sessionId + "/wda/keys")
+        data.put("text", text);
+        data.put("replace", isCover);
+        BaseResp b = respHandler.getResp(HttpUtil.createPost(remoteUrl + "/session/" + sessionId + "/keys")
                 .body(data.toJSONString()));
         if (b.getErr() == null) {
             logger.info("send key %s.", text);
@@ -219,9 +187,9 @@ public class UiaClientImpl implements UiaClient {
     public void setPasteboard(String contentType, String content) throws SonicRespException {
         checkSessionId();
         JSONObject data = new JSONObject();
-        data.put("contentType", contentType);
+        data.put("contentType", contentType.toUpperCase(Locale.ROOT));
         data.put("content", Base64.getEncoder().encodeToString(content.getBytes(StandardCharsets.UTF_8)));
-        BaseResp b = respHandler.getResp(HttpUtil.createPost(remoteUrl + "/session/" + sessionId + "/wda/setPasteboard")
+        BaseResp b = respHandler.getResp(HttpUtil.createPost(remoteUrl + "/session/" + sessionId + "/appium/device/set_clipboard")
                 .body(data.toJSONString()));
         if (b.getErr() == null) {
             logger.info("set pasteboard %s.", content);
@@ -235,10 +203,11 @@ public class UiaClientImpl implements UiaClient {
     public byte[] getPasteboard(String contentType) throws SonicRespException {
         checkSessionId();
         JSONObject data = new JSONObject();
-        data.put("contentType", contentType);
-        BaseResp b = respHandler.getResp(HttpUtil.createPost(remoteUrl + "/session/" + sessionId + "/wda/getPasteboard")
+        data.put("contentType", contentType.toUpperCase(Locale.ROOT));
+        BaseResp b = respHandler.getResp(HttpUtil.createPost(remoteUrl + "/session/" + sessionId + "/appium/device/get_clipboard")
                 .body(data.toJSONString()));
         if (b.getErr() == null) {
+            System.out.println(b.getValue());
             byte[] result = Base64.getMimeDecoder().decode(b.getValue().toString());
             logger.info("get pasteboard length: %d.", result.length);
             return result;
@@ -282,8 +251,8 @@ public class UiaClientImpl implements UiaClient {
             wait++;
             checkSessionId();
             JSONObject data = new JSONObject();
-            data.put("using", selector);
-            data.put("value", value);
+            data.put("strategy", selector);
+            data.put("selector", value);
             BaseResp b = respHandler.getResp(HttpUtil.createPost(remoteUrl + "/session/" + sessionId + "/element")
                     .body(data.toJSONString()));
             if (b.getErr() == null) {
@@ -324,8 +293,8 @@ public class UiaClientImpl implements UiaClient {
             wait++;
             checkSessionId();
             JSONObject data = new JSONObject();
-            data.put("using", selector);
-            data.put("value", value);
+            data.put("strategy", selector);
+            data.put("selector", value);
             BaseResp b = respHandler.getResp(HttpUtil.createPost(remoteUrl + "/session/" + sessionId + "/elements")
                     .body(data.toJSONString()));
             if (b.getErr() == null) {

@@ -22,8 +22,7 @@ import org.cloud.sonic.driver.common.service.WebElement;
 import org.cloud.sonic.driver.common.tool.RespHandler;
 import org.cloud.sonic.driver.common.tool.Logger;
 import org.cloud.sonic.driver.common.tool.SonicRespException;
-import org.cloud.sonic.driver.ios.models.TouchActions;
-import org.cloud.sonic.driver.ios.models.WindowSize;
+import org.cloud.sonic.driver.common.models.WindowSize;
 
 import java.util.List;
 
@@ -63,14 +62,8 @@ public interface UiaClient extends BaseClient {
     //window handler.
     WindowSize getWindowSize() throws SonicRespException;
 
-    //perform handler.
-    void performTouchAction(TouchActions touchActions) throws SonicRespException;
-
-    //button handler.
-    void pressButton(String buttonName) throws SonicRespException;
-
     //keyboard handler.
-    void sendKeys(String text, Integer frequency) throws SonicRespException;
+    void sendKeys(String text, boolean isCover) throws SonicRespException;
 
     void setPasteboard(String contentType, String content) throws SonicRespException;
 

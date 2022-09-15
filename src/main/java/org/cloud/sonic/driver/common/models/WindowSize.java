@@ -14,7 +14,7 @@
  *  limitations under the License.
  *
  */
-package org.cloud.sonic.driver.ios.models;
+package org.cloud.sonic.driver.common.models;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

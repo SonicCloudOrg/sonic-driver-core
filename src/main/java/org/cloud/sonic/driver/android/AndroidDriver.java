@@ -23,8 +23,7 @@ import org.cloud.sonic.driver.common.service.WebElement;
 import org.cloud.sonic.driver.common.tool.RespHandler;
 import org.cloud.sonic.driver.common.tool.SonicRespException;
 import org.cloud.sonic.driver.ios.enums.*;
-import org.cloud.sonic.driver.ios.models.TouchActions;
-import org.cloud.sonic.driver.ios.models.WindowSize;
+import org.cloud.sonic.driver.common.models.WindowSize;
 
 import java.util.List;
 
@@ -134,111 +133,24 @@ public class AndroidDriver {
     }
 
     /**
-     * tap position on screen.
-     *
-     * @param x
-     * @param y
-     * @throws SonicRespException
-     */
-    public void tap(int x, int y) throws SonicRespException {
-        performTouchAction(new TouchActions().press(x, y).release());
-    }
-
-    /**
-     * long press position on screen.
-     *
-     * @param x
-     * @param y
-     * @param ms
-     * @throws SonicRespException
-     */
-    public void longPress(int x, int y, int ms) throws SonicRespException {
-        performTouchAction(new TouchActions().press(x, y).wait(ms).release());
-    }
-
-    /**
-     * swipe position on screen.
-     *
-     * @param fromX
-     * @param fromY
-     * @param toX
-     * @param toY
-     * @throws SonicRespException
-     */
-    public void swipe(int fromX, int fromY, int toX, int toY) throws SonicRespException {
-        performTouchAction(new TouchActions().press(fromX, fromY).wait(50).move(toX, toY).wait(10).release());
-    }
-
-    /**
-     * perform touch action.
-     *
-     * @param touchActions
-     * @throws SonicRespException
-     */
-    public void performTouchAction(TouchActions touchActions) throws SonicRespException {
-        uiaClient.performTouchAction(touchActions);
-    }
-
-    /**
-     * press system button.
-     *
-     * @param systemButton
-     * @throws SonicRespException
-     */
-    public void pressButton(String systemButton) throws SonicRespException {
-        uiaClient.pressButton(systemButton);
-    }
-
-    /**
-     * press system button.
-     *
-     * @param systemButton
-     * @throws SonicRespException
-     */
-    public void pressButton(SystemButton systemButton) throws SonicRespException {
-        pressButton(systemButton.getButton());
-    }
-
-    /**
      * send key without element.
      *
      * @param text
      * @throws SonicRespException
      */
     public void sendKeys(String text) throws SonicRespException {
-        sendKeys(text, 3);
+        sendKeys(text, false);
     }
 
     /**
      * send key without element.
      *
      * @param text
-     * @param frequency
+     * @param isCover
      * @throws SonicRespException
      */
-    public void sendKeys(String text, int frequency) throws SonicRespException {
-        uiaClient.sendKeys(text, frequency);
-    }
-
-    /**
-     * send key without element.
-     *
-     * @param text
-     * @throws SonicRespException
-     */
-    public void sendKeys(TextKey text) throws SonicRespException {
-        sendKeys(text, 3);
-    }
-
-    /**
-     * send key without element.
-     *
-     * @param text
-     * @param frequency
-     * @throws SonicRespException
-     */
-    public void sendKeys(TextKey text, int frequency) throws SonicRespException {
-        sendKeys(text.getKey(), frequency);
+    public void sendKeys(String text, boolean isCover) throws SonicRespException {
+        uiaClient.sendKeys(text, isCover);
     }
 
     /**

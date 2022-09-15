@@ -21,7 +21,7 @@ import org.cloud.sonic.driver.common.service.BaseClient;
 import org.cloud.sonic.driver.common.service.WebElement;
 import org.cloud.sonic.driver.common.tool.RespHandler;
 import org.cloud.sonic.driver.ios.models.TouchActions;
-import org.cloud.sonic.driver.ios.models.WindowSize;
+import org.cloud.sonic.driver.common.models.WindowSize;
 import org.cloud.sonic.driver.common.tool.Logger;
 import org.cloud.sonic.driver.common.tool.SonicRespException;
 

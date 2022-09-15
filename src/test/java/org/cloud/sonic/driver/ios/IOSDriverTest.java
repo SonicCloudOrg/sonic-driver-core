@@ -17,6 +17,7 @@
 package org.cloud.sonic.driver.ios;
 
 import com.alibaba.fastjson.JSONObject;
+import org.cloud.sonic.driver.common.models.WindowSize;
 import org.cloud.sonic.driver.ios.enums.*;
 import org.cloud.sonic.driver.ios.models.*;
 import org.cloud.sonic.driver.common.service.WebElement;
@@ -63,6 +64,7 @@ public class IOSDriverTest {
         Assert.assertTrue(hasThrow);
         iosDriver = new IOSDriver(url, new JSONObject());
         iosDriver.disableLog();
+        iosDriver.showLog();
         Assert.assertEquals(url, iosDriver.getWdaClient().getRemoteUrl());
         Assert.assertTrue(iosDriver.getSessionId().length() > 0);
         iosDriver.closeDriver();
