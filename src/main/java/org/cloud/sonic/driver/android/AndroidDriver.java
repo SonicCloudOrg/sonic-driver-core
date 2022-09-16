@@ -17,6 +17,7 @@
 package org.cloud.sonic.driver.android;
 
 import com.alibaba.fastjson.JSONObject;
+import org.cloud.sonic.driver.android.enmus.AndroidSelector;
 import org.cloud.sonic.driver.android.service.UiaClient;
 import org.cloud.sonic.driver.android.service.impl.UiaClientImpl;
 import org.cloud.sonic.driver.common.service.WebElement;
@@ -220,24 +221,13 @@ public class AndroidDriver {
     /**
      * find element in device.
      *
-     * @param iosSelector
+     * @param androidSelector
      * @param value
      * @return
      * @throws SonicRespException
      */
-    public WebElement findElement(IOSSelector iosSelector, String value) throws SonicRespException {
-        return findElement(iosSelector, value, null);
-    }
-
-    /**
-     * find element in device.
-     *
-     * @param xcuiElementType
-     * @return
-     * @throws SonicRespException
-     */
-    public WebElement findElement(XCUIElementType xcuiElementType) throws SonicRespException {
-        return findElement(xcuiElementType, null);
+    public WebElement findElement(AndroidSelector androidSelector, String value) throws SonicRespException {
+        return findElement(androidSelector, value, null);
     }
 
     /**
@@ -255,26 +245,14 @@ public class AndroidDriver {
     /**
      * find element in device.
      *
-     * @param iosSelector
+     * @param androidSelector
      * @param value
      * @param retry
      * @return
      * @throws SonicRespException
      */
-    public WebElement findElement(IOSSelector iosSelector, String value, Integer retry) throws SonicRespException {
-        return findElement(iosSelector, value, retry, null);
-    }
-
-    /**
-     * find element in device.
-     *
-     * @param xcuiElementType
-     * @param retry
-     * @return
-     * @throws SonicRespException
-     */
-    public WebElement findElement(XCUIElementType xcuiElementType, Integer retry) throws SonicRespException {
-        return findElement(xcuiElementType, retry, null);
+    public WebElement findElement(AndroidSelector androidSelector, String value, Integer retry) throws SonicRespException {
+        return findElement(androidSelector, value, retry, null);
     }
 
     /**
@@ -293,28 +271,15 @@ public class AndroidDriver {
     /**
      * find element in device.
      *
-     * @param iosSelector
+     * @param androidSelector
      * @param value
      * @param retry
      * @param interval
      * @return
      * @throws SonicRespException
      */
-    public WebElement findElement(IOSSelector iosSelector, String value, Integer retry, Integer interval) throws SonicRespException {
-        return findElement(iosSelector.getSelector(), value, retry, interval);
-    }
-
-    /**
-     * find element in device.
-     *
-     * @param xcuiElementType
-     * @param retry
-     * @param interval
-     * @return
-     * @throws SonicRespException
-     */
-    public WebElement findElement(XCUIElementType xcuiElementType, Integer retry, Integer interval) throws SonicRespException {
-        return findElement(IOSSelector.CLASS_NAME.getSelector(), xcuiElementType.getType(), retry, interval);
+    public WebElement findElement(AndroidSelector androidSelector, String value, Integer retry, Integer interval) throws SonicRespException {
+        return findElement(androidSelector.getSelector(), value, retry, interval);
     }
 
     /**
@@ -334,24 +299,13 @@ public class AndroidDriver {
     /**
      * find element list in device.
      *
-     * @param iosSelector
+     * @param androidSelector
      * @param value
      * @return
      * @throws SonicRespException
      */
-    public List<WebElement> findElementList(IOSSelector iosSelector, String value) throws SonicRespException {
-        return findElementList(iosSelector, value, null);
-    }
-
-    /**
-     * find element list in device.
-     *
-     * @param xcuiElementType
-     * @return
-     * @throws SonicRespException
-     */
-    public List<WebElement> findElementList(XCUIElementType xcuiElementType) throws SonicRespException {
-        return findElementList(xcuiElementType, null);
+    public List<WebElement> findElementList(AndroidSelector androidSelector, String value) throws SonicRespException {
+        return findElementList(androidSelector, value, null);
     }
 
     /**
@@ -369,26 +323,14 @@ public class AndroidDriver {
     /**
      * find element list in device.
      *
-     * @param iosSelector
+     * @param androidSelector
      * @param value
      * @param retry
      * @return
      * @throws SonicRespException
      */
-    public List<WebElement> findElementList(IOSSelector iosSelector, String value, Integer retry) throws SonicRespException {
-        return findElementList(iosSelector, value, retry, null);
-    }
-
-    /**
-     * find element list in device.
-     *
-     * @param xcuiElementType
-     * @param retry
-     * @return
-     * @throws SonicRespException
-     */
-    public List<WebElement> findElementList(XCUIElementType xcuiElementType, Integer retry) throws SonicRespException {
-        return findElementList(xcuiElementType, retry, null);
+    public List<WebElement> findElementList(AndroidSelector androidSelector, String value, Integer retry) throws SonicRespException {
+        return findElementList(androidSelector, value, retry, null);
     }
 
     /**
@@ -407,28 +349,15 @@ public class AndroidDriver {
     /**
      * find element list in device.
      *
-     * @param iosSelector
+     * @param androidSelector
      * @param value
      * @param retry
      * @param interval
      * @return
      * @throws SonicRespException
      */
-    public List<WebElement> findElementList(IOSSelector iosSelector, String value, Integer retry, Integer interval) throws SonicRespException {
-        return findElementList(iosSelector.getSelector(), value, retry, interval);
-    }
-
-    /**
-     * find element list in device.
-     *
-     * @param xcuiElementType
-     * @param retry
-     * @param interval
-     * @return
-     * @throws SonicRespException
-     */
-    public List<WebElement> findElementList(XCUIElementType xcuiElementType, Integer retry, Integer interval) throws SonicRespException {
-        return findElementList(IOSSelector.CLASS_NAME.getSelector(), xcuiElementType.getType(), retry, interval);
+    public List<WebElement> findElementList(AndroidSelector androidSelector, String value, Integer retry, Integer interval) throws SonicRespException {
+        return findElementList(androidSelector.getSelector(), value, retry, interval);
     }
 
     /**

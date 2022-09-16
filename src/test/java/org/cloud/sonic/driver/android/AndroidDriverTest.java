@@ -1,6 +1,7 @@
 package org.cloud.sonic.driver.android;
 
 import com.alibaba.fastjson.JSONObject;
+import org.cloud.sonic.driver.android.enmus.AndroidSelector;
 import org.cloud.sonic.driver.common.service.WebElement;
 import org.cloud.sonic.driver.common.tool.SonicRespException;
 import org.cloud.sonic.driver.common.models.WindowSize;
@@ -57,7 +58,7 @@ public class AndroidDriverTest {
 
     @AfterClass
     public static void afterClass() throws SonicRespException {
-        androidDriver.closeDriver();
+//        androidDriver.closeDriver();
     }
 
     @Test
@@ -75,7 +76,7 @@ public class AndroidDriverTest {
 
     @Test
     public void testClipboard() throws SonicRespException {
-        androidDriver.setPasteboard(PasteboardType.PLAIN_TEXT,"abc");
+        androidDriver.setPasteboard(PasteboardType.PLAIN_TEXT, "abc");
 //        System.out.println(androidDriver.getPasteboard(PasteboardType.PLAIN_TEXT));
     }
 
@@ -83,45 +84,22 @@ public class AndroidDriverTest {
     public void testFindElement() throws SonicRespException, InterruptedException, IOException {
         Boolean hasThrow = false;
         try {
-            androidDriver.findElement("id", "android:id/content").click();
+            androidDriver.findElement("id", "android:id/content1").click();
         } catch (Throwable e) {
             hasThrow = true;
             Assert.assertEquals(SonicRespException.class, e.getClass());
-            Assert.assertTrue(e.getMessage().contains("unable to find an element"));
+            Assert.assertTrue(e.getMessage().contains("An element could not be located on the page using the given search parameters"));
         }
         Assert.assertTrue(hasThrow);
         Thread.sleep(2000);
-        androidDriver.findElement("id", "android:id/content").click();
-//        iosDriver.findElement(XCUIElementType.ANY);
-//        Thread.sleep(2000);
-//        iosDriver.pressButton(SystemButton.HOME);
-//        Thread.sleep(2000);
-//        iosDriver.findElement(IOSSelector.ACCESSIBILITY_ID, "地图").click();
-//        Thread.sleep(2000);
-//        iosDriver.findElement(IOSSelector.ACCESSIBILITY_ID, "搜索地点或地址").click();
-//        WebElement w = iosDriver.findElement(IOSSelector.ACCESSIBILITY_ID, "搜索地点或地址");
-//        String text = UUID.randomUUID().toString().substring(0, 6) + "中文";
-//        w.sendKeys(text);
-//        Assert.assertEquals(text, w.getText());
-//        w.clear();
-//        Assert.assertEquals("搜索地点或地址", w.getText());
-//        IOSRect iosRect = w.getRect();
-//        Assert.assertTrue(iosRect.getX() > 0);
-//        Assert.assertTrue(iosRect.getY() > 0);
-//        Assert.assertTrue(iosRect.getWidth() > 0);
-//        Assert.assertTrue(iosRect.getHeight() > 0);
-//        Assert.assertTrue(iosRect.getCenter().getX() > 0);
-//        Assert.assertTrue(iosRect.getCenter().getY() > 0);
-//        byte[] bt = w.screenshot();
-//        File output = new File("./" + UUID.randomUUID() + ".png");
-//        FileImageOutputStream imageOutput = new FileImageOutputStream(output);
-//        imageOutput.write(bt, 0, bt.length);
-//        imageOutput.close();
-//        output.delete();
-//        iosDriver.findElement(IOSSelector.ACCESSIBILITY_ID, "取消").click();
-//        iosDriver.setDefaultFindElementInterval(null, 3000);
-//        iosDriver.setDefaultFindElementInterval(5, null);
-//        iosDriver.setDefaultFindElementInterval(null, null);
-//        iosDriver.pressButton(SystemButton.HOME);
+        androidDriver.findElement(AndroidSelector.Id, "android:id/content").click();
+        Thread.sleep(2000);
+        WebElement w = androidDriver.findElement(AndroidSelector.XPATH, "//*[@text='标题']");
+        w.click();
+        w.sendKeys("hello");
+        w.clear();
+        androidDriver.setDefaultFindElementInterval(null, 3000);
+        androidDriver.setDefaultFindElementInterval(5, null);
+        androidDriver.setDefaultFindElementInterval(null, null);
     }
 }
