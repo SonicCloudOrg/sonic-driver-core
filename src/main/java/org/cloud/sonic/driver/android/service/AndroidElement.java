@@ -14,20 +14,30 @@
  *  limitations under the License.
  *
  */
-package org.cloud.sonic.driver.common.service;
+package org.cloud.sonic.driver.android.service;
 
-import org.cloud.sonic.driver.common.tool.Logger;
-import org.cloud.sonic.driver.common.tool.RespHandler;
 import org.cloud.sonic.driver.common.tool.SonicRespException;
+import org.cloud.sonic.driver.common.models.ElementRect;
 
-public interface BaseClient {
-    RespHandler getRespHandler();
+/**
+ * @author Eason
+ * web element interface
+ */
+public interface AndroidElement {
 
-    Logger getLogger();
+    void click() throws SonicRespException;
 
-    String getRemoteUrl();
+    void sendKeys(String text) throws SonicRespException;
 
-    String getSessionId();
+    void sendKeys(String text,boolean isCover) throws SonicRespException;
 
-    void checkSessionId() throws SonicRespException;
+    void clear() throws SonicRespException;
+
+    String getText() throws SonicRespException;
+
+    String getAttribute(String name) throws SonicRespException;
+
+    ElementRect getRect() throws SonicRespException;
+
+    byte[] screenshot() throws SonicRespException;
 }
