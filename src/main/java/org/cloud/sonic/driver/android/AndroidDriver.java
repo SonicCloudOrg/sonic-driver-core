@@ -18,12 +18,12 @@ package org.cloud.sonic.driver.android;
 
 import com.alibaba.fastjson.JSONObject;
 import org.cloud.sonic.driver.android.enmus.AndroidSelector;
+import org.cloud.sonic.driver.android.service.AndroidElement;
 import org.cloud.sonic.driver.android.service.UiaClient;
 import org.cloud.sonic.driver.android.service.impl.UiaClientImpl;
-import org.cloud.sonic.driver.common.service.WebElement;
+import org.cloud.sonic.driver.common.enums.PasteboardType;
 import org.cloud.sonic.driver.common.tool.RespHandler;
 import org.cloud.sonic.driver.common.tool.SonicRespException;
-import org.cloud.sonic.driver.ios.enums.*;
 import org.cloud.sonic.driver.common.models.WindowSize;
 
 import java.util.List;
@@ -226,7 +226,7 @@ public class AndroidDriver {
      * @return
      * @throws SonicRespException
      */
-    public WebElement findElement(AndroidSelector androidSelector, String value) throws SonicRespException {
+    public AndroidElement findElement(AndroidSelector androidSelector, String value) throws SonicRespException {
         return findElement(androidSelector, value, null);
     }
 
@@ -238,7 +238,7 @@ public class AndroidDriver {
      * @return
      * @throws SonicRespException
      */
-    public WebElement findElement(String selector, String value) throws SonicRespException {
+    public AndroidElement findElement(String selector, String value) throws SonicRespException {
         return findElement(selector, value, null);
     }
 
@@ -251,7 +251,7 @@ public class AndroidDriver {
      * @return
      * @throws SonicRespException
      */
-    public WebElement findElement(AndroidSelector androidSelector, String value, Integer retry) throws SonicRespException {
+    public AndroidElement findElement(AndroidSelector androidSelector, String value, Integer retry) throws SonicRespException {
         return findElement(androidSelector, value, retry, null);
     }
 
@@ -264,7 +264,7 @@ public class AndroidDriver {
      * @return
      * @throws SonicRespException
      */
-    public WebElement findElement(String selector, String value, Integer retry) throws SonicRespException {
+    public AndroidElement findElement(String selector, String value, Integer retry) throws SonicRespException {
         return findElement(selector, value, retry, null);
     }
 
@@ -278,7 +278,7 @@ public class AndroidDriver {
      * @return
      * @throws SonicRespException
      */
-    public WebElement findElement(AndroidSelector androidSelector, String value, Integer retry, Integer interval) throws SonicRespException {
+    public AndroidElement findElement(AndroidSelector androidSelector, String value, Integer retry, Integer interval) throws SonicRespException {
         return findElement(androidSelector.getSelector(), value, retry, interval);
     }
 
@@ -292,7 +292,7 @@ public class AndroidDriver {
      * @return
      * @throws SonicRespException
      */
-    public WebElement findElement(String selector, String value, Integer retry, Integer interval) throws SonicRespException {
+    public AndroidElement findElement(String selector, String value, Integer retry, Integer interval) throws SonicRespException {
         return uiaClient.findElement(selector, value, retry, interval);
     }
 
@@ -304,7 +304,7 @@ public class AndroidDriver {
      * @return
      * @throws SonicRespException
      */
-    public List<WebElement> findElementList(AndroidSelector androidSelector, String value) throws SonicRespException {
+    public List<AndroidElement> findElementList(AndroidSelector androidSelector, String value) throws SonicRespException {
         return findElementList(androidSelector, value, null);
     }
 
@@ -316,7 +316,7 @@ public class AndroidDriver {
      * @return
      * @throws SonicRespException
      */
-    public List<WebElement> findElementList(String selector, String value) throws SonicRespException {
+    public List<AndroidElement> findElementList(String selector, String value) throws SonicRespException {
         return findElementList(selector, value, null);
     }
 
@@ -329,7 +329,7 @@ public class AndroidDriver {
      * @return
      * @throws SonicRespException
      */
-    public List<WebElement> findElementList(AndroidSelector androidSelector, String value, Integer retry) throws SonicRespException {
+    public List<AndroidElement> findElementList(AndroidSelector androidSelector, String value, Integer retry) throws SonicRespException {
         return findElementList(androidSelector, value, retry, null);
     }
 
@@ -342,7 +342,7 @@ public class AndroidDriver {
      * @return
      * @throws SonicRespException
      */
-    public List<WebElement> findElementList(String selector, String value, Integer retry) throws SonicRespException {
+    public List<AndroidElement> findElementList(String selector, String value, Integer retry) throws SonicRespException {
         return findElementList(selector, value, retry, null);
     }
 
@@ -356,7 +356,7 @@ public class AndroidDriver {
      * @return
      * @throws SonicRespException
      */
-    public List<WebElement> findElementList(AndroidSelector androidSelector, String value, Integer retry, Integer interval) throws SonicRespException {
+    public List<AndroidElement> findElementList(AndroidSelector androidSelector, String value, Integer retry, Integer interval) throws SonicRespException {
         return findElementList(androidSelector.getSelector(), value, retry, interval);
     }
 
@@ -370,7 +370,7 @@ public class AndroidDriver {
      * @return
      * @throws SonicRespException
      */
-    public List<WebElement> findElementList(String selector, String value, Integer retry, Integer interval) throws SonicRespException {
+    public List<AndroidElement> findElementList(String selector, String value, Integer retry, Integer interval) throws SonicRespException {
         return uiaClient.findElementList(selector, value, retry, interval);
     }
 

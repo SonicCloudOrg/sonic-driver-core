@@ -17,11 +17,12 @@
 package org.cloud.sonic.driver.ios;
 
 import com.alibaba.fastjson.JSONObject;
+import org.cloud.sonic.driver.common.enums.PasteboardType;
 import org.cloud.sonic.driver.common.models.WindowSize;
 import org.cloud.sonic.driver.ios.enums.*;
 import org.cloud.sonic.driver.ios.models.*;
 import org.cloud.sonic.driver.ios.service.WdaClient;
-import org.cloud.sonic.driver.common.service.WebElement;
+import org.cloud.sonic.driver.ios.service.IOSElement;
 import org.cloud.sonic.driver.ios.service.impl.WdaClientImpl;
 import org.cloud.sonic.driver.common.tool.RespHandler;
 import org.cloud.sonic.driver.common.tool.SonicRespException;
@@ -402,7 +403,7 @@ public class IOSDriver {
      * @return
      * @throws SonicRespException
      */
-    public WebElement findElement(IOSSelector iosSelector, String value) throws SonicRespException {
+    public IOSElement findElement(IOSSelector iosSelector, String value) throws SonicRespException {
         return findElement(iosSelector, value, null);
     }
 
@@ -413,7 +414,7 @@ public class IOSDriver {
      * @return
      * @throws SonicRespException
      */
-    public WebElement findElement(XCUIElementType xcuiElementType) throws SonicRespException {
+    public IOSElement findElement(XCUIElementType xcuiElementType) throws SonicRespException {
         return findElement(xcuiElementType, null);
     }
 
@@ -425,7 +426,7 @@ public class IOSDriver {
      * @return
      * @throws SonicRespException
      */
-    public WebElement findElement(String selector, String value) throws SonicRespException {
+    public IOSElement findElement(String selector, String value) throws SonicRespException {
         return findElement(selector, value, null);
     }
 
@@ -438,7 +439,7 @@ public class IOSDriver {
      * @return
      * @throws SonicRespException
      */
-    public WebElement findElement(IOSSelector iosSelector, String value, Integer retry) throws SonicRespException {
+    public IOSElement findElement(IOSSelector iosSelector, String value, Integer retry) throws SonicRespException {
         return findElement(iosSelector, value, retry, null);
     }
 
@@ -450,7 +451,7 @@ public class IOSDriver {
      * @return
      * @throws SonicRespException
      */
-    public WebElement findElement(XCUIElementType xcuiElementType, Integer retry) throws SonicRespException {
+    public IOSElement findElement(XCUIElementType xcuiElementType, Integer retry) throws SonicRespException {
         return findElement(xcuiElementType, retry, null);
     }
 
@@ -463,7 +464,7 @@ public class IOSDriver {
      * @return
      * @throws SonicRespException
      */
-    public WebElement findElement(String selector, String value, Integer retry) throws SonicRespException {
+    public IOSElement findElement(String selector, String value, Integer retry) throws SonicRespException {
         return findElement(selector, value, retry, null);
     }
 
@@ -477,7 +478,7 @@ public class IOSDriver {
      * @return
      * @throws SonicRespException
      */
-    public WebElement findElement(IOSSelector iosSelector, String value, Integer retry, Integer interval) throws SonicRespException {
+    public IOSElement findElement(IOSSelector iosSelector, String value, Integer retry, Integer interval) throws SonicRespException {
         return findElement(iosSelector.getSelector(), value, retry, interval);
     }
 
@@ -490,7 +491,7 @@ public class IOSDriver {
      * @return
      * @throws SonicRespException
      */
-    public WebElement findElement(XCUIElementType xcuiElementType, Integer retry, Integer interval) throws SonicRespException {
+    public IOSElement findElement(XCUIElementType xcuiElementType, Integer retry, Integer interval) throws SonicRespException {
         return findElement(IOSSelector.CLASS_NAME.getSelector(), xcuiElementType.getType(), retry, interval);
     }
 
@@ -504,7 +505,7 @@ public class IOSDriver {
      * @return
      * @throws SonicRespException
      */
-    public WebElement findElement(String selector, String value, Integer retry, Integer interval) throws SonicRespException {
+    public IOSElement findElement(String selector, String value, Integer retry, Integer interval) throws SonicRespException {
         return wdaClient.findElement(selector, value, retry, interval);
     }
 
@@ -516,7 +517,7 @@ public class IOSDriver {
      * @return
      * @throws SonicRespException
      */
-    public List<WebElement> findElementList(IOSSelector iosSelector, String value) throws SonicRespException {
+    public List<IOSElement> findElementList(IOSSelector iosSelector, String value) throws SonicRespException {
         return findElementList(iosSelector, value, null);
     }
 
@@ -527,7 +528,7 @@ public class IOSDriver {
      * @return
      * @throws SonicRespException
      */
-    public List<WebElement> findElementList(XCUIElementType xcuiElementType) throws SonicRespException {
+    public List<IOSElement> findElementList(XCUIElementType xcuiElementType) throws SonicRespException {
         return findElementList(xcuiElementType, null);
     }
 
@@ -539,7 +540,7 @@ public class IOSDriver {
      * @return
      * @throws SonicRespException
      */
-    public List<WebElement> findElementList(String selector, String value) throws SonicRespException {
+    public List<IOSElement> findElementList(String selector, String value) throws SonicRespException {
         return findElementList(selector, value, null);
     }
 
@@ -552,7 +553,7 @@ public class IOSDriver {
      * @return
      * @throws SonicRespException
      */
-    public List<WebElement> findElementList(IOSSelector iosSelector, String value, Integer retry) throws SonicRespException {
+    public List<IOSElement> findElementList(IOSSelector iosSelector, String value, Integer retry) throws SonicRespException {
         return findElementList(iosSelector, value, retry, null);
     }
 
@@ -564,7 +565,7 @@ public class IOSDriver {
      * @return
      * @throws SonicRespException
      */
-    public List<WebElement> findElementList(XCUIElementType xcuiElementType, Integer retry) throws SonicRespException {
+    public List<IOSElement> findElementList(XCUIElementType xcuiElementType, Integer retry) throws SonicRespException {
         return findElementList(xcuiElementType, retry, null);
     }
 
@@ -577,7 +578,7 @@ public class IOSDriver {
      * @return
      * @throws SonicRespException
      */
-    public List<WebElement> findElementList(String selector, String value, Integer retry) throws SonicRespException {
+    public List<IOSElement> findElementList(String selector, String value, Integer retry) throws SonicRespException {
         return findElementList(selector, value, retry, null);
     }
 
@@ -591,7 +592,7 @@ public class IOSDriver {
      * @return
      * @throws SonicRespException
      */
-    public List<WebElement> findElementList(IOSSelector iosSelector, String value, Integer retry, Integer interval) throws SonicRespException {
+    public List<IOSElement> findElementList(IOSSelector iosSelector, String value, Integer retry, Integer interval) throws SonicRespException {
         return findElementList(iosSelector.getSelector(), value, retry, interval);
     }
 
@@ -604,7 +605,7 @@ public class IOSDriver {
      * @return
      * @throws SonicRespException
      */
-    public List<WebElement> findElementList(XCUIElementType xcuiElementType, Integer retry, Integer interval) throws SonicRespException {
+    public List<IOSElement> findElementList(XCUIElementType xcuiElementType, Integer retry, Integer interval) throws SonicRespException {
         return findElementList(IOSSelector.CLASS_NAME.getSelector(), xcuiElementType.getType(), retry, interval);
     }
 
@@ -618,7 +619,7 @@ public class IOSDriver {
      * @return
      * @throws SonicRespException
      */
-    public List<WebElement> findElementList(String selector, String value, Integer retry, Integer interval) throws SonicRespException {
+    public List<IOSElement> findElementList(String selector, String value, Integer retry, Integer interval) throws SonicRespException {
         return wdaClient.findElementList(selector, value, retry, interval);
     }
 

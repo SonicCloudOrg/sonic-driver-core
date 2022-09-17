@@ -22,8 +22,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import org.cloud.sonic.driver.common.models.BaseResp;
 import org.cloud.sonic.driver.common.models.SessionInfo;
-import org.cloud.sonic.driver.common.service.WebElement;
-import org.cloud.sonic.driver.common.service.impl.WebElementImpl;
+import org.cloud.sonic.driver.ios.service.IOSElement;
 import org.cloud.sonic.driver.common.tool.Logger;
 import org.cloud.sonic.driver.common.tool.RespHandler;
 import org.cloud.sonic.driver.common.tool.SonicRespException;
@@ -392,8 +391,8 @@ public class WdaClientImpl implements WdaClient {
     }
 
     @Override
-    public WebElement findElement(String selector, String value, Integer retry, Integer interval) throws SonicRespException {
-        WebElement webElement = null;
+    public IOSElement findElement(String selector, String value, Integer retry, Integer interval) throws SonicRespException {
+        IOSElement iosElement = null;
         int wait = 0;
         int intervalInit = (interval == null ? FIND_ELEMENT_INTERVAL : interval);
         int retryInit = (retry == null ? FIND_ELEMENT_RETRY : retry);
@@ -410,7 +409,7 @@ public class WdaClientImpl implements WdaClient {
                 logger.info("find element successful.");
                 String id = parseElementId(b.getValue());
                 if (id.length() > 0) {
-                    webElement = new WebElementImpl(id, this);
+                    iosElement = new IOSElementImpl(id, this);
                     break;
                 } else {
                     logger.error("parse element id %s failed. retried %d times, retry in %d ms.", b.getValue().toString(), wait, intervalInit);
@@ -427,15 +426,15 @@ public class WdaClientImpl implements WdaClient {
                 }
             }
         }
-        if (webElement == null) {
+        if (iosElement == null) {
             throw new SonicRespException(errMsg);
         }
-        return webElement;
+        return iosElement;
     }
 
     @Override
-    public List<WebElement> findElementList(String selector, String value, Integer retry, Integer interval) throws SonicRespException {
-        List<WebElement> webElementList = new ArrayList<>();
+    public List<IOSElement> findElementList(String selector, String value, Integer retry, Integer interval) throws SonicRespException {
+        List<IOSElement> iosElementList = new ArrayList<>();
         int wait = 0;
         int intervalInit = (interval == null ? FIND_ELEMENT_INTERVAL : interval);
         int retryInit = (retry == null ? FIND_ELEMENT_RETRY : retry);
@@ -454,7 +453,7 @@ public class WdaClientImpl implements WdaClient {
                 for (JSONObject ele : ids) {
                     String id = parseElementId(ele);
                     if (id.length() > 0) {
-                        webElementList.add(new WebElementImpl(id, this));
+                        iosElementList.add(new IOSElementImpl(id, this));
                     } else {
                         logger.error("parse element id %s failed.", ele);
                         continue;
@@ -473,10 +472,10 @@ public class WdaClientImpl implements WdaClient {
                 }
             }
         }
-        if (webElementList.size() == 0) {
+        if (iosElementList.size() == 0) {
             throw new SonicRespException(errMsg);
         }
-        return webElementList;
+        return iosElementList;
     }
 
     @Override

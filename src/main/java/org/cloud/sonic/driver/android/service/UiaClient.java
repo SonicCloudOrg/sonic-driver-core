@@ -17,8 +17,6 @@
 package org.cloud.sonic.driver.android.service;
 
 import com.alibaba.fastjson.JSONObject;
-import org.cloud.sonic.driver.common.service.BaseClient;
-import org.cloud.sonic.driver.common.service.WebElement;
 import org.cloud.sonic.driver.common.tool.RespHandler;
 import org.cloud.sonic.driver.common.tool.Logger;
 import org.cloud.sonic.driver.common.tool.SonicRespException;
@@ -30,7 +28,7 @@ import java.util.List;
  * @author Eason
  * uia client interface
  */
-public interface UiaClient extends BaseClient {
+public interface UiaClient {
     //Client Setting
     void setGlobalTimeOut(int timeOut);
 
@@ -75,9 +73,9 @@ public interface UiaClient extends BaseClient {
     //element handler.
     void setDefaultFindElementInterval(Integer retry, Integer interval);
 
-    WebElement findElement(String selector, String value, Integer retry, Integer interval) throws SonicRespException;
+    AndroidElement findElement(String selector, String value, Integer retry, Integer interval) throws SonicRespException;
 
-    List<WebElement> findElementList(String selector, String value, Integer retry, Integer interval) throws SonicRespException;
+    List<AndroidElement> findElementList(String selector, String value, Integer retry, Integer interval) throws SonicRespException;
 
     //screen handler.
     byte[] screenshot() throws SonicRespException;

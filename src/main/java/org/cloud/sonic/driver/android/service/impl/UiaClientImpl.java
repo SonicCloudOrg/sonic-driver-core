@@ -20,11 +20,10 @@ import cn.hutool.http.HttpUtil;
 import cn.hutool.http.Method;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import org.cloud.sonic.driver.android.service.AndroidElement;
 import org.cloud.sonic.driver.android.service.UiaClient;
 import org.cloud.sonic.driver.common.models.BaseResp;
 import org.cloud.sonic.driver.common.models.SessionInfo;
-import org.cloud.sonic.driver.common.service.WebElement;
-import org.cloud.sonic.driver.common.service.impl.WebElementImpl;
 import org.cloud.sonic.driver.common.tool.RespHandler;
 import org.cloud.sonic.driver.common.models.WindowSize;
 import org.cloud.sonic.driver.common.tool.Logger;
@@ -241,8 +240,8 @@ public class UiaClientImpl implements UiaClient {
     }
 
     @Override
-    public WebElement findElement(String selector, String value, Integer retry, Integer interval) throws SonicRespException {
-        WebElement webElement = null;
+    public AndroidElement findElement(String selector, String value, Integer retry, Integer interval) throws SonicRespException {
+        AndroidElement androidElement = null;
         int wait = 0;
         int intervalInit = (interval == null ? FIND_ELEMENT_INTERVAL : interval);
         int retryInit = (retry == null ? FIND_ELEMENT_RETRY : retry);
@@ -259,7 +258,7 @@ public class UiaClientImpl implements UiaClient {
                 logger.info("find element successful.");
                 String id = parseElementId(b.getValue());
                 if (id.length() > 0) {
-                    webElement = new WebElementImpl(id, this);
+                    androidElement = new AndroidElementImpl(id, this);
                     break;
                 } else {
                     logger.error("parse element id %s failed. retried %d times, retry in %d ms.", b.getValue().toString(), wait, intervalInit);
@@ -276,15 +275,15 @@ public class UiaClientImpl implements UiaClient {
                 }
             }
         }
-        if (webElement == null) {
+        if (androidElement == null) {
             throw new SonicRespException(errMsg);
         }
-        return webElement;
+        return androidElement;
     }
 
     @Override
-    public List<WebElement> findElementList(String selector, String value, Integer retry, Integer interval) throws SonicRespException {
-        List<WebElement> webElementList = new ArrayList<>();
+    public List<AndroidElement> findElementList(String selector, String value, Integer retry, Integer interval) throws SonicRespException {
+        List<AndroidElement> androidElementList = new ArrayList<>();
         int wait = 0;
         int intervalInit = (interval == null ? FIND_ELEMENT_INTERVAL : interval);
         int retryInit = (retry == null ? FIND_ELEMENT_RETRY : retry);
@@ -303,7 +302,7 @@ public class UiaClientImpl implements UiaClient {
                 for (JSONObject ele : ids) {
                     String id = parseElementId(ele);
                     if (id.length() > 0) {
-                        webElementList.add(new WebElementImpl(id, this));
+                        androidElementList.add(new AndroidElementImpl(id, this));
                     } else {
                         logger.error("parse element id %s failed.", ele);
                         continue;
@@ -322,10 +321,10 @@ public class UiaClientImpl implements UiaClient {
                 }
             }
         }
-        if (webElementList.size() == 0) {
+        if (androidElementList.size() == 0) {
             throw new SonicRespException(errMsg);
         }
-        return webElementList;
+        return androidElementList;
     }
 
     @Override

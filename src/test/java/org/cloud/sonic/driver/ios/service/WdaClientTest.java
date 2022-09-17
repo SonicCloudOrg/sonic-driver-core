@@ -21,7 +21,7 @@ import org.cloud.sonic.driver.common.tool.RespHandler;
 import org.cloud.sonic.driver.ios.enums.IOSSelector;
 import org.cloud.sonic.driver.common.models.BaseResp;
 import org.cloud.sonic.driver.common.models.ErrorMsg;
-import org.cloud.sonic.driver.ios.enums.PasteboardType;
+import org.cloud.sonic.driver.common.enums.PasteboardType;
 import org.cloud.sonic.driver.ios.models.TouchActions;
 import org.cloud.sonic.driver.ios.service.impl.WdaClientImpl;
 import org.cloud.sonic.driver.common.tool.SonicRespException;

@@ -14,7 +14,7 @@
  *  limitations under the License.
  *
  */
-package org.cloud.sonic.driver.ios.models;
+package org.cloud.sonic.driver.common.models;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -23,7 +23,7 @@ import lombok.ToString;
 @Getter
 @ToString
 @AllArgsConstructor
-public class IOSRect {
+public class ElementRect {
     private int x;
     private int y;
     private int width;

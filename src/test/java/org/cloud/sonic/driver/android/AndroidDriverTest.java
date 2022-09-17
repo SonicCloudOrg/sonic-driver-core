@@ -2,14 +2,11 @@ package org.cloud.sonic.driver.android;
 
 import com.alibaba.fastjson.JSONObject;
 import org.cloud.sonic.driver.android.enmus.AndroidSelector;
-import org.cloud.sonic.driver.common.service.WebElement;
-import org.cloud.sonic.driver.common.tool.SonicRespException;
+import org.cloud.sonic.driver.android.service.AndroidElement;
+import org.cloud.sonic.driver.common.enums.PasteboardType;
+import org.cloud.sonic.driver.common.models.ElementRect;
 import org.cloud.sonic.driver.common.models.WindowSize;
-import org.cloud.sonic.driver.ios.enums.IOSSelector;
-import org.cloud.sonic.driver.ios.enums.PasteboardType;
-import org.cloud.sonic.driver.ios.enums.SystemButton;
-import org.cloud.sonic.driver.ios.enums.XCUIElementType;
-import org.cloud.sonic.driver.ios.models.IOSRect;
+import org.cloud.sonic.driver.common.tool.SonicRespException;
 import org.junit.*;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -58,7 +55,33 @@ public class AndroidDriverTest {
 
     @AfterClass
     public static void afterClass() throws SonicRespException {
-//        androidDriver.closeDriver();
+        androidDriver.closeDriver();
+    }
+
+    @Test
+    public void testSession() {
+        String sessionId = androidDriver.getSessionId();
+        androidDriver.getUiaClient().setSessionId(null);
+        Boolean hasThrow = false;
+        try {
+            androidDriver.getUiaClient().pageSource();
+        } catch (Throwable e) {
+            hasThrow = true;
+            Assert.assertEquals(SonicRespException.class, e.getClass());
+            Assert.assertEquals("sessionId not found.", e.getMessage());
+        }
+        Assert.assertTrue(hasThrow);
+        androidDriver.getUiaClient().setSessionId("");
+        hasThrow = false;
+        try {
+            androidDriver.getUiaClient().pageSource();
+        } catch (Throwable e) {
+            hasThrow = true;
+            Assert.assertEquals(SonicRespException.class, e.getClass());
+            Assert.assertEquals("sessionId not found.", e.getMessage());
+        }
+        Assert.assertTrue(hasThrow);
+        androidDriver.getUiaClient().setSessionId(sessionId);
     }
 
     @Test
@@ -77,7 +100,7 @@ public class AndroidDriverTest {
     @Test
     public void testClipboard() throws SonicRespException {
         androidDriver.setPasteboard(PasteboardType.PLAIN_TEXT, "abc");
-//        System.out.println(androidDriver.getPasteboard(PasteboardType.PLAIN_TEXT));
+        androidDriver.getPasteboard(PasteboardType.PLAIN_TEXT);
     }
 
     @Test
@@ -94,12 +117,49 @@ public class AndroidDriverTest {
         Thread.sleep(2000);
         androidDriver.findElement(AndroidSelector.Id, "android:id/content").click();
         Thread.sleep(2000);
-        WebElement w = androidDriver.findElement(AndroidSelector.XPATH, "//*[@text='标题']");
+        AndroidElement w = androidDriver.findElement(AndroidSelector.XPATH, "//*[@text='标题']");
         w.click();
-        w.sendKeys("hello");
+        String text = UUID.randomUUID().toString().substring(0, 6) + "中文";
+        w.sendKeys(text);
+        Assert.assertEquals(text, w.getText());
         w.clear();
         androidDriver.setDefaultFindElementInterval(null, 3000);
         androidDriver.setDefaultFindElementInterval(5, null);
         androidDriver.setDefaultFindElementInterval(null, null);
+        ElementRect elementRect = w.getRect();
+        Assert.assertTrue(elementRect.getX() > 0);
+        Assert.assertTrue(elementRect.getY() > 0);
+        Assert.assertTrue(elementRect.getWidth() > 0);
+        Assert.assertTrue(elementRect.getHeight() > 0);
+        Assert.assertTrue(elementRect.getCenter().getX() > 0);
+        Assert.assertTrue(elementRect.getCenter().getY() > 0);
+        byte[] bt = w.screenshot();
+        File output = new File("./" + UUID.randomUUID() + ".png");
+        FileImageOutputStream imageOutput = new FileImageOutputStream(output);
+        imageOutput.write(bt, 0, bt.length);
+        imageOutput.close();
+        output.delete();
+        Assert.assertEquals("android.widget.EditText", w.getAttribute("class"));
+    }
+
+    @Test
+    public void testFindElementList() throws SonicRespException {
+        int eleSize = androidDriver.findElementList("id", "android:id/content").size();
+        Assert.assertEquals(eleSize, androidDriver.findElementList(AndroidSelector.Id, "android:id/content").size());
+    }
+
+    @Test
+    public void testScreenshot() throws IOException, SonicRespException {
+        byte[] bt = androidDriver.screenshot();
+        File output = new File("./" + UUID.randomUUID() + ".png");
+        FileImageOutputStream imageOutput = new FileImageOutputStream(output);
+        imageOutput.write(bt, 0, bt.length);
+        imageOutput.close();
+        output.delete();
+    }
+
+    @Test
+    public void testSetAppiumSettings() throws SonicRespException {
+        androidDriver.setAppiumSettings(new JSONObject());
     }
 }

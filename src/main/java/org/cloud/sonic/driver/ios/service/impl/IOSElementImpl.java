@@ -14,37 +14,37 @@
  *  limitations under the License.
  *
  */
-package org.cloud.sonic.driver.common.service.impl;
+package org.cloud.sonic.driver.ios.service.impl;
 
 import cn.hutool.http.HttpUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson2.JSON;
 import org.cloud.sonic.driver.common.models.BaseResp;
-import org.cloud.sonic.driver.common.service.BaseClient;
-import org.cloud.sonic.driver.ios.models.IOSRect;
-import org.cloud.sonic.driver.common.service.WebElement;
 import org.cloud.sonic.driver.common.tool.Logger;
 import org.cloud.sonic.driver.common.tool.SonicRespException;
+import org.cloud.sonic.driver.common.models.ElementRect;
+import org.cloud.sonic.driver.ios.service.WdaClient;
+import org.cloud.sonic.driver.ios.service.IOSElement;
 
 import java.util.Base64;
 
-public class WebElementImpl implements WebElement {
+public class IOSElementImpl implements IOSElement {
     private String id;
-    private BaseClient baseClient;
+    private WdaClient wdaClient;
     private Logger logger;
 
-    public WebElementImpl(String id, BaseClient baseClient) {
+    public IOSElementImpl(String id, WdaClient wdaClient) {
         this.id = id;
-        this.baseClient = baseClient;
-        logger = baseClient.getLogger();
+        this.wdaClient = wdaClient;
+        logger = wdaClient.getLogger();
     }
 
     @Override
     public void click() throws SonicRespException {
-        baseClient.checkSessionId();
-        BaseResp b = baseClient.getRespHandler().getResp(
-                HttpUtil.createPost(baseClient.getRemoteUrl() + "/session/"
-                        + baseClient.getSessionId() + "/element/" + id + "/click"));
+        wdaClient.checkSessionId();
+        BaseResp b = wdaClient.getRespHandler().getResp(
+                HttpUtil.createPost(wdaClient.getRemoteUrl() + "/session/"
+                        + wdaClient.getSessionId() + "/element/" + id + "/click"));
         if (b.getErr() == null) {
             logger.info("click element %s.", id);
         } else {
@@ -60,13 +60,13 @@ public class WebElementImpl implements WebElement {
 
     @Override
     public void sendKeys(String text, int frequency) throws SonicRespException {
-        baseClient.checkSessionId();
+        wdaClient.checkSessionId();
         JSONObject data = new JSONObject();
         data.put("value", text.split(""));
         data.put("frequency", frequency);
-        BaseResp b = baseClient.getRespHandler().getResp(
-                HttpUtil.createPost(baseClient.getRemoteUrl() + "/session/"
-                        + baseClient.getSessionId() + "/element/" + id + "/value")
+        BaseResp b = wdaClient.getRespHandler().getResp(
+                HttpUtil.createPost(wdaClient.getRemoteUrl() + "/session/"
+                        + wdaClient.getSessionId() + "/element/" + id + "/value")
                         .body(data.toJSONString()), 60000);
         if (b.getErr() == null) {
             logger.info("send key to %s.", id);
@@ -78,10 +78,10 @@ public class WebElementImpl implements WebElement {
 
     @Override
     public void clear() throws SonicRespException {
-        baseClient.checkSessionId();
-        BaseResp b = baseClient.getRespHandler().getResp(
-                HttpUtil.createPost(baseClient.getRemoteUrl() + "/session/"
-                        + baseClient.getSessionId() + "/element/" + id + "/clear"), 60000);
+        wdaClient.checkSessionId();
+        BaseResp b = wdaClient.getRespHandler().getResp(
+                HttpUtil.createPost(wdaClient.getRemoteUrl() + "/session/"
+                        + wdaClient.getSessionId() + "/element/" + id + "/clear"), 60000);
         if (b.getErr() == null) {
             logger.info("clear %s.", id);
         } else {
@@ -92,10 +92,10 @@ public class WebElementImpl implements WebElement {
 
     @Override
     public String getText() throws SonicRespException {
-        baseClient.checkSessionId();
-        BaseResp b = baseClient.getRespHandler().getResp(
-                HttpUtil.createGet(baseClient.getRemoteUrl() + "/session/"
-                        + baseClient.getSessionId() + "/element/" + id + "/text"));
+        wdaClient.checkSessionId();
+        BaseResp b = wdaClient.getRespHandler().getResp(
+                HttpUtil.createGet(wdaClient.getRemoteUrl() + "/session/"
+                        + wdaClient.getSessionId() + "/element/" + id + "/text"));
         if (b.getErr() == null) {
             logger.info("get %s text %s.", id, b.getValue().toString());
             return b.getValue().toString();
@@ -106,15 +106,15 @@ public class WebElementImpl implements WebElement {
     }
 
     @Override
-    public IOSRect getRect() throws SonicRespException {
-        baseClient.checkSessionId();
-        BaseResp b = baseClient.getRespHandler().getResp(
-                HttpUtil.createGet(baseClient.getRemoteUrl() + "/session/"
-                        + baseClient.getSessionId() + "/element/" + id + "/rect"));
+    public ElementRect getRect() throws SonicRespException {
+        wdaClient.checkSessionId();
+        BaseResp b = wdaClient.getRespHandler().getResp(
+                HttpUtil.createGet(wdaClient.getRemoteUrl() + "/session/"
+                        + wdaClient.getSessionId() + "/element/" + id + "/rect"));
         if (b.getErr() == null) {
-            IOSRect iosRect = JSON.parseObject(b.getValue().toString(), IOSRect.class);
-            logger.info("get %s rect %s.", id, iosRect.toString());
-            return iosRect;
+            ElementRect elementRect = JSON.parseObject(b.getValue().toString(), ElementRect.class);
+            logger.info("get %s rect %s.", id, elementRect.toString());
+            return elementRect;
         } else {
             logger.error("get %s rect failed.", id);
             throw new SonicRespException(b.getErr().getMessage());
@@ -123,10 +123,10 @@ public class WebElementImpl implements WebElement {
 
     @Override
     public byte[] screenshot() throws SonicRespException {
-        baseClient.checkSessionId();
-        BaseResp b = baseClient.getRespHandler().getResp(
-                HttpUtil.createGet(baseClient.getRemoteUrl() + "/session/"
-                        + baseClient.getSessionId() + "/element/" + id + "/screenshot"), 60000);
+        wdaClient.checkSessionId();
+        BaseResp b = wdaClient.getRespHandler().getResp(
+                HttpUtil.createGet(wdaClient.getRemoteUrl() + "/session/"
+                        + wdaClient.getSessionId() + "/element/" + id + "/screenshot"), 60000);
         if (b.getErr() == null) {
             logger.info("get element %s screenshot.", id);
             return Base64.getMimeDecoder().decode(b.getValue().toString());

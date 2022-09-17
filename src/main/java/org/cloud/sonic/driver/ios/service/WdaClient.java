@@ -17,8 +17,6 @@
 package org.cloud.sonic.driver.ios.service;
 
 import com.alibaba.fastjson.JSONObject;
-import org.cloud.sonic.driver.common.service.BaseClient;
-import org.cloud.sonic.driver.common.service.WebElement;
 import org.cloud.sonic.driver.common.tool.RespHandler;
 import org.cloud.sonic.driver.ios.models.TouchActions;
 import org.cloud.sonic.driver.common.models.WindowSize;
@@ -31,7 +29,7 @@ import java.util.List;
  * @author Eason
  * wda client interface
  */
-public interface WdaClient extends BaseClient {
+public interface WdaClient {
     //Client Setting
     void setGlobalTimeOut(int timeOut);
 
@@ -101,9 +99,9 @@ public interface WdaClient extends BaseClient {
     //element handler.
     void setDefaultFindElementInterval(Integer retry, Integer interval);
 
-    WebElement findElement(String selector, String value, Integer retry, Integer interval) throws SonicRespException;
+    IOSElement findElement(String selector, String value, Integer retry, Integer interval) throws SonicRespException;
 
-    List<WebElement> findElementList(String selector, String value, Integer retry, Integer interval) throws SonicRespException;
+    List<IOSElement> findElementList(String selector, String value, Integer retry, Integer interval) throws SonicRespException;
 
     //screen handler.
     byte[] screenshot() throws SonicRespException;

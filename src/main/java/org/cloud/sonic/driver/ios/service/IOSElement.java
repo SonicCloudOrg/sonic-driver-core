@@ -14,19 +14,28 @@
  *  limitations under the License.
  *
  */
-package org.cloud.sonic.driver.ios.enums;
+package org.cloud.sonic.driver.ios.service;
 
-public enum PasteboardType {
-    PLAIN_TEXT("plaintext"),
-    IMAGE("image"),
-    URL("url");
+import org.cloud.sonic.driver.common.models.ElementRect;
+import org.cloud.sonic.driver.common.tool.SonicRespException;
 
-    private final String type;
-    PasteboardType(String pasteboardType) {
-        this.type = pasteboardType;
-    }
+/**
+ * @author Eason
+ * web element interface
+ */
+public interface IOSElement {
 
-    public String getType() {
-        return type;
-    }
+    void click() throws SonicRespException;
+
+    void sendKeys(String text) throws SonicRespException;
+
+    void sendKeys(String text,int frequency) throws SonicRespException;
+
+    void clear() throws SonicRespException;
+
+    String getText() throws SonicRespException;
+
+    ElementRect getRect() throws SonicRespException;
+
+    byte[] screenshot() throws SonicRespException;
 }
