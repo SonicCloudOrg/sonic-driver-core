@@ -63,7 +63,7 @@ jobs:
           MERGE_RETRY_SLEEP: 10000
 
   release:
-    needs: [ doc,test ]
+    needs: doc
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
