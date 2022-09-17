@@ -206,7 +206,6 @@ public class UiaClientImpl implements UiaClient {
         BaseResp b = respHandler.getResp(HttpUtil.createPost(remoteUrl + "/session/" + sessionId + "/appium/device/get_clipboard")
                 .body(data.toJSONString()));
         if (b.getErr() == null) {
-            System.out.println(b.getValue());
             byte[] result = Base64.getMimeDecoder().decode(b.getValue().toString());
             logger.info("get pasteboard length: %d.", result.length);
             return result;
