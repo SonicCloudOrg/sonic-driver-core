@@ -19,7 +19,6 @@ import java.util.UUID;
 @RunWith(Parameterized.class)
 public class AndroidDriverTest {
     static AndroidDriver androidDriver;
-    static final String SONIC_REMOTE_URL = "http://SONIC_REMOTE_TEST_URL";
     static String url = "http://localhost:6790";
 
     @Parameterized.Parameters
@@ -34,9 +33,6 @@ public class AndroidDriverTest {
 
     @BeforeClass
     public static void beforeClass() throws SonicRespException {
-        if (!SONIC_REMOTE_URL.contains("SONIC_REMOTE_TEST")) {
-            url = SONIC_REMOTE_URL;
-        }
         Boolean hasThrow = false;
         try {
             new AndroidDriver(url, null);
