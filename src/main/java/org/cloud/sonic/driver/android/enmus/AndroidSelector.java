@@ -23,7 +23,7 @@ public enum AndroidSelector {
 
     XPATH("xpath"),
 
-    CLASS_CHAIN("-android uiautomator");
+    UIAUTOMATOR("-android uiautomator");
 
     private final String selector;
     AndroidSelector(String selector) {
