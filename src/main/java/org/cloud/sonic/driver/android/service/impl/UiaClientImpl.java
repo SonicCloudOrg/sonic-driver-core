@@ -127,7 +127,6 @@ public class UiaClientImpl implements UiaClient {
             setSessionId(sessionInfo.getSessionId());
             logger.info("start session successful!");
             logger.info("session : %s", sessionInfo.getSessionId());
-            logger.info("session capabilities : %s", sessionInfo.getCapabilities().toString());
         } else {
             logger.error("start session failed.");
             logger.error("cause: %s", b.getErr().toString());
