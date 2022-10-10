@@ -16,10 +16,12 @@
  */
 package org.cloud.sonic.driver.poco.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import org.cloud.sonic.driver.common.tool.Logger;
 import org.cloud.sonic.driver.common.tool.SonicRespException;
 import org.cloud.sonic.driver.poco.enums.PocoEngine;
+import org.cloud.sonic.driver.poco.models.PocoElement;
 import org.cloud.sonic.driver.poco.service.PocoClient;
 import org.cloud.sonic.driver.poco.service.PocoConnection;
 
@@ -69,7 +71,13 @@ public class PocoClientImpl implements PocoClient {
     }
 
     @Override
-    public JSONObject pageSource() throws SonicRespException {
+    public PocoElement pageSource() throws SonicRespException {
+        PocoElement pocoElement = JSON.parseObject(pageSourceForJson().toJSONString(), PocoElement.class);
+        return pocoElement;
+    }
+
+    @Override
+    public JSONObject pageSourceForJson() throws SonicRespException {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("jsonrpc", "2.0");
         jsonObject.put("params", Arrays.asList(true));

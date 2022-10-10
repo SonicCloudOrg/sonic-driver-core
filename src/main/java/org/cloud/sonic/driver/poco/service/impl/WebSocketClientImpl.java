@@ -20,6 +20,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import org.cloud.sonic.driver.common.tool.Logger;
 import org.cloud.sonic.driver.common.tool.SonicRespException;
+import org.cloud.sonic.driver.poco.models.PocoElement;
 import org.cloud.sonic.driver.poco.service.PocoConnection;
 import org.java_websocket.handshake.ServerHandshake;
 
@@ -40,26 +41,28 @@ public class WebSocketClientImpl implements PocoConnection {
 
     @Override
     public JSONObject sendAndReceive(JSONObject jsonObject) throws SonicRespException {
-        webSocketClient.send(jsonObject.toString());
-        int wait = 0;
-        while (result == null) {
-            try {
-                Thread.sleep(500);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+        synchronized (WebSocketClientImpl.class) {
+            webSocketClient.send(jsonObject.toString());
+            int wait = 0;
+            while (result == null) {
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                wait++;
+                if (wait >= 20) {
+                    break;
+                }
             }
-            wait++;
-            if (wait >= 20) {
-                break;
-            }
-        }
-        if (result != null) {
-            JSONObject re = JSON.parseObject(result);
-            result = null;
-            if (re.getString("id").equals(jsonObject.getString("id"))) {
-                return re;
-            } else {
-                throw new SonicRespException("id not found!");
+            if (result != null) {
+                JSONObject re = JSON.parseObject(result);
+                result = null;
+                if (re.getString("id").equals(jsonObject.getString("id"))) {
+                    return re.getJSONObject("result");
+                } else {
+                    throw new SonicRespException("id not found!");
+                }
             }
         }
         return null;
@@ -81,6 +84,7 @@ public class WebSocketClientImpl implements PocoConnection {
 
             @Override
             public void onMessage(String s) {
+                logger.info(s);
                 result = s;
             }
 

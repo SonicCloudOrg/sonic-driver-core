@@ -20,6 +20,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import org.cloud.sonic.driver.common.tool.Logger;
 import org.cloud.sonic.driver.common.tool.SonicRespException;
+import org.cloud.sonic.driver.poco.models.PocoElement;
 import org.cloud.sonic.driver.poco.service.PocoConnection;
 
 import java.io.IOException;
@@ -56,33 +57,36 @@ public class SocketClientImpl implements PocoConnection {
         total.put(header.array());
         total.put(body.array());
         total.flip();
-        try {
-            outputStream.write(total.array());
-            byte[] head = new byte[4];
-            inputStream.read(head);
-            int headLen = toInt(head);
-            StringBuilder s = new StringBuilder();
-            while (poco.isConnected() && !Thread.interrupted()) {
-                byte[] buffer = new byte[1024];
-                int realLen;
-                realLen = inputStream.read(buffer);
-                if (buffer.length != realLen && realLen >= 0) {
-                    buffer = subByteArray(buffer, 0, realLen);
-                }
-                if (realLen >= 0) {
-                    s.append(new String(buffer));
-                    if (s.toString().getBytes(StandardCharsets.UTF_8).length == headLen) {
-                        JSONObject re = JSON.parseObject(s.toString());
-                        if (re.getString("id").equals(jsonObject.getString("id"))) {
-                            return re;
-                        } else {
-                            throw new SonicRespException("id not found!");
+        synchronized (SocketClientImpl.class) {
+            try {
+                outputStream.write(total.array());
+                byte[] head = new byte[4];
+                inputStream.read(head);
+                int headLen = toInt(head);
+                StringBuilder s = new StringBuilder();
+                while (poco.isConnected() && !Thread.interrupted()) {
+                    byte[] buffer = new byte[1024];
+                    int realLen;
+                    realLen = inputStream.read(buffer);
+                    if (buffer.length != realLen && realLen >= 0) {
+                        buffer = subByteArray(buffer, 0, realLen);
+                    }
+                    if (realLen >= 0) {
+                        s.append(new String(buffer));
+                        if (s.toString().getBytes(StandardCharsets.UTF_8).length == headLen) {
+                            JSONObject re = JSON.parseObject(s.toString());
+                            logger.info(re.toJSONString());
+                            if (re.getString("id").equals(jsonObject.getString("id"))) {
+                                return re.getJSONObject("result");
+                            } else {
+                                throw new SonicRespException("id not found!");
+                            }
                         }
                     }
                 }
+            } catch (Exception e) {
+                throw new SonicRespException(e.getMessage());
             }
-        } catch (Exception e) {
-            throw new SonicRespException(e.getMessage());
         }
         return null;
     }
@@ -95,6 +99,7 @@ public class SocketClientImpl implements PocoConnection {
                 poco = new Socket("localhost", port);
                 inputStream = poco.getInputStream();
                 outputStream = poco.getOutputStream();
+                logger.info("poco socket connected.");
             } catch (Exception e) {
                 e.printStackTrace();
             }

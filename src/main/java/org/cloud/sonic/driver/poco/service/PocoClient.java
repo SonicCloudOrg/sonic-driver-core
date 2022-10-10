@@ -20,6 +20,7 @@ import com.alibaba.fastjson.JSONObject;
 import org.cloud.sonic.driver.common.tool.Logger;
 import org.cloud.sonic.driver.common.tool.SonicRespException;
 import org.cloud.sonic.driver.poco.enums.PocoEngine;
+import org.cloud.sonic.driver.poco.models.PocoElement;
 
 /**
  * @author Eason
@@ -39,5 +40,7 @@ public interface PocoClient {
     void closeClient();
 
     //source handler.
-    JSONObject pageSource() throws SonicRespException;
+    PocoElement pageSource() throws SonicRespException;
+
+    JSONObject pageSourceForJson() throws SonicRespException;
 }

@@ -19,6 +19,7 @@ package org.cloud.sonic.driver.poco;
 import com.alibaba.fastjson.JSONObject;
 import org.cloud.sonic.driver.common.tool.SonicRespException;
 import org.cloud.sonic.driver.poco.enums.PocoEngine;
+import org.cloud.sonic.driver.poco.models.PocoElement;
 import org.cloud.sonic.driver.poco.service.PocoClient;
 import org.cloud.sonic.driver.poco.service.impl.PocoClientImpl;
 
@@ -70,8 +71,21 @@ public class PocoDriver {
         pocoClient.disableLog();
     }
 
-
-    public JSONObject getPageSource() throws SonicRespException {
+    /**
+     * get Poco element
+     * @return
+     * @throws SonicRespException
+     */
+    public PocoElement getPageSource() throws SonicRespException {
         return pocoClient.pageSource();
+    }
+
+    /**
+     * get Poco element for Json
+     * @return
+     * @throws SonicRespException
+     */
+    public JSONObject getPageSourceForJson() throws SonicRespException {
+        return pocoClient.pageSourceForJson();
     }
 }
