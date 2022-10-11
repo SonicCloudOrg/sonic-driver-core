@@ -17,7 +17,9 @@
 package org.cloud.sonic.driver.poco.service.impl;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import org.cloud.sonic.driver.common.models.WindowSize;
 import org.cloud.sonic.driver.common.tool.Logger;
 import org.cloud.sonic.driver.common.tool.SonicRespException;
 import org.cloud.sonic.driver.poco.enums.PocoEngine;
@@ -26,6 +28,7 @@ import org.cloud.sonic.driver.poco.service.PocoClient;
 import org.cloud.sonic.driver.poco.service.PocoConnection;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 
 import static org.cloud.sonic.driver.poco.enums.PocoEngine.*;
@@ -86,7 +89,21 @@ public class PocoClientImpl implements PocoClient {
         if (engine.equals(COCOS_CREATOR) || engine.equals(COCOS_2DX_JS)) {
             jsonObject.put("method", "dump");
         }
-        return pocoConnection.sendAndReceive(jsonObject);
+        return (JSONObject) pocoConnection.sendAndReceive(jsonObject);
+    }
+
+    @Override
+    public WindowSize getScreenSize() throws SonicRespException {
+        if (engine.equals(UNITY_3D) || engine.equals(COCOS_2DX_LUA)) {
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("jsonrpc", "2.0");
+            jsonObject.put("params", Arrays.asList(true));
+            jsonObject.put("id", UUID.randomUUID().toString());
+            jsonObject.put("method", "GetScreenSize");
+            List<Integer> result = ((JSONArray) pocoConnection.sendAndReceive(jsonObject)).toJavaList(Integer.class);
+            return new WindowSize(result.get(0), result.get(1));
+        }
+        return null;
     }
 
 }

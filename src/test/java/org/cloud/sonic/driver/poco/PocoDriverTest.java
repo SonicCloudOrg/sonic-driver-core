@@ -1,9 +1,8 @@
 package org.cloud.sonic.driver.poco;
 
-import com.alibaba.fastjson2.JSON;
+import org.cloud.sonic.driver.common.models.WindowSize;
 import org.cloud.sonic.driver.common.tool.SonicRespException;
 import org.cloud.sonic.driver.poco.enums.PocoEngine;
-import org.cloud.sonic.driver.poco.models.PocoElement;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
@@ -20,6 +19,13 @@ public class PocoDriverTest {
     @Test
     public void testPageSource() throws SonicRespException {
         Assert.assertTrue(pocoDriver.getPageSource().getPayload().getType().equals("Root"));
+    }
+
+    @Test
+    public void testWindowsSize() throws SonicRespException {
+        WindowSize windowSize = pocoDriver.getScreenSize();
+        Assert.assertTrue(windowSize.getHeight() > 0);
+        Assert.assertTrue(windowSize.getWidth() > 0);
     }
 
     @AfterClass

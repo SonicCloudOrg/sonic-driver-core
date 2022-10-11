@@ -20,7 +20,6 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import org.cloud.sonic.driver.common.tool.Logger;
 import org.cloud.sonic.driver.common.tool.SonicRespException;
-import org.cloud.sonic.driver.poco.models.PocoElement;
 import org.cloud.sonic.driver.poco.service.PocoConnection;
 import org.java_websocket.handshake.ServerHandshake;
 
@@ -40,7 +39,7 @@ public class WebSocketClientImpl implements PocoConnection {
     }
 
     @Override
-    public JSONObject sendAndReceive(JSONObject jsonObject) throws SonicRespException {
+    public Object sendAndReceive(JSONObject jsonObject) throws SonicRespException {
         synchronized (WebSocketClientImpl.class) {
             webSocketClient.send(jsonObject.toString());
             int wait = 0;
@@ -59,7 +58,7 @@ public class WebSocketClientImpl implements PocoConnection {
                 JSONObject re = JSON.parseObject(result);
                 result = null;
                 if (re.getString("id").equals(jsonObject.getString("id"))) {
-                    return re.getJSONObject("result");
+                    return re.get("result");
                 } else {
                     throw new SonicRespException("id not found!");
                 }

@@ -17,6 +17,7 @@
 package org.cloud.sonic.driver.poco.service;
 
 import com.alibaba.fastjson.JSONObject;
+import org.cloud.sonic.driver.common.models.WindowSize;
 import org.cloud.sonic.driver.common.tool.Logger;
 import org.cloud.sonic.driver.common.tool.SonicRespException;
 import org.cloud.sonic.driver.poco.enums.PocoEngine;
@@ -43,4 +44,6 @@ public interface PocoClient {
     PocoElement pageSource() throws SonicRespException;
 
     JSONObject pageSourceForJson() throws SonicRespException;
+
+    WindowSize getScreenSize() throws SonicRespException;
 }
