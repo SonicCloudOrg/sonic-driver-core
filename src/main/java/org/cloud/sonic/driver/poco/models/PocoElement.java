@@ -19,6 +19,8 @@ public class PocoElement {
     public class Payload{
         private String layer;
         private String name;
+        private String tag;
+        private String texture;
         private Integer _instanceId;
         private Integer _ilayer;
         private String type;

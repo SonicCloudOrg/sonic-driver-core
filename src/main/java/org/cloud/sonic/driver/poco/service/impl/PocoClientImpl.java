@@ -27,16 +27,16 @@ import org.cloud.sonic.driver.poco.models.PocoElement;
 import org.cloud.sonic.driver.poco.service.PocoClient;
 import org.cloud.sonic.driver.poco.service.PocoConnection;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 import static org.cloud.sonic.driver.poco.enums.PocoEngine.*;
 
 public class PocoClientImpl implements PocoClient {
     private Logger logger;
     private PocoConnection pocoConnection;
-    PocoEngine engine;
+    private PocoEngine engine;
+    private JSONObject source;
+    private boolean isFrozen = false;
 
     public PocoClientImpl() {
         logger = new Logger();
@@ -81,6 +81,9 @@ public class PocoClientImpl implements PocoClient {
 
     @Override
     public JSONObject pageSourceForJson() throws SonicRespException {
+        if (isFrozen) {
+            return source;
+        }
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("jsonrpc", "2.0");
         jsonObject.put("params", Arrays.asList(true));
@@ -89,7 +92,123 @@ public class PocoClientImpl implements PocoClient {
         if (engine.equals(COCOS_CREATOR) || engine.equals(COCOS_2DX_JS)) {
             jsonObject.put("method", "dump");
         }
-        return (JSONObject) pocoConnection.sendAndReceive(jsonObject);
+        source = (JSONObject) pocoConnection.sendAndReceive(jsonObject);
+        return source;
+    }
+
+    @Override
+    public PocoElement findElement(String expression) throws SonicRespException {
+        PocoElement pocoElement = pageSource();
+        String[] steps = expression.split("\\.");
+        for (String step : steps) {
+            if (step.startsWith("poco")) {
+                List<PocoElement> results = parseAttr(pocoElement, step);
+                if (results.size() > 0) {
+                    pocoElement = results.get(0);
+                } else {
+                    return null;
+                }
+            } else if (step.startsWith("child")) {
+                List<PocoElement> children = pocoElement.getChildren();
+                List<PocoElement> results = new ArrayList<>();
+                if (children != null && children.size() > 0) {
+                    for (PocoElement child : children) {
+                        results.addAll(parseAttr(child, step));
+                    }
+                    if (results.size() == 0) {
+                        return null;
+                    } else if (step.endsWith("]") && step.contains("[")) {
+                        int index = Integer.parseInt(step.substring(step.indexOf("[") + 1, step.indexOf("]")));
+                        if (results.size() <= index) {
+                            pocoElement = results.get(results.size() - 1);
+                        } else {
+                            pocoElement = results.get(index);
+                        }
+                    } else {
+                        if (results.size() > 0) {
+                            pocoElement = results.get(0);
+                        }
+                    }
+                } else {
+                    return null;
+                }
+            }
+        }
+        return pocoElement;
+    }
+
+    @Override
+    public void freezeSource() {
+        isFrozen = true;
+    }
+
+    @Override
+    public void thawSource() {
+        isFrozen = false;
+    }
+
+    private List<PocoElement> parseAttr(PocoElement pocoElement, String express) {
+        String attrExpression = express.substring(express.indexOf("(") + 1, express.indexOf(")"));
+        if (attrExpression.startsWith("\"") && attrExpression.endsWith("\"")) {
+            attrExpression = "name=" + attrExpression.replace("\"", "");
+        }
+        String[] attrs = attrExpression.split(",");
+        return findElementsByAttr(pocoElement, new ArrayList<>(), attrs);
+    }
+
+    private List<PocoElement> findElementsByAttr(PocoElement sourceElement, List<PocoElement> result, String[] attrs) {
+        Boolean predicate = null;
+        for (String attr : attrs) {
+            boolean p;
+            String field = attr.substring(0, attr.indexOf("="));
+            String value = attr.substring(attr.indexOf("=") + 1).replace("\"", "");
+            switch (field) {
+                case "name":
+                    p = value.equals(sourceElement.getPayload().getName());
+                    break;
+                case "type":
+                    p = value.equals(sourceElement.getPayload().getType());
+                    break;
+                case "layer":
+                    p = value.equals(sourceElement.getPayload().getLayer());
+                    break;
+                case "tag":
+                    p = value.equals(sourceElement.getPayload().getTag());
+                    break;
+                case "texture":
+                    p = value.equals(sourceElement.getPayload().getTexture());
+                    break;
+                case "_instanceId":
+                    p = value.equals(sourceElement.getPayload().get_instanceId().toString());
+                    break;
+                case "_ilayer":
+                    p = value.equals(sourceElement.getPayload().get_ilayer().toString());
+                    break;
+                case "visible":
+                    p = value.toLowerCase(Locale.ROOT).equals(sourceElement.getPayload().getVisible().toString());
+                    break;
+                case "clickable":
+                    p = value.toLowerCase(Locale.ROOT).equals(sourceElement.getPayload().getClickable().toString());
+                    break;
+                default:
+                    throw new IllegalStateException("Unexpected value: " + field);
+            }
+            if (predicate == null) {
+                predicate = p;
+            } else {
+                predicate = predicate & p;
+            }
+        }
+        if (predicate != null && predicate) {
+            result.add(sourceElement);
+        }
+        List<PocoElement> children = sourceElement.getChildren();
+        if (children != null && children.size() > 0) {
+            for (PocoElement child : children) {
+                result.addAll(findElementsByAttr(child, result, attrs));
+            }
+        }
+        return result;
     }
 
     @Override

@@ -1,8 +1,10 @@
 package org.cloud.sonic.driver.poco;
 
+import com.alibaba.fastjson.JSONObject;
 import org.cloud.sonic.driver.common.models.WindowSize;
 import org.cloud.sonic.driver.common.tool.SonicRespException;
 import org.cloud.sonic.driver.poco.enums.PocoEngine;
+import org.cloud.sonic.driver.poco.models.PocoElement;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
@@ -19,6 +21,22 @@ public class PocoDriverTest {
     @Test
     public void testPageSource() throws SonicRespException {
         Assert.assertTrue(pocoDriver.getPageSource().getPayload().getType().equals("Root"));
+        Assert.assertTrue(pocoDriver.getPageSourceForJson().toJSONString().length() > 0);
+    }
+
+    @Test
+    public void testFindElement() throws SonicRespException {
+        String expression = "poco(type=\"Node\",name=\"Canvas\").child(type=\"Image\")[1]";
+        PocoElement pocoElement = pocoDriver.findElement(expression);
+        Assert.assertTrue(pocoElement.getPayload().getType().equals("Image"));
+    }
+
+    @Test
+    public void testFreeze() throws SonicRespException {
+        JSONObject r = pocoDriver.getPageSourceForJson();
+        pocoDriver.freezeSource();
+        Assert.assertEquals(r, pocoDriver.getPageSourceForJson());
+        pocoDriver.thawSource();
     }
 
     @Test

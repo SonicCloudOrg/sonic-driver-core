@@ -45,5 +45,12 @@ public interface PocoClient {
 
     JSONObject pageSourceForJson() throws SonicRespException;
 
+    PocoElement findElement(String expression) throws SonicRespException;
+
+    void freezeSource();
+
+    void thawSource();
+
+    //other
     WindowSize getScreenSize() throws SonicRespException;
 }

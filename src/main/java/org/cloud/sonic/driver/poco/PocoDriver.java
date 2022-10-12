@@ -74,6 +74,7 @@ public class PocoDriver {
 
     /**
      * get Poco element
+     *
      * @return
      * @throws SonicRespException
      */
@@ -83,6 +84,7 @@ public class PocoDriver {
 
     /**
      * get Poco element for Json
+     *
      * @return
      * @throws SonicRespException
      */
@@ -91,7 +93,32 @@ public class PocoDriver {
     }
 
     /**
+     * find poco element
+     *
+     * @param expression
+     * @return
+     */
+    public PocoElement findElement(String expression) throws SonicRespException {
+        return pocoClient.findElement(expression);
+    }
+
+    /**
+     * Freeze page source
+     */
+    public void freezeSource() {
+        pocoClient.freezeSource();
+    }
+
+    /**
+     * Thaw page source
+     */
+    public void thawSource() {
+        pocoClient.thawSource();
+    }
+
+    /**
      * get windows size
+     *
      * @return
      * @throws SonicRespException
      */
