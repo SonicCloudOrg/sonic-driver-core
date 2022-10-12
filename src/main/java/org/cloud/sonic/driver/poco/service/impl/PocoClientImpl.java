@@ -137,16 +137,6 @@ public class PocoClientImpl implements PocoClient {
         return pocoElement;
     }
 
-    @Override
-    public void freezeSource() {
-        isFrozen = true;
-    }
-
-    @Override
-    public void thawSource() {
-        isFrozen = false;
-    }
-
     private List<PocoElement> parseAttr(PocoElement pocoElement, String express) {
         String attrExpression = express.substring(express.indexOf("(") + 1, express.indexOf(")"));
         if (attrExpression.startsWith("\"") && attrExpression.endsWith("\"")) {
@@ -209,6 +199,16 @@ public class PocoClientImpl implements PocoClient {
             }
         }
         return result;
+    }
+
+    @Override
+    public void freezeSource() {
+        isFrozen = true;
+    }
+
+    @Override
+    public void thawSource() {
+        isFrozen = false;
     }
 
     @Override
