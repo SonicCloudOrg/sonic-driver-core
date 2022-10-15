@@ -20,6 +20,7 @@ public class PocoElement {
         private String layer;
         private String name;
         private String tag;
+        private String text;
         private String texture;
         private Integer _instanceId;
         private Integer _ilayer;

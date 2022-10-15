@@ -156,6 +156,9 @@ public class PocoClientImpl implements PocoClient {
                 case "name":
                     p = value.equals(sourceElement.getPayload().getName());
                     break;
+                case "text":
+                    p = value.equals(sourceElement.getPayload().getText());
+                    break;
                 case "type":
                     p = value.equals(sourceElement.getPayload().getType());
                     break;

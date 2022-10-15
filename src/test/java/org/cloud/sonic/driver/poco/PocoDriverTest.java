@@ -26,9 +26,9 @@ public class PocoDriverTest {
 
     @Test
     public void testFindElement() throws SonicRespException {
-        String expression = "poco(type=\"Node\",name=\"Canvas\").child(type=\"Image\")[1]";
+        String expression = "poco(type=\"Text\",text=\"Start\")";
         PocoElement pocoElement = pocoDriver.findElement(expression);
-        Assert.assertTrue(pocoElement.getPayload().getType().equals("Image"));
+        Assert.assertTrue(pocoElement.getPayload().getType().equals("Text"));
     }
 
     @Test
