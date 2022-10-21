@@ -63,7 +63,9 @@ public class SocketClientImpl implements PocoConnection {
 
                     int realLen;
                     realLen = inputStream.read(buffer);
-                    rData.put(buffer, 0, realLen);
+                    if (realLen > 0 ) {
+                        rData.put(buffer, 0, realLen);
+                    }
 
                     if (rData.position() == headLen) {
                         rData.flip();
