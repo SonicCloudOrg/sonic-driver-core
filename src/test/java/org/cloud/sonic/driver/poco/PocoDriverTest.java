@@ -25,7 +25,7 @@ public class PocoDriverTest {
     @Test
     public void testPageSource() throws SonicRespException {
         Assert.assertEquals("Root", pocoDriver.getPageSource().getPayload().getType());
-        Assert.assertTrue(pocoDriver.getPageSourceForJson().toJSONString().length() > 0);
+        Assert.assertTrue(pocoDriver.getPageSourceForJsonString().length() > 0);
         Assert.assertNotNull(pocoDriver.getPageSourceForXmlElement().data());
     }
 
@@ -44,9 +44,9 @@ public class PocoDriverTest {
 
     @Test
     public void testFreeze() throws SonicRespException {
-        JSONObject r = pocoDriver.getPageSourceForJson();
+        String r = pocoDriver.getPageSourceForJsonString();
         pocoDriver.freezeSource();
-        Assert.assertEquals(r, pocoDriver.getPageSourceForJson());
+        Assert.assertEquals(r, pocoDriver.getPageSourceForJsonString());
         pocoDriver.thawSource();
     }
 

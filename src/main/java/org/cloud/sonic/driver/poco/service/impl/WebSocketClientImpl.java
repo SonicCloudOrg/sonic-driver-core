@@ -21,10 +21,12 @@ import com.alibaba.fastjson.JSONObject;
 import org.cloud.sonic.driver.common.tool.Logger;
 import org.cloud.sonic.driver.common.tool.SonicRespException;
 import org.cloud.sonic.driver.poco.service.PocoConnection;
+import org.cloud.sonic.driver.poco.util.PocoTool;
 import org.java_websocket.handshake.ServerHandshake;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.nio.charset.StandardCharsets;
 
 public class WebSocketClientImpl implements PocoConnection {
     private int port;
@@ -39,7 +41,7 @@ public class WebSocketClientImpl implements PocoConnection {
     }
 
     @Override
-    public Object sendAndReceive(JSONObject jsonObject) throws SonicRespException {
+    public String sendAndReceive(JSONObject jsonObject) throws SonicRespException {
         synchronized (WebSocketClientImpl.class) {
             webSocketClient.send(jsonObject.toString());
             int wait = 0;
@@ -55,13 +57,22 @@ public class WebSocketClientImpl implements PocoConnection {
                 }
             }
             if (result != null) {
-                JSONObject re = JSON.parseObject(result);
-                result = null;
-                if (re.getString("id").equals(jsonObject.getString("id"))) {
-                    return re.get("result");
+                int subStartIndex = result.indexOf("result");
+
+                String pocoPrefix = result.substring(subStartIndex) + "}";
+
+                if (PocoTool.checkPocoRpcResultID(pocoPrefix, jsonObject.getString("id"))) {
+                    return "{" + result.substring(subStartIndex);
                 } else {
                     throw new SonicRespException("id not found!");
                 }
+//                JSONObject re = JSON.parseObject(result);
+//                result = null;
+//                if (re.getString("id").equals(jsonObject.getString("id"))) {
+//                    return re.get("result");
+//                } else {
+//                    throw new SonicRespException("id not found!");
+//                }
             }
         }
         return null;

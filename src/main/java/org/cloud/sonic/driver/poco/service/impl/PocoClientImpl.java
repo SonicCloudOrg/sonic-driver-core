@@ -40,7 +40,7 @@ public class PocoClientImpl implements PocoClient {
     private Logger logger;
     private PocoConnection pocoConnection;
     private PocoEngine engine;
-    private JSONObject source;
+    private String source;
 
     private Element rootXmlNode;
     private boolean isFrozen = false;
@@ -88,7 +88,7 @@ public class PocoClientImpl implements PocoClient {
     }
 
     @Override
-    public JSONObject pageSourceForJson() throws SonicRespException {
+    public String pageSourceForJsonString() throws SonicRespException {
         if (isFrozen) {
             return source;
         }
@@ -100,27 +100,23 @@ public class PocoClientImpl implements PocoClient {
         if (engine.equals(COCOS_CREATOR) || engine.equals(COCOS_2DX_JS)) {
             jsonObject.put("method", "dump");
         }
-        source = (JSONObject) pocoConnection.sendAndReceive(jsonObject);
+        source = pocoConnection.sendAndReceive(jsonObject);
         return source;
     }
 
     @Override
     public Element pageSourceForXmlElement() throws SonicRespException {
-        JSONObject source = null;
-        if (!isFrozen) {
-            JSONObject jsonObject = new JSONObject();
-            jsonObject.put("jsonrpc", "2.0");
-            jsonObject.put("params", Arrays.asList(true));
-            jsonObject.put("id", UUID.randomUUID().toString());
-            jsonObject.put("method", "Dump");
-            if (engine.equals(COCOS_CREATOR) || engine.equals(COCOS_2DX_JS)) {
-                jsonObject.put("method", "dump");
-            }
-            source = (JSONObject) pocoConnection.sendAndReceive(jsonObject);
-        }
-        rootXmlNode = Jsoup.parse(pocoJsonToXml.jsonToXml(source.toJSONString(), U.Mode.FORCE_ATTRIBUTE_USAGE,
-                "Root"),"", Parser.xmlParser());
+        pageSourceForJsonString();
+        String pocoJson = "{\"Root\""+source.substring("{\"result\"".length());
+        rootXmlNode = Jsoup.parse(pocoJsonToXml.jsonToXml(pocoJson, U.Mode.FORCE_ATTRIBUTE_USAGE,
+                "result"), "", Parser.xmlParser());
         return rootXmlNode;
+    }
+
+    @Override
+    public PocoElement findElement(String expression) throws SonicRespException {
+        List<PocoElement> pocoElements = findElements(expression);
+        return pocoElements.size() <= 0 ? null : findElements(expression).get(0);
     }
 
     @Override
@@ -166,7 +162,7 @@ public class PocoClientImpl implements PocoClient {
         }
         Elements xmlNodes = rootXmlNode.select(expression);
         List<PocoElement> result = new ArrayList<>();
-        for (Element node:xmlNodes){
+        for (Element node : xmlNodes) {
             PocoElement pocoElement = new PocoElement(rootXmlNode, node);
             result.add(pocoElement);
         }
@@ -258,7 +254,10 @@ public class PocoClientImpl implements PocoClient {
             jsonObject.put("params", Arrays.asList(true));
             jsonObject.put("id", UUID.randomUUID().toString());
             jsonObject.put("method", "GetScreenSize");
-            List<Integer> result = ((JSONArray) pocoConnection.sendAndReceive(jsonObject)).toJavaList(Integer.class);
+            List<Integer> result = ((JSONArray) JSONObject.parseObject(
+                    pocoConnection.sendAndReceive(jsonObject))
+                    .get("result"))
+                    .toJavaList(Integer.class);
             return new WindowSize(result.get(0), result.get(1));
         }
         return null;

@@ -24,5 +24,5 @@ public interface PocoConnection {
 
     void disconnect();
 
-    Object sendAndReceive(JSONObject jsonObject) throws SonicRespException;
+    String sendAndReceive(JSONObject jsonObject) throws SonicRespException;
 }

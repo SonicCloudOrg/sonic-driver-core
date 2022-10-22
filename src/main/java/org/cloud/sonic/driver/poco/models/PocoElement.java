@@ -79,7 +79,7 @@ public class PocoElement {
             return null;
         }
 
-        if (currentNodeXmlElement == null || !xmlPocoNode.data().equals(currentNodeXmlElement.data())) {
+        if (currentNodeXmlElement == null || !xmlPocoNode.toString().equals(currentNodeXmlElement.toString())) {
             currentNodeXmlElement = xmlPocoNode;
             parseXmlNode(xmlPocoNode);
         }
@@ -93,7 +93,7 @@ public class PocoElement {
         if (xmlPocoNode == null) {
             return null;
         }
-        if (currentNodeXmlElement == null || !xmlPocoNode.data().equals(currentNodeXmlElement.data())) {
+        if (currentNodeXmlElement == null || !xmlPocoNode.toString().equals(currentNodeXmlElement.toString())) {
 
             children.clear();
 

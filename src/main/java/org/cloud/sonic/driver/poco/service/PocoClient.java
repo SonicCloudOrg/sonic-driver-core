@@ -46,10 +46,11 @@ public interface PocoClient {
     //source handler.
     PocoElement pageSource() throws SonicRespException;
 
-    JSONObject pageSourceForJson() throws SonicRespException;
+    String pageSourceForJsonString() throws SonicRespException;
 
     Element pageSourceForXmlElement() throws SonicRespException;
 
+    PocoElement findElement(String expression) throws SonicRespException;
     List<PocoElement> findElements(String expression) throws SonicRespException;
 
     void freezeSource();

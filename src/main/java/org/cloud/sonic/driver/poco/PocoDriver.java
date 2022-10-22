@@ -91,8 +91,8 @@ public class PocoDriver {
      * @return
      * @throws SonicRespException
      */
-    public JSONObject getPageSourceForJson() throws SonicRespException {
-        return pocoClient.pageSourceForJson();
+    public String getPageSourceForJsonString() throws SonicRespException {
+        return pocoClient.pageSourceForJsonString();
     }
 
     /**
@@ -113,6 +113,16 @@ public class PocoDriver {
      */
     public List<PocoElement> findElements(String expression) throws SonicRespException {
         return pocoClient.findElements(expression);
+    }
+
+    /**
+     * find poco element
+     *
+     * @param expression
+     * @return
+     */
+    public PocoElement findElement(String expression) throws SonicRespException {
+        return pocoClient.findElement(expression);
     }
 
     /**
