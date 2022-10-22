@@ -142,23 +142,11 @@ public class SocketClientImpl implements PocoConnection {
         return result;
     }
 
-    private byte[] subByteArray(byte[] byte1, int start, int end) {
-        byte[] byte2;
-        byte2 = new byte[end - start];
-        System.arraycopy(byte1, start, byte2, 0, end - start);
-        return byte2;
-    }
-
     private int toInt(byte[] b) {
         int res = 0;
         for (int i = 0; i < b.length; i++) {
             res += (b[i] & 0xff) << (i * 8);
         }
         return res;
-    }
-
-    public static void main(String[] args) throws UnsupportedEncodingException {
-        System.out.printf("xx中文x".length()+ "，");
-        System.out.printf("xx中文x".getBytes(StandardCharsets.UTF_8).length+ "");
     }
 }
