@@ -16,6 +16,8 @@ public class PocoDriverTest {
     @BeforeClass
     public static void beforeClass() {
         pocoDriver = new PocoDriver(PocoEngine.UNITY_3D);
+        pocoDriver.disableLog();
+        pocoDriver.showLog();
     }
 
     @Test

@@ -25,6 +25,7 @@ import org.cloud.sonic.driver.poco.service.PocoConnection;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.Socket;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
@@ -45,41 +46,36 @@ public class SocketClientImpl implements PocoConnection {
 
     @Override
     public Object sendAndReceive(JSONObject jsonObject) throws SonicRespException {
-        int len = jsonObject.toJSONString().length();
-        ByteBuffer header = ByteBuffer.allocate(4);
-        header.put(intToByteArray(len), 0, 4);
-        header.flip();
-        ByteBuffer body = ByteBuffer.allocate(len);
-        body.put(jsonObject.toJSONString().getBytes(StandardCharsets.UTF_8), 0, len);
-        body.flip();
-        ByteBuffer total = ByteBuffer.allocate(len + 4);
-        total.put(header.array());
-        total.put(body.array());
-        total.flip();
+        byte[] data = jsonObject.toJSONString().getBytes(StandardCharsets.UTF_8);
+        byte[] header = intToByteArray(data.length);
+
         synchronized (SocketClientImpl.class) {
             try {
-                outputStream.write(total.array());
+                outputStream.write(header);
+                outputStream.write(data);
+                outputStream.flush();
                 byte[] head = new byte[4];
+                byte[] buffer = new byte[8192];
                 inputStream.read(head);
                 int headLen = toInt(head);
-                StringBuilder s = new StringBuilder();
+                ByteBuffer rData = ByteBuffer.allocate(headLen);
                 while (poco.isConnected() && !Thread.interrupted()) {
-                    byte[] buffer = new byte[1024];
+
                     int realLen;
                     realLen = inputStream.read(buffer);
-                    if (buffer.length != realLen && realLen >= 0) {
-                        buffer = subByteArray(buffer, 0, realLen);
+                    if (realLen > 0 ) {
+                        rData.put(buffer, 0, realLen);
                     }
-                    if (realLen >= 0) {
-                        s.append(new String(buffer));
-                        if (s.toString().getBytes(StandardCharsets.UTF_8).length == headLen) {
-                            JSONObject re = JSON.parseObject(s.toString());
-                            logger.info(re.toJSONString());
-                            if (re.getString("id").equals(jsonObject.getString("id"))) {
-                                return re.get("result");
-                            } else {
-                                throw new SonicRespException("id not found!");
-                            }
+
+                    if (rData.position() == headLen) {
+                        rData.flip();
+                        String sData = new String(rData.array(),StandardCharsets.UTF_8 );
+                        JSONObject re = JSON.parseObject(sData);
+                        logger.info(sData);
+                        if (re.getString("id").equals(jsonObject.getString("id"))) {
+                            return re.get("result");
+                        } else {
+                            throw new SonicRespException("id not found!");
                         }
                     }
                 }
@@ -144,13 +140,6 @@ public class SocketClientImpl implements PocoConnection {
         result[2] = (byte) (i >> 16 & 0xff);
         result[3] = (byte) (i >> 24 & 0xff);
         return result;
-    }
-
-    private byte[] subByteArray(byte[] byte1, int start, int end) {
-        byte[] byte2;
-        byte2 = new byte[end - start];
-        System.arraycopy(byte1, start, byte2, 0, end - start);
-        return byte2;
     }
 
     private int toInt(byte[] b) {
