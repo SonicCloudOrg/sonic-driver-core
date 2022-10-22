@@ -23,6 +23,9 @@ import org.cloud.sonic.driver.poco.enums.PocoEngine;
 import org.cloud.sonic.driver.poco.models.PocoElement;
 import org.cloud.sonic.driver.poco.service.PocoClient;
 import org.cloud.sonic.driver.poco.service.impl.PocoClientImpl;
+import org.jsoup.nodes.Element;
+
+import java.util.List;
 
 /**
  * @author Eason
@@ -93,13 +96,23 @@ public class PocoDriver {
     }
 
     /**
-     * find poco element
+     * get Poco element for dom4j.Element
+     *
+     * @return
+     * @throws SonicRespException
+     */
+    public Element getPageSourceForXmlElement() throws SonicRespException {
+        return pocoClient.pageSourceForXmlElement();
+    }
+
+    /**
+     * find poco elements
      *
      * @param expression
      * @return
      */
-    public PocoElement findElement(String expression) throws SonicRespException {
-        return pocoClient.findElement(expression);
+    public List<PocoElement> findElements(String expression) throws SonicRespException {
+        return pocoClient.findElements(expression);
     }
 
     /**

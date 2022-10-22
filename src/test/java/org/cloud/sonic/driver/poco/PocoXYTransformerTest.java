@@ -1,9 +1,8 @@
-package org.cloud.sonic.driver.common.tool;
+package org.cloud.sonic.driver.poco;
 
 import org.junit.Assert;
 import org.junit.Test;
-
-import javax.swing.plaf.synth.SynthOptionPaneUI;
+import org.cloud.sonic.driver.poco.util.PocoXYTransformer;
 
 public class PocoXYTransformerTest {
     double width = 100, height = 1000;

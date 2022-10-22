@@ -14,7 +14,7 @@
  *  limitations under the License.
  *
  */
-package org.cloud.sonic.driver.common.tool;
+package org.cloud.sonic.driver.poco.util;
 
 /***
  * poco coordinate system conversion and vertical coordinate system converter

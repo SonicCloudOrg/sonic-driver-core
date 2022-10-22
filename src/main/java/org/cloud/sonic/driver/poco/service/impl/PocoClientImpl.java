@@ -16,9 +16,9 @@
  */
 package org.cloud.sonic.driver.poco.service.impl;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.github.underscore.U;
 import org.cloud.sonic.driver.common.models.WindowSize;
 import org.cloud.sonic.driver.common.tool.Logger;
 import org.cloud.sonic.driver.common.tool.SonicRespException;
@@ -26,6 +26,11 @@ import org.cloud.sonic.driver.poco.enums.PocoEngine;
 import org.cloud.sonic.driver.poco.models.PocoElement;
 import org.cloud.sonic.driver.poco.service.PocoClient;
 import org.cloud.sonic.driver.poco.service.PocoConnection;
+import org.cloud.sonic.driver.poco.util.pocoJsonToXml;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Element;
+import org.jsoup.parser.Parser;
+import org.jsoup.select.Elements;
 
 import java.util.*;
 
@@ -36,6 +41,8 @@ public class PocoClientImpl implements PocoClient {
     private PocoConnection pocoConnection;
     private PocoEngine engine;
     private JSONObject source;
+
+    private Element rootXmlNode;
     private boolean isFrozen = false;
 
     public PocoClientImpl() {
@@ -75,7 +82,8 @@ public class PocoClientImpl implements PocoClient {
 
     @Override
     public PocoElement pageSource() throws SonicRespException {
-        PocoElement pocoElement = JSON.parseObject(pageSourceForJson().toJSONString(), PocoElement.class);
+//        PocoElement pocoElement = JSON.parseObject(pageSourceForJson().toJSONString(), PocoElement.class);
+        PocoElement pocoElement = new PocoElement(pageSourceForXmlElement());
         return pocoElement;
     }
 
@@ -97,44 +105,72 @@ public class PocoClientImpl implements PocoClient {
     }
 
     @Override
-    public PocoElement findElement(String expression) throws SonicRespException {
-        PocoElement pocoElement = pageSource();
-        String[] steps = expression.split("\\.");
-        for (String step : steps) {
-            if (step.startsWith("poco")) {
-                List<PocoElement> results = parseAttr(pocoElement, step);
-                if (results.size() > 0) {
-                    pocoElement = results.get(0);
-                } else {
-                    return null;
-                }
-            } else if (step.startsWith("child")) {
-                List<PocoElement> children = pocoElement.getChildren();
-                List<PocoElement> results = new ArrayList<>();
-                if (children != null && children.size() > 0) {
-                    for (PocoElement child : children) {
-                        results.addAll(parseAttr(child, step));
-                    }
-                    if (results.size() == 0) {
-                        return null;
-                    } else if (step.endsWith("]") && step.contains("[")) {
-                        int index = Integer.parseInt(step.substring(step.indexOf("[") + 1, step.indexOf("]")));
-                        if (results.size() <= index) {
-                            pocoElement = results.get(results.size() - 1);
-                        } else {
-                            pocoElement = results.get(index);
-                        }
-                    } else {
-                        if (results.size() > 0) {
-                            pocoElement = results.get(0);
-                        }
-                    }
-                } else {
-                    return null;
-                }
+    public Element pageSourceForXmlElement() throws SonicRespException {
+        JSONObject source = null;
+        if (!isFrozen) {
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("jsonrpc", "2.0");
+            jsonObject.put("params", Arrays.asList(true));
+            jsonObject.put("id", UUID.randomUUID().toString());
+            jsonObject.put("method", "Dump");
+            if (engine.equals(COCOS_CREATOR) || engine.equals(COCOS_2DX_JS)) {
+                jsonObject.put("method", "dump");
             }
+            source = (JSONObject) pocoConnection.sendAndReceive(jsonObject);
         }
-        return pocoElement;
+        rootXmlNode = Jsoup.parse(pocoJsonToXml.jsonToXml(source.toJSONString(), U.Mode.FORCE_ATTRIBUTE_USAGE,
+                "Root"),"", Parser.xmlParser());
+        return rootXmlNode;
+    }
+
+    @Override
+    public List<PocoElement> findElements(String expression) throws SonicRespException {
+//        PocoElement pocoElement = pageSource();
+//        String[] steps = expression.split("\\.");
+//        for (String step : steps) {
+//            if (step.startsWith("poco")) {
+//                List<PocoElement> results = parseAttr(pocoElement, step);
+//                if (results.size() > 0) {
+//                    pocoElement = results.get(0);
+//                } else {
+//                    return null;
+//                }
+//            } else if (step.startsWith("child")) {
+//                List<PocoElement> children = pocoElement.getChildren();
+//                List<PocoElement> results = new ArrayList<>();
+//                if (children != null && children.size() > 0) {
+//                    for (PocoElement child : children) {
+//                        results.addAll(parseAttr(child, step));
+//                    }
+//                    if (results.size() == 0) {
+//                        return null;
+//                    } else if (step.endsWith("]") && step.contains("[")) {
+//                        int index = Integer.parseInt(step.substring(step.indexOf("[") + 1, step.indexOf("]")));
+//                        if (results.size() <= index) {
+//                            pocoElement = results.get(results.size() - 1);
+//                        } else {
+//                            pocoElement = results.get(index);
+//                        }
+//                    } else {
+//                        if (results.size() > 0) {
+//                            pocoElement = results.get(0);
+//                        }
+//                    }
+//                } else {
+//                    return null;
+//                }
+//            }
+//        }
+        if (rootXmlNode == null) {
+            pageSourceForXmlElement();
+        }
+        Elements xmlNodes = rootXmlNode.select(expression);
+        List<PocoElement> result = new ArrayList<>();
+        for (Element node:xmlNodes){
+            PocoElement pocoElement = new PocoElement(rootXmlNode, node);
+            result.add(pocoElement);
+        }
+        return result;
     }
 
     private List<PocoElement> parseAttr(PocoElement pocoElement, String express) {
