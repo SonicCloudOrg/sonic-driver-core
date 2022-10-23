@@ -4,10 +4,10 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.ToString;
 import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
 
 @Getter
@@ -17,8 +17,10 @@ public class PocoElement {
     public String currentNodeSelector = "Root";
     private Payload payload;
     private List<PocoElement> children;
-    Element rootNodeXmlElement;
+    RootElement rootElement;
     private Element currentNodeXmlElement;
+
+    private long version;
 
     @Getter
     @ToString
@@ -57,13 +59,13 @@ public class PocoElement {
         }
     }
 
-    public PocoElement(Element root) {
-        this.rootNodeXmlElement = root;
+    public PocoElement(RootElement root) {
+        this.rootElement = root;
         payload = new Payload();
         children = new ArrayList<>();
     }
 
-    public PocoElement(Element root, Element currentNodeXmlElement) {
+    public PocoElement(RootElement root, Element currentNodeXmlElement) {
         this(root);
         this.currentNodeXmlElement = currentNodeXmlElement;
         this.currentNodeSelector = currentNodeXmlElement.cssSelector();
@@ -72,39 +74,37 @@ public class PocoElement {
 
     public Payload getPayload() {
 
-        Element xmlPocoNode = rootNodeXmlElement.select(currentNodeSelector).first();
-
-        if (xmlPocoNode == null) {
-            return null;
-        }
-
-        if (currentNodeXmlElement == null || !xmlPocoNode.toString().equals(currentNodeXmlElement.toString())) {
-            currentNodeXmlElement = xmlPocoNode;
+        if (rootElement.getVersion()!=getVersion()){
+            Element xmlPocoNode = rootElement.getXmlElement().select(currentNodeSelector).first();
+            if (xmlPocoNode == null) {
+                return null;
+            }
             parseXmlNode(xmlPocoNode);
+            version = rootElement.getVersion();
         }
         return payload;
     }
 
     public List<PocoElement> getChildren() {
 
-        Element xmlPocoNode = rootNodeXmlElement.select(currentNodeSelector).first();
+        if (rootElement.getVersion()!=getVersion()){
+            Element xmlPocoNode = rootElement.getXmlElement().select(currentNodeSelector).first();
 
-        if (xmlPocoNode == null) {
-            return null;
-        }
-        if (currentNodeXmlElement == null || !xmlPocoNode.toString().equals(currentNodeXmlElement.toString())) {
+            if (xmlPocoNode == null) {
+                return null;
+            }
 
             children.clear();
 
             currentNodeXmlElement = xmlPocoNode;
 
-            String childXpath = currentNodeSelector + "/children";
+            Elements childList = xmlPocoNode.children();
 
-            Iterator<Element> nodeIterator = xmlPocoNode.select(childXpath).iterator();
-
-            while (nodeIterator.hasNext()) {
-                children.add(new PocoElement(rootNodeXmlElement, nodeIterator.next()));
+            for (Element child:childList) {
+                children.add(new PocoElement(rootElement, child));
             }
+
+            version = rootElement.getVersion();
         }
         return children;
     }
@@ -157,11 +157,11 @@ public class PocoElement {
     }
 
     public Boolean currentTheNodeExists(){
-        return rootNodeXmlElement.select(currentNodeSelector).first()!=null;
+        return rootElement.getXmlElement().select(currentNodeSelector).first()!=null;
     }
 
     public PocoElement getParentNode(){
-        Element xmlPocoNode = rootNodeXmlElement.select(currentNodeSelector).first();
+        Element xmlPocoNode = rootElement.getXmlElement().select(currentNodeSelector).first();
 
         if (xmlPocoNode == null) {
             return null;
@@ -170,6 +170,6 @@ public class PocoElement {
         if (parentNode==null){
             return null;
         }
-        return new PocoElement(rootNodeXmlElement,parentNode);
+        return new PocoElement(rootElement,parentNode);
     }
 }

@@ -24,6 +24,7 @@ import org.cloud.sonic.driver.common.tool.Logger;
 import org.cloud.sonic.driver.common.tool.SonicRespException;
 import org.cloud.sonic.driver.poco.enums.PocoEngine;
 import org.cloud.sonic.driver.poco.models.PocoElement;
+import org.cloud.sonic.driver.poco.models.RootElement;
 import org.cloud.sonic.driver.poco.service.PocoClient;
 import org.cloud.sonic.driver.poco.service.PocoConnection;
 import org.cloud.sonic.driver.poco.util.pocoJsonToXml;
@@ -42,11 +43,12 @@ public class PocoClientImpl implements PocoClient {
     private PocoEngine engine;
     private String source;
 
-    private Element rootXmlNode;
+    private RootElement rootNode;
     private boolean isFrozen = false;
 
     public PocoClientImpl() {
         logger = new Logger();
+        rootNode = new RootElement();
     }
 
     @Override
@@ -82,8 +84,8 @@ public class PocoClientImpl implements PocoClient {
 
     @Override
     public PocoElement pageSource() throws SonicRespException {
-        PocoElement pocoElement = new PocoElement(pageSourceForXmlElement());
-        return pocoElement;
+        pageSourceForXmlElement();
+        return new PocoElement(rootNode);
     }
 
     @Override
@@ -107,9 +109,12 @@ public class PocoClientImpl implements PocoClient {
     public Element pageSourceForXmlElement() throws SonicRespException {
         pageSourceForJsonString();
         String pocoJson = "{\"Root\"" + source.substring("{\"result\"".length());
-        rootXmlNode = Jsoup.parse(pocoJsonToXml.jsonToXml(pocoJson, U.Mode.FORCE_ATTRIBUTE_USAGE,
+        Element rootXmlElement = Jsoup.parse(pocoJsonToXml.jsonToXml(pocoJson, U.Mode.FORCE_ATTRIBUTE_USAGE,
                 "result"), "", Parser.xmlParser());
-        return rootXmlNode;
+
+        rootNode.updateVersion(rootXmlElement);
+
+        return rootNode.getXmlElement();
     }
 
     @Override
@@ -120,7 +125,7 @@ public class PocoClientImpl implements PocoClient {
 
     @Override
     public List<PocoElement> findElements(String selector, String expression) throws SonicRespException {
-        if (rootXmlNode == null) {
+        if (rootNode.getXmlElement() == null) {
             pageSourceForXmlElement();
         }
         Elements xmlNodes = null;
@@ -141,15 +146,15 @@ public class PocoClientImpl implements PocoClient {
                 }
                 expression = newExpress;
             case "xpath":
-                xmlNodes = rootXmlNode.selectXpath(expression);
+                xmlNodes = rootNode.getXmlElement().selectXpath(expression);
                 break;
             case "cssSelector":
-                xmlNodes = rootXmlNode.select(expression);
+                xmlNodes = rootNode.getXmlElement().select(expression);
                 break;
         }
         List<PocoElement> result = new ArrayList<>();
         for (Element node : xmlNodes) {
-            PocoElement pocoElement = new PocoElement(rootXmlNode, node);
+            PocoElement pocoElement = new PocoElement(rootNode, node);
             result.add(pocoElement);
         }
         return result;
