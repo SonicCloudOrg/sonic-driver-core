@@ -140,7 +140,6 @@ public class PocoClientImpl implements PocoClient {
                     }
                 }
                 expression = newExpress;
-                System.out.println(newExpress);
             case "xpath":
                 xmlNodes = rootXmlNode.selectXpath(expression);
                 break;
