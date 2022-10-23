@@ -82,7 +82,6 @@ public class PocoClientImpl implements PocoClient {
 
     @Override
     public PocoElement pageSource() throws SonicRespException {
-//        PocoElement pocoElement = JSON.parseObject(pageSourceForJson().toJSONString(), PocoElement.class);
         PocoElement pocoElement = new PocoElement(pageSourceForXmlElement());
         return pocoElement;
     }
