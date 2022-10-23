@@ -32,7 +32,8 @@ public class PocoDriverTest {
     @Test
     public void testFindElement() throws SonicRespException {
 //        String expression = "poco(type=\"Text\",text=\"Start\")";
-        String expression = "Root > children > MEHolo > children > AnchorManager";
+//        String expression = "Root > children > MEHolo > children > AnchorManager";
+        String expression = "//*[@text=\"Start\" and @type=\"Text\"]";
         List<PocoElement> pocoElements = pocoDriver.findElements(expression);
         for (PocoElement pocoElement:pocoElements){
             Assert.assertNotNull(pocoElement.getPayload().getName());

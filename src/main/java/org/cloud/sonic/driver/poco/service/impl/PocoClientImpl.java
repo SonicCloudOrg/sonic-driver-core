@@ -121,46 +121,10 @@ public class PocoClientImpl implements PocoClient {
 
     @Override
     public List<PocoElement> findElements(String expression) throws SonicRespException {
-//        PocoElement pocoElement = pageSource();
-//        String[] steps = expression.split("\\.");
-//        for (String step : steps) {
-//            if (step.startsWith("poco")) {
-//                List<PocoElement> results = parseAttr(pocoElement, step);
-//                if (results.size() > 0) {
-//                    pocoElement = results.get(0);
-//                } else {
-//                    return null;
-//                }
-//            } else if (step.startsWith("child")) {
-//                List<PocoElement> children = pocoElement.getChildren();
-//                List<PocoElement> results = new ArrayList<>();
-//                if (children != null && children.size() > 0) {
-//                    for (PocoElement child : children) {
-//                        results.addAll(parseAttr(child, step));
-//                    }
-//                    if (results.size() == 0) {
-//                        return null;
-//                    } else if (step.endsWith("]") && step.contains("[")) {
-//                        int index = Integer.parseInt(step.substring(step.indexOf("[") + 1, step.indexOf("]")));
-//                        if (results.size() <= index) {
-//                            pocoElement = results.get(results.size() - 1);
-//                        } else {
-//                            pocoElement = results.get(index);
-//                        }
-//                    } else {
-//                        if (results.size() > 0) {
-//                            pocoElement = results.get(0);
-//                        }
-//                    }
-//                } else {
-//                    return null;
-//                }
-//            }
-//        }
         if (rootXmlNode == null) {
             pageSourceForXmlElement();
         }
-        Elements xmlNodes = rootXmlNode.select(expression);
+        Elements xmlNodes = rootXmlNode.selectXpath(expression);
         List<PocoElement> result = new ArrayList<>();
         for (Element node : xmlNodes) {
             PocoElement pocoElement = new PocoElement(rootXmlNode, node);

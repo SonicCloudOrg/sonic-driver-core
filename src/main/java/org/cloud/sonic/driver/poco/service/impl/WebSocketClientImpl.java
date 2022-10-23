@@ -66,13 +66,6 @@ public class WebSocketClientImpl implements PocoConnection {
                 } else {
                     throw new SonicRespException("id not found!");
                 }
-//                JSONObject re = JSON.parseObject(result);
-//                result = null;
-//                if (re.getString("id").equals(jsonObject.getString("id"))) {
-//                    return re.get("result");
-//                } else {
-//                    throw new SonicRespException("id not found!");
-//                }
             }
         }
         return null;

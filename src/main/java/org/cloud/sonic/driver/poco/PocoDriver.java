@@ -16,7 +16,6 @@
  */
 package org.cloud.sonic.driver.poco;
 
-import com.alibaba.fastjson.JSONObject;
 import org.cloud.sonic.driver.common.models.WindowSize;
 import org.cloud.sonic.driver.common.tool.SonicRespException;
 import org.cloud.sonic.driver.poco.enums.PocoEngine;
@@ -96,7 +95,7 @@ public class PocoDriver {
     }
 
     /**
-     * get Poco element for dom4j.Element
+     * get Poco element for jsoup.Element
      *
      * @return
      * @throws SonicRespException
