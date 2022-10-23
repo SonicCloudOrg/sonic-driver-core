@@ -166,11 +166,7 @@ public class PocoElement {
         if (xmlPocoNode == null) {
             return null;
         }
-        Element preChildNode = xmlPocoNode.parent();
-        if (preChildNode==null){
-            return null;
-        }
-        Element parentNode = preChildNode.parent();
+        Element parentNode = xmlPocoNode.parent();
         if (parentNode==null){
             return null;
         }
