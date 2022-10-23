@@ -14,7 +14,7 @@ import java.util.List;
 @ToString
 @AllArgsConstructor
 public class PocoElement {
-    public String currentNodeSelector = "";
+    public String currentNodeSelector = "Root";
     private Payload payload;
     private List<PocoElement> children;
     Element rootNodeXmlElement;
@@ -67,7 +67,6 @@ public class PocoElement {
         this(root);
         this.currentNodeXmlElement = currentNodeXmlElement;
         this.currentNodeSelector = currentNodeXmlElement.cssSelector();
-        System.out.println(currentNodeSelector);
         parseXmlNode(currentNodeXmlElement);
     }
 
@@ -120,10 +119,10 @@ public class PocoElement {
         payload.texture = xmlNode.attr("texture");
 
         String _instanceId = xmlNode.attr("_instanceId");
-        payload._instanceId = _instanceId == null ? 0 : Integer.parseInt(_instanceId);
+        payload._instanceId = _instanceId.isEmpty()? 0 : Integer.parseInt(_instanceId);
 
         String _ilayer = xmlNode.attr("_ilayer");
-        payload._ilayer = _ilayer == null ? 0 : Integer.parseInt(_ilayer);
+        payload._ilayer = _ilayer.isEmpty() ? 0 : Integer.parseInt(_ilayer);
 
         payload.type = xmlNode.attr("type");
 
@@ -131,12 +130,12 @@ public class PocoElement {
         payload.visible = Boolean.parseBoolean(visible);
 
         String global = xmlNode.attr("global");
-        payload.zOrders.global = global == null ? 0 : Float.parseFloat(global);
+        payload.zOrders.global = global.isEmpty() ? 0 : Float.parseFloat(global);
         String local = xmlNode.attr("local");
-        payload.zOrders.local = local == null ? 0 : Float.parseFloat(local);
+        payload.zOrders.local = local.isEmpty() ? 0 : Float.parseFloat(local);
 
         String components = xmlNode.attr("components");
-        if (components != null && components.length() > 2) {
+        if (components.length() > 2) {
             components = components.substring(1, components.length() - 1);
             payload.components = Arrays.asList(components.split(","));
         }
@@ -148,7 +147,7 @@ public class PocoElement {
     }
 
     private List<Float> parseFloatAttrList(String floatAttrStr) {
-        if (floatAttrStr == null && floatAttrStr.length() <= 2) return null;
+        if (floatAttrStr.length() <= 2) return null;
         List<Float> result = new ArrayList<Float>();
         floatAttrStr = floatAttrStr.substring(1, floatAttrStr.length() - 1);
         for (String numStr : floatAttrStr.split(",")) {
@@ -159,5 +158,22 @@ public class PocoElement {
 
     public Boolean currentTheNodeExists(){
         return rootNodeXmlElement.select(currentNodeSelector).first()!=null;
+    }
+
+    public PocoElement getParentNode(){
+        Element xmlPocoNode = rootNodeXmlElement.select(currentNodeSelector).first();
+
+        if (xmlPocoNode == null) {
+            return null;
+        }
+        Element preChildNode = xmlPocoNode.parent();
+        if (preChildNode==null){
+            return null;
+        }
+        Element parentNode = preChildNode.parent();
+        if (parentNode==null){
+            return null;
+        }
+        return new PocoElement(rootNodeXmlElement,parentNode);
     }
 }

@@ -26,7 +26,8 @@ public class PocoDriverTest {
     public void testPageSource() throws SonicRespException {
         Assert.assertEquals("Root", pocoDriver.getPageSource().getPayload().getType());
         Assert.assertTrue(pocoDriver.getPageSourceForJsonString().length() > 0);
-        Assert.assertNotNull(pocoDriver.getPageSourceForXmlElement().data());
+        Assert.assertNotNull(pocoDriver.getPageSourceForXmlElement().toString());
+        System.out.println(pocoDriver.getPageSourceForXmlElement().toString());
     }
 
     @Test
@@ -47,6 +48,12 @@ public class PocoDriverTest {
     public void testFreeze() throws SonicRespException {
         String r = pocoDriver.getPageSourceForJsonString();
         pocoDriver.freezeSource();
+        try {
+            // change page tree operation
+            Thread.sleep(5*1000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
         Assert.assertEquals(r, pocoDriver.getPageSourceForJsonString());
         pocoDriver.thawSource();
     }
@@ -56,6 +63,27 @@ public class PocoDriverTest {
         WindowSize windowSize = pocoDriver.getScreenSize();
         Assert.assertTrue(windowSize.getHeight() > 0);
         Assert.assertTrue(windowSize.getWidth() > 0);
+    }
+
+    @Test
+    public void testNodeExist() throws SonicRespException{
+        String expression = "Root > children > MEHolo > children > AnchorManager";
+        PocoElement pocoElement = pocoDriver.findElement(expression);
+        Assert.assertTrue(pocoElement.currentTheNodeExists());
+        // mock node does not exist
+        pocoElement.currentNodeSelector = "Root > children > MEHolo > children > AnchorManager222";
+        Assert.assertTrue(pocoElement.currentTheNodeExists());
+    }
+
+    @Test
+    public void testGetParent() throws SonicRespException{
+        String expression = "Root > children > MEHolo > children > AnchorManager";
+        PocoElement pocoElement = pocoDriver.findElement(expression);
+        PocoElement parentPocoElement = pocoElement.getParentNode();
+        Assert.assertNotNull(parentPocoElement.getPayload().getName());
+        System.out.println(parentPocoElement.getPayload().getName());
+        Assert.assertNotNull(parentPocoElement.currentNodeSelector);
+        System.out.println(parentPocoElement.currentNodeSelector);
     }
 
     @AfterClass
