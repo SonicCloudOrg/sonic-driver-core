@@ -10,6 +10,8 @@ import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import java.util.List;
+
 public class PocoDriverTest {
     static PocoDriver pocoDriver;
 
@@ -22,22 +24,30 @@ public class PocoDriverTest {
 
     @Test
     public void testPageSource() throws SonicRespException {
-        Assert.assertTrue(pocoDriver.getPageSource().getPayload().getType().equals("Root"));
-        Assert.assertTrue(pocoDriver.getPageSourceForJson().toJSONString().length() > 0);
+        Assert.assertEquals("Root", pocoDriver.getPageSource().getPayload().getType());
+        Assert.assertTrue(pocoDriver.getPageSourceForJsonString().length() > 0);
+        Assert.assertNotNull(pocoDriver.getPageSourceForXmlElement().data());
     }
 
     @Test
     public void testFindElement() throws SonicRespException {
-        String expression = "poco(type=\"Text\",text=\"Start\")";
-        PocoElement pocoElement = pocoDriver.findElement(expression);
-        Assert.assertTrue(pocoElement.getPayload().getType().equals("Text"));
+//        String expression = "poco(type=\"Text\",text=\"Start\")";
+//        String expression = "Root > children > MEHolo > children > AnchorManager";
+        String expression = "//*[@text=\"Start\" and @type=\"Text\"]";
+        List<PocoElement> pocoElements = pocoDriver.findElements(expression);
+        for (PocoElement pocoElement:pocoElements){
+            Assert.assertNotNull(pocoElement.getPayload().getName());
+            System.out.println(pocoElement.getPayload().getName());
+            Assert.assertNotNull(pocoElement.currentNodeSelector);
+            System.out.println(pocoElement.currentNodeSelector);
+        }
     }
 
     @Test
     public void testFreeze() throws SonicRespException {
-        JSONObject r = pocoDriver.getPageSourceForJson();
+        String r = pocoDriver.getPageSourceForJsonString();
         pocoDriver.freezeSource();
-        Assert.assertEquals(r, pocoDriver.getPageSourceForJson());
+        Assert.assertEquals(r, pocoDriver.getPageSourceForJsonString());
         pocoDriver.thawSource();
     }
 

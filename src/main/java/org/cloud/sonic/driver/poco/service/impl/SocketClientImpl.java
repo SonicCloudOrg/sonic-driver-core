@@ -21,6 +21,7 @@ import com.alibaba.fastjson.JSONObject;
 import org.cloud.sonic.driver.common.tool.Logger;
 import org.cloud.sonic.driver.common.tool.SonicRespException;
 import org.cloud.sonic.driver.poco.service.PocoConnection;
+import org.cloud.sonic.driver.poco.util.PocoTool;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -44,7 +45,7 @@ public class SocketClientImpl implements PocoConnection {
     }
 
     @Override
-    public Object sendAndReceive(JSONObject jsonObject) throws SonicRespException {
+    public String sendAndReceive(JSONObject jsonObject) throws SonicRespException {
         byte[] data = jsonObject.toJSONString().getBytes(StandardCharsets.UTF_8);
         byte[] header = intToByteArray(data.length);
 
@@ -62,17 +63,19 @@ public class SocketClientImpl implements PocoConnection {
 
                     int realLen;
                     realLen = inputStream.read(buffer);
-                    if (realLen > 0 ) {
+                    if (realLen > 0) {
                         rData.put(buffer, 0, realLen);
                     }
 
                     if (rData.position() == headLen) {
                         rData.flip();
-                        String sData = new String(rData.array(),StandardCharsets.UTF_8 );
-                        JSONObject re = JSON.parseObject(sData);
-                        logger.info(sData);
-                        if (re.getString("id").equals(jsonObject.getString("id"))) {
-                            return re.get("result");
+                        String pocoResult = new String(rData.array(), StandardCharsets.UTF_8);
+                        int subStartIndex = pocoResult.indexOf("\"result\"");
+
+                        String pocoPrefix = pocoResult.substring(0,subStartIndex) + "}";
+
+                        if (PocoTool.checkPocoRpcResultID(pocoPrefix, jsonObject.getString("id"))) {
+                            return "{" + pocoResult.substring(subStartIndex);
                         } else {
                             throw new SonicRespException("id not found!");
                         }

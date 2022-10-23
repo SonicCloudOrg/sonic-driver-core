@@ -16,13 +16,15 @@
  */
 package org.cloud.sonic.driver.poco;
 
-import com.alibaba.fastjson.JSONObject;
 import org.cloud.sonic.driver.common.models.WindowSize;
 import org.cloud.sonic.driver.common.tool.SonicRespException;
 import org.cloud.sonic.driver.poco.enums.PocoEngine;
 import org.cloud.sonic.driver.poco.models.PocoElement;
 import org.cloud.sonic.driver.poco.service.PocoClient;
 import org.cloud.sonic.driver.poco.service.impl.PocoClientImpl;
+import org.jsoup.nodes.Element;
+
+import java.util.List;
 
 /**
  * @author Eason
@@ -88,8 +90,28 @@ public class PocoDriver {
      * @return
      * @throws SonicRespException
      */
-    public JSONObject getPageSourceForJson() throws SonicRespException {
-        return pocoClient.pageSourceForJson();
+    public String getPageSourceForJsonString() throws SonicRespException {
+        return pocoClient.pageSourceForJsonString();
+    }
+
+    /**
+     * get Poco element for jsoup.Element
+     *
+     * @return
+     * @throws SonicRespException
+     */
+    public Element getPageSourceForXmlElement() throws SonicRespException {
+        return pocoClient.pageSourceForXmlElement();
+    }
+
+    /**
+     * find poco elements
+     *
+     * @param expression
+     * @return
+     */
+    public List<PocoElement> findElements(String expression) throws SonicRespException {
+        return pocoClient.findElements(expression);
     }
 
     /**

@@ -22,6 +22,9 @@ import org.cloud.sonic.driver.common.tool.Logger;
 import org.cloud.sonic.driver.common.tool.SonicRespException;
 import org.cloud.sonic.driver.poco.enums.PocoEngine;
 import org.cloud.sonic.driver.poco.models.PocoElement;
+import org.jsoup.nodes.Element;
+
+import java.util.List;
 
 /**
  * @author Eason
@@ -43,9 +46,12 @@ public interface PocoClient {
     //source handler.
     PocoElement pageSource() throws SonicRespException;
 
-    JSONObject pageSourceForJson() throws SonicRespException;
+    String pageSourceForJsonString() throws SonicRespException;
+
+    Element pageSourceForXmlElement() throws SonicRespException;
 
     PocoElement findElement(String expression) throws SonicRespException;
+    List<PocoElement> findElements(String expression) throws SonicRespException;
 
     void freezeSource();
 
