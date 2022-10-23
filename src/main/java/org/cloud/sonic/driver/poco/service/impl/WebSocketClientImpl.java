@@ -16,7 +16,6 @@
  */
 package org.cloud.sonic.driver.poco.service.impl;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import org.cloud.sonic.driver.common.tool.Logger;
 import org.cloud.sonic.driver.common.tool.SonicRespException;
@@ -26,7 +25,6 @@ import org.java_websocket.handshake.ServerHandshake;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.nio.charset.StandardCharsets;
 
 public class WebSocketClientImpl implements PocoConnection {
     private int port;

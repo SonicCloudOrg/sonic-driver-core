@@ -1,3 +1,19 @@
+/*
+ *  Copyright (C) [SonicCloudOrg] Sonic Project
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ *
+ */
 package org.cloud.sonic.driver.poco.util;
 
 import com.github.underscore.Json;
@@ -9,7 +25,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-public class pocoJsonToXml extends U{
+public class pocoJsonToXml extends U {
     private static final String ROOT = "root";
 
     public pocoJsonToXml(Iterable iterable) {
@@ -19,21 +35,20 @@ public class pocoJsonToXml extends U{
     public static String jsonToXml(String json, Mode mode, String newRootName) {
         return jsonToXml(json, Xml.XmlStringBuilder.Step.TWO_SPACES, mode, newRootName);
     }
+
     // core code
     public static Map<String, Object> forceAttributeUsageOverride(Map<String, Object> map) {
         Map<String, Object> outMap = newLinkedHashMap();
         for (Map.Entry<String, Object> entry : map.entrySet()) {
             // poco dedicated conversion
-            if (entry.getKey().equals("payload")){
-                makeAttributePoco(outMap,entry);
-            } else if (entry.getKey().equals("children")){
-                Map<String, Object> childMap = newLinkedHashMap();
-                for (Object mapObject : (List) entry.getValue()){
-                    String name  = (String) ((Map<String, Object>) mapObject).get("name");
-                    childMap.put(name,forceAttributeUsageOverride((Map<String, Object>) mapObject));
+            if (entry.getKey().equals("payload")) {
+                makeAttributePoco(outMap, entry);
+            } else if (entry.getKey().equals("children")) {
+                for (Object mapObject : (List) entry.getValue()) {
+                    String name = (String) ((Map<String, Object>) mapObject).get("name");
+                    outMap.put(name, forceAttributeUsageOverride((Map<String, Object>) mapObject));
                 }
-                outMap.put("children",childMap);
-            } else{
+            } else {
                 outMap.put(
                         entry.getValue() instanceof Map
                                 || entry.getValue() instanceof List
@@ -46,10 +61,10 @@ public class pocoJsonToXml extends U{
         return outMap;
     }
 
-    public static String valueJoinString(List<Object> objectList){
-        if (objectList==null||objectList.isEmpty())return "[]";
+    public static String valueJoinString(List<Object> objectList) {
+        if (objectList == null || objectList.isEmpty()) return "[]";
         StringBuilder result = new StringBuilder("[");
-        for (int i = 0;i<objectList.size()-1;i++){
+        for (int i = 0; i < objectList.size() - 1; i++) {
             result.append(objectList.get(i).toString());
             result.append(",");
         }
@@ -58,23 +73,22 @@ public class pocoJsonToXml extends U{
     }
 
     @SuppressWarnings("unchecked")
-    private static void makeAttributePoco(Map<String, Object> outMap,Map.Entry<String, Object> entry) {
-        HashMap<String,Object> tempMap = (HashMap<String, Object>) entry.getValue();
-        for (String attributeName:tempMap.keySet()){
-            if (tempMap.get(attributeName) instanceof LinkedHashMap){
-                if (attributeName.equals("zOrders")){
+    private static void makeAttributePoco(Map<String, Object> outMap, Map.Entry<String, Object> entry) {
+        HashMap<String, Object> tempMap = (HashMap<String, Object>) entry.getValue();
+        for (String attributeName : tempMap.keySet()) {
+            if (tempMap.get(attributeName) instanceof LinkedHashMap) {
+                if (attributeName.equals("zOrders")) {
                     Map map = (Map) tempMap.get("zOrders");
-                    outMap.put("-global",String.valueOf(map.get("global")));
-                    outMap.put("-local",String.valueOf(map.get("local")));
+                    outMap.put("-global", String.valueOf(map.get("global")));
+                    outMap.put("-local", String.valueOf(map.get("local")));
                     continue;
                 }
                 Object object = forceAttributeUsageOverride((Map) tempMap.get(attributeName));
-                outMap.put(attributeName,object);
-            }
-            else if (tempMap.get(attributeName) instanceof List){
+                outMap.put(attributeName, object);
+            } else if (tempMap.get(attributeName) instanceof List) {
                 // put prefixed "-" with means the value is an attribute
-                outMap.put("-" + attributeName,valueJoinString((List<Object>) tempMap.get(attributeName)));
-            }else {
+                outMap.put("-" + attributeName, valueJoinString((List<Object>) tempMap.get(attributeName)));
+            } else {
                 outMap.put("-" + attributeName, String.valueOf(tempMap.get(attributeName)));
             }
         }
