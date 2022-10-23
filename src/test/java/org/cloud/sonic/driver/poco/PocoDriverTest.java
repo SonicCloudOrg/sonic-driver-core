@@ -64,6 +64,27 @@ public class PocoDriverTest {
         Assert.assertTrue(windowSize.getWidth() > 0);
     }
 
+    @Test
+    public void testNodeExist() throws SonicRespException{
+        String expression = "Root > children > MEHolo > children > AnchorManager";
+        PocoElement pocoElement = pocoDriver.findElement(expression);
+        Assert.assertTrue(pocoElement.currentTheNodeExists());
+        // mock node does not exist
+        pocoElement.currentNodeSelector = "Root > children > MEHolo > children > AnchorManager222";
+        Assert.assertTrue(pocoElement.currentTheNodeExists());
+    }
+
+    @Test
+    public void testGetParent() throws SonicRespException{
+        String expression = "Root > children > MEHolo > children > AnchorManager";
+        PocoElement pocoElement = pocoDriver.findElement(expression);
+        PocoElement parentPocoElement = pocoElement.getParentNode();
+        Assert.assertNotNull(parentPocoElement.getPayload().getName());
+        System.out.println(parentPocoElement.getPayload().getName());
+        Assert.assertNotNull(parentPocoElement.currentNodeSelector);
+        System.out.println(parentPocoElement.currentNodeSelector);
+    }
+
     @AfterClass
     public static void afterClass() {
         pocoDriver.closeDriver();

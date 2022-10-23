@@ -67,7 +67,6 @@ public class PocoElement {
         this(root);
         this.currentNodeXmlElement = currentNodeXmlElement;
         this.currentNodeSelector = currentNodeXmlElement.cssSelector();
-        System.out.println(currentNodeSelector);
         parseXmlNode(currentNodeXmlElement);
     }
 
@@ -159,5 +158,22 @@ public class PocoElement {
 
     public Boolean currentTheNodeExists(){
         return rootNodeXmlElement.select(currentNodeSelector).first()!=null;
+    }
+
+    public PocoElement getParentNode(){
+        Element xmlPocoNode = rootNodeXmlElement.select(currentNodeSelector).first();
+
+        if (xmlPocoNode == null) {
+            return null;
+        }
+        Element preChildNode = xmlPocoNode.parent();
+        if (preChildNode==null){
+            return null;
+        }
+        Element parentNode = preChildNode.parent();
+        if (parentNode==null){
+            return null;
+        }
+        return new PocoElement(rootNodeXmlElement,parentNode);
     }
 }
