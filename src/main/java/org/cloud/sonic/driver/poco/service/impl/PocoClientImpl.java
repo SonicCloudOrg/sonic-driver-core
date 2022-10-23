@@ -106,24 +106,48 @@ public class PocoClientImpl implements PocoClient {
     @Override
     public Element pageSourceForXmlElement() throws SonicRespException {
         pageSourceForJsonString();
-        String pocoJson = "{\"Root\""+source.substring("{\"result\"".length());
+        String pocoJson = "{\"Root\"" + source.substring("{\"result\"".length());
         rootXmlNode = Jsoup.parse(pocoJsonToXml.jsonToXml(pocoJson, U.Mode.FORCE_ATTRIBUTE_USAGE,
                 "result"), "", Parser.xmlParser());
         return rootXmlNode;
     }
 
     @Override
-    public PocoElement findElement(String expression) throws SonicRespException {
-        List<PocoElement> pocoElements = findElements(expression);
-        return pocoElements.size() <= 0 ? null : findElements(expression).get(0);
+    public PocoElement findElement(String selector, String expression) throws SonicRespException {
+        List<PocoElement> pocoElements = findElements(selector, expression);
+        return pocoElements.size() <= 0 ? null : pocoElements.get(0);
     }
 
     @Override
-    public List<PocoElement> findElements(String expression) throws SonicRespException {
+    public List<PocoElement> findElements(String selector, String expression) throws SonicRespException {
         if (rootXmlNode == null) {
             pageSourceForXmlElement();
         }
-        Elements xmlNodes = rootXmlNode.selectXpath(expression);
+        Elements xmlNodes = null;
+        switch (selector) {
+            case "poco":
+                String newExpress = "";
+                String[] steps = expression.split("\\.");
+                for (String step : steps) {
+                    if (step.startsWith("poco")) {
+                        newExpress += ("//*" + parseAttr(step));
+                    } else if (step.startsWith("child")) {
+                        newExpress += ("/*" + parseAttr(step));
+                        if (step.endsWith("]") && step.contains("[")) {
+                            int index = Integer.parseInt(step.substring(step.indexOf("[") + 1, step.indexOf("]")));
+                            newExpress += ("[" + index + 1 + "]");
+                        }
+                    }
+                }
+                expression = newExpress;
+                System.out.println(newExpress);
+            case "xpath":
+                xmlNodes = rootXmlNode.selectXpath(expression);
+                break;
+            case "cssSelector":
+                xmlNodes = rootXmlNode.select(expression);
+                break;
+        }
         List<PocoElement> result = new ArrayList<>();
         for (Element node : xmlNodes) {
             PocoElement pocoElement = new PocoElement(rootXmlNode, node);
@@ -132,71 +156,23 @@ public class PocoClientImpl implements PocoClient {
         return result;
     }
 
-    private List<PocoElement> parseAttr(PocoElement pocoElement, String express) {
+    private String parseAttr(String express) {
+        String result = "[";
         String attrExpression = express.substring(express.indexOf("(") + 1, express.indexOf(")"));
         if (attrExpression.startsWith("\"") && attrExpression.endsWith("\"")) {
             attrExpression = "name=" + attrExpression.replace("\"", "");
         }
         String[] attrs = attrExpression.split(",");
-        return findElementsByAttr(pocoElement, new ArrayList<>(), attrs);
-    }
-
-    private List<PocoElement> findElementsByAttr(PocoElement sourceElement, List<PocoElement> result, String[] attrs) {
-        Boolean predicate = null;
         for (String attr : attrs) {
-            boolean p;
             String field = attr.substring(0, attr.indexOf("="));
             String value = attr.substring(attr.indexOf("=") + 1).replace("\"", "");
-            switch (field) {
-                case "name":
-                    p = value.equals(sourceElement.getPayload().getName());
-                    break;
-                case "text":
-                    p = value.equals(sourceElement.getPayload().getText());
-                    break;
-                case "type":
-                    p = value.equals(sourceElement.getPayload().getType());
-                    break;
-                case "layer":
-                    p = value.equals(sourceElement.getPayload().getLayer());
-                    break;
-                case "tag":
-                    p = value.equals(sourceElement.getPayload().getTag());
-                    break;
-                case "texture":
-                    p = value.equals(sourceElement.getPayload().getTexture());
-                    break;
-                case "_instanceId":
-                    p = value.equals(sourceElement.getPayload().get_instanceId().toString());
-                    break;
-                case "_ilayer":
-                    p = value.equals(sourceElement.getPayload().get_ilayer().toString());
-                    break;
-                case "visible":
-                    p = value.toLowerCase(Locale.ROOT).equals(sourceElement.getPayload().getVisible().toString());
-                    break;
-                case "clickable":
-                    p = value.toLowerCase(Locale.ROOT).equals(sourceElement.getPayload().getClickable().toString());
-                    break;
-                default:
-                    throw new IllegalStateException("Unexpected value: " + field);
+            if (value.equals("visible") || value.equals("clickable")) {
+                value = value.toLowerCase(Locale.ROOT);
             }
-            if (predicate == null) {
-                predicate = p;
-            } else {
-                predicate = predicate & p;
-            }
+            result += ("@" + field + "=\"" + value + "\" and ");
         }
-        if (predicate != null && predicate) {
-            result.add(sourceElement);
-        }
-        List<PocoElement> children = sourceElement.getChildren();
-        if (children != null && children.size() > 0) {
-            for (PocoElement child : children) {
-                result.addAll(findElementsByAttr(child, result, attrs));
-            }
-        }
-        return result;
+        result += "]";
+        return result.replace(" and ]", "]");
     }
 
     @Override

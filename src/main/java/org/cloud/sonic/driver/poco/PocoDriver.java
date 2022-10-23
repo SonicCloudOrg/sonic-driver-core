@@ -19,6 +19,7 @@ package org.cloud.sonic.driver.poco;
 import org.cloud.sonic.driver.common.models.WindowSize;
 import org.cloud.sonic.driver.common.tool.SonicRespException;
 import org.cloud.sonic.driver.poco.enums.PocoEngine;
+import org.cloud.sonic.driver.poco.enums.PocoSelector;
 import org.cloud.sonic.driver.poco.models.PocoElement;
 import org.cloud.sonic.driver.poco.service.PocoClient;
 import org.cloud.sonic.driver.poco.service.impl.PocoClientImpl;
@@ -110,8 +111,18 @@ public class PocoDriver {
      * @param expression
      * @return
      */
-    public List<PocoElement> findElements(String expression) throws SonicRespException {
-        return pocoClient.findElements(expression);
+    public List<PocoElement> findElements(String selector, String expression) throws SonicRespException {
+        return pocoClient.findElements(selector, expression);
+    }
+
+    /**
+     * find poco elements
+     *
+     * @param expression
+     * @return
+     */
+    public List<PocoElement> findElements(PocoSelector selector, String expression) throws SonicRespException {
+        return findElements(selector.getSelector(), expression);
     }
 
     /**
@@ -120,8 +131,18 @@ public class PocoDriver {
      * @param expression
      * @return
      */
-    public PocoElement findElement(String expression) throws SonicRespException {
-        return pocoClient.findElement(expression);
+    public PocoElement findElement(String selector, String expression) throws SonicRespException {
+        return pocoClient.findElement(selector, expression);
+    }
+
+    /**
+     * find poco element
+     *
+     * @param expression
+     * @return
+     */
+    public PocoElement findElement(PocoSelector selector, String expression) throws SonicRespException {
+        return findElement(selector.getSelector(), expression);
     }
 
     /**

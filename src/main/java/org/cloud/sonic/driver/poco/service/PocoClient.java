@@ -50,8 +50,9 @@ public interface PocoClient {
 
     Element pageSourceForXmlElement() throws SonicRespException;
 
-    PocoElement findElement(String expression) throws SonicRespException;
-    List<PocoElement> findElements(String expression) throws SonicRespException;
+    PocoElement findElement(String selector, String expression) throws SonicRespException;
+
+    List<PocoElement> findElements(String selector, String expression) throws SonicRespException;
 
     void freezeSource();
 

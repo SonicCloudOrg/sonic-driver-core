@@ -1,9 +1,9 @@
 package org.cloud.sonic.driver.poco;
 
-import com.alibaba.fastjson.JSONObject;
 import org.cloud.sonic.driver.common.models.WindowSize;
 import org.cloud.sonic.driver.common.tool.SonicRespException;
 import org.cloud.sonic.driver.poco.enums.PocoEngine;
+import org.cloud.sonic.driver.poco.enums.PocoSelector;
 import org.cloud.sonic.driver.poco.models.PocoElement;
 import org.junit.AfterClass;
 import org.junit.Assert;
@@ -32,11 +32,12 @@ public class PocoDriverTest {
 
     @Test
     public void testFindElement() throws SonicRespException {
-//        String expression = "poco(type=\"Text\",text=\"Start\")";
+        String expression = "poco(\"btn_start\").child(text=\"Start\")[1]";
 //        String expression = "Root > children > MEHolo > children > AnchorManager";
-        String expression = "//*[@text=\"Start\" and @type=\"Text\"]";
-        List<PocoElement> pocoElements = pocoDriver.findElements(expression);
-        for (PocoElement pocoElement:pocoElements){
+//        String expression = "//*[@text=\"Start\" and @type=\"Text\"]";
+        List<PocoElement> pocoElements = pocoDriver.findElements(PocoSelector.POCO, expression);
+        System.out.println(pocoElements.size());
+        for (PocoElement pocoElement : pocoElements) {
             Assert.assertNotNull(pocoElement.getPayload().getName());
             System.out.println(pocoElement.getPayload().getName());
             Assert.assertNotNull(pocoElement.currentNodeSelector);
@@ -50,7 +51,7 @@ public class PocoDriverTest {
         pocoDriver.freezeSource();
         try {
             // change page tree operation
-            Thread.sleep(5*1000);
+            Thread.sleep(5 * 1000);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
@@ -66,9 +67,9 @@ public class PocoDriverTest {
     }
 
     @Test
-    public void testNodeExist() throws SonicRespException{
+    public void testNodeExist() throws SonicRespException {
         String expression = "Root > children > MEHolo > children > AnchorManager";
-        PocoElement pocoElement = pocoDriver.findElement(expression);
+        PocoElement pocoElement = pocoDriver.findElement(PocoSelector.CSS_SELECTOR, expression);
         Assert.assertTrue(pocoElement.currentTheNodeExists());
         // mock node does not exist
         pocoElement.currentNodeSelector = "Root > children > MEHolo > children > AnchorManager222";
@@ -76,9 +77,9 @@ public class PocoDriverTest {
     }
 
     @Test
-    public void testGetParent() throws SonicRespException{
+    public void testGetParent() throws SonicRespException {
         String expression = "Root > children > MEHolo > children > AnchorManager";
-        PocoElement pocoElement = pocoDriver.findElement(expression);
+        PocoElement pocoElement = pocoDriver.findElement(PocoSelector.CSS_SELECTOR, expression);
         PocoElement parentPocoElement = pocoElement.getParentNode();
         Assert.assertNotNull(parentPocoElement.getPayload().getName());
         System.out.println(parentPocoElement.getPayload().getName());
