@@ -68,7 +68,7 @@ public class PocoDriverTest {
 
     @Test
     public void testNodeExist() throws SonicRespException {
-        String expression = "Root > children > MEHolo > children > AnchorManager";
+        String expression = "Root > MEHolo > AnchorManager";
         PocoElement pocoElement = pocoDriver.findElement(PocoSelector.CSS_SELECTOR, expression);
         Assert.assertTrue(pocoElement.currentTheNodeExists());
         // mock node does not exist
@@ -78,13 +78,37 @@ public class PocoDriverTest {
 
     @Test
     public void testGetParent() throws SonicRespException {
-        String expression = "Root > children > MEHolo > children > AnchorManager";
+        String expression = "Root > MEHolo >  AnchorManager";
         PocoElement pocoElement = pocoDriver.findElement(PocoSelector.CSS_SELECTOR, expression);
         PocoElement parentPocoElement = pocoElement.getParentNode();
         Assert.assertNotNull(parentPocoElement.getPayload().getName());
         System.out.println(parentPocoElement.getPayload().getName());
         Assert.assertNotNull(parentPocoElement.currentNodeSelector);
         System.out.println(parentPocoElement.currentNodeSelector);
+    }
+
+    @Test
+    public void testElementGetChild()  throws SonicRespException{
+        String expression = "Root > Canvas";
+        PocoElement pocoElement = pocoDriver.findElement(PocoSelector.CSS_SELECTOR, expression);
+        Assert.assertTrue(!pocoElement.getChildren().isEmpty());
+        System.out.println(pocoElement.getChildren().size());
+    }
+
+    @Test
+    public void testUpdateRootCase() throws SonicRespException{
+        String expression = "Root > MEHolo > AnchorManager";
+        PocoElement pocoElement = pocoDriver.findElement(PocoSelector.CSS_SELECTOR, expression);
+        String lastRootXml = pocoElement.getRootElement().getXmlElement().toString();
+        try {
+            System.out.println("into blocking,please perform a page tree change operation");
+            // change page tree operation
+            Thread.sleep(5 * 1000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        pocoDriver.getPageSource();
+        Assert.assertEquals(lastRootXml, pocoElement.getRootElement().getXmlElement().toString());
     }
 
     @AfterClass
