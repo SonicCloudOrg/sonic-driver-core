@@ -117,6 +117,7 @@ public class AndroidDriverTest {
         w.click();
         String text = UUID.randomUUID().toString().substring(0, 6) + "中文";
         w.sendKeys(text);
+        w.sendKeys(text, true);
         Assert.assertEquals(text, w.getText());
         w.clear();
         androidDriver.setDefaultFindElementInterval(null, 3000);
