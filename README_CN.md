@@ -49,12 +49,12 @@ sonic-driver-core可以脱离Appium，直接与WebDriverAgent或UIautomator2交�
 <dependency>
     <groupId>io.github.soniccloudorg</groupId>
     <artifactId>sonic-driver-core</artifactId>
-    <version>1.1.9</version>
+    <version>1.1.10</version>
 </dependency>
 ```
 #### Gradle
 ```
-implementation 'io.github.soniccloudorg:sonic-driver-core:1.1.9'
+implementation 'io.github.soniccloudorg:sonic-driver-core:1.1.10'
 ```
 
 ### 代码
