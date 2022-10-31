@@ -71,7 +71,7 @@ public class SocketClientImpl implements PocoConnection {
                         String pocoResult = new String(rData.array(), StandardCharsets.UTF_8);
                         int subStartIndex = pocoResult.indexOf("\"result\"");
 
-                        String pocoPrefix = pocoResult.substring(0,subStartIndex) + "}";
+                        String pocoPrefix = pocoResult.substring(0, subStartIndex) + "}";
 
                         if (PocoTool.checkPocoRpcResultID(pocoPrefix, jsonObject.getString("id"))) {
                             return "{" + pocoResult.substring(subStartIndex);

@@ -55,12 +55,14 @@ public class WebSocketClientImpl implements PocoConnection {
                 }
             }
             if (result != null) {
-                int subStartIndex = result.indexOf("result");
+                int subStartIndex = result.indexOf("\"result\"");
 
-                String pocoPrefix = result.substring(subStartIndex) + "}";
+                String pocoPrefix = result.substring(0, subStartIndex) + "}";
 
                 if (PocoTool.checkPocoRpcResultID(pocoPrefix, jsonObject.getString("id"))) {
-                    return "{" + result.substring(subStartIndex);
+                    String re = "{" + result.substring(subStartIndex);
+                    result = null;
+                    return re;
                 } else {
                     throw new SonicRespException("id not found!");
                 }
