@@ -32,10 +32,9 @@ public class PocoDriverTest {
 
     @Test
     public void testFindElement() throws SonicRespException {
-        String expression = "poco(\"btn_start\").child(text=\"Start\")[1]";
-//        String expression = "Root > children > MEHolo > children > AnchorManager";
-//        String expression = "//*[@text=\"Start\" and @type=\"Text\"]";
-        List<PocoElement> pocoElements = pocoDriver.findElements(PocoSelector.POCO, expression);
+//        String expression = "poco(\"playDragAndDrop\").child(\"star\")[0]";
+        String expression = "star";
+        List<PocoElement> pocoElements = pocoDriver.findElements(PocoSelector.CSS_SELECTOR, expression);
         System.out.println(pocoElements.size());
         for (PocoElement pocoElement : pocoElements) {
             Assert.assertNotNull(pocoElement.getPayload().getName());

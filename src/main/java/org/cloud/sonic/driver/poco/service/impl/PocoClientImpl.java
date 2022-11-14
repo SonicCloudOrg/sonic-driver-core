@@ -16,9 +16,9 @@
  */
 package org.cloud.sonic.driver.poco.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.github.underscore.U;
 import org.cloud.sonic.driver.common.models.WindowSize;
 import org.cloud.sonic.driver.common.tool.Logger;
 import org.cloud.sonic.driver.common.tool.SonicRespException;
@@ -30,7 +30,6 @@ import org.cloud.sonic.driver.poco.service.PocoConnection;
 import org.cloud.sonic.driver.poco.util.pocoJsonToXml;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
-import org.jsoup.parser.Parser;
 import org.jsoup.select.Elements;
 
 import java.util.*;
@@ -109,8 +108,7 @@ public class PocoClientImpl implements PocoClient {
     public Element pageSourceForXmlElement() throws SonicRespException {
         pageSourceForJsonString();
         String pocoJson = "{\"Root\"" + source.substring("{\"result\"".length());
-        Element rootXmlElement = Jsoup.parse(pocoJsonToXml.jsonToXml(pocoJson, U.Mode.FORCE_ATTRIBUTE_USAGE,
-                "result"), "", Parser.xmlParser());
+        Element rootXmlElement = Jsoup.parse(pocoJsonToXml.jsonObjToXml(JSON.parseObject(pocoJson).getJSONObject("Root")));
 
         rootNode.updateVersion(rootXmlElement);
 
@@ -140,7 +138,7 @@ public class PocoClientImpl implements PocoClient {
                         newExpress += ("/*" + parseAttr(step));
                         if (step.endsWith("]") && step.contains("[")) {
                             int index = Integer.parseInt(step.substring(step.indexOf("[") + 1, step.indexOf("]")));
-                            newExpress += ("[" + index + 1 + "]");
+                            newExpress += ("[" + (index + 1) + "]");
                         }
                     }
                 }
