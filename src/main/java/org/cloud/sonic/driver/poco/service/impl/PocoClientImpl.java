@@ -16,9 +16,9 @@
  */
 package org.cloud.sonic.driver.poco.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.github.underscore.U;
 import org.cloud.sonic.driver.common.models.WindowSize;
 import org.cloud.sonic.driver.common.tool.Logger;
 import org.cloud.sonic.driver.common.tool.SonicRespException;
@@ -108,9 +108,8 @@ public class PocoClientImpl implements PocoClient {
     @Override
     public Element pageSourceForXmlElement() throws SonicRespException {
         pageSourceForJsonString();
-        String pocoJson = "{\"Root\"" + source.substring("{\"result\"".length());
-        Element rootXmlElement = Jsoup.parse(pocoJsonToXml.jsonToXml(pocoJson, U.Mode.FORCE_ATTRIBUTE_USAGE,
-                "result"), "", Parser.xmlParser());
+//        String pocoJson = "{\"Root\"" + source.substring("{\"result\"".length());
+        Element rootXmlElement = Jsoup.parse(pocoJsonToXml.jsonObjToXml(JSON.parseObject(source).getJSONObject("result")),"", Parser.xmlParser());
 
         rootNode.updateVersion(rootXmlElement);
 
@@ -120,7 +119,7 @@ public class PocoClientImpl implements PocoClient {
     @Override
     public PocoElement findElement(String selector, String expression) throws SonicRespException {
         List<PocoElement> pocoElements = findElements(selector, expression);
-        return pocoElements.size() <= 0 ? null : pocoElements.get(0);
+        return pocoElements.get(0);
     }
 
     @Override
@@ -140,17 +139,21 @@ public class PocoClientImpl implements PocoClient {
                         newExpress += ("/*" + parseAttr(step));
                         if (step.endsWith("]") && step.contains("[")) {
                             int index = Integer.parseInt(step.substring(step.indexOf("[") + 1, step.indexOf("]")));
-                            newExpress += ("[" + index + 1 + "]");
+                            newExpress += ("[" + (index + 1) + "]");
                         }
                     }
                 }
-                expression = newExpress;
+                xmlNodes = rootNode.getXmlElement().selectXpath(newExpress);
+                break;
             case "xpath":
                 xmlNodes = rootNode.getXmlElement().selectXpath(expression);
                 break;
             case "cssSelector":
                 xmlNodes = rootNode.getXmlElement().select(expression);
                 break;
+        }
+        if (xmlNodes == null ||xmlNodes.isEmpty()){
+            throw  new SonicRespException(String.format("poco element not found for selector:%s, value:%s",selector,expression));
         }
         List<PocoElement> result = new ArrayList<>();
         for (Element node : xmlNodes) {

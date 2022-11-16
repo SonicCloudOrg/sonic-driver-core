@@ -24,7 +24,7 @@ public class PocoDriverTest {
 
     @Test
     public void testPageSource() throws SonicRespException {
-        Assert.assertEquals("Root", pocoDriver.getPageSource().getPayload().getType());
+//        Assert.assertEquals("Root", pocoDriver.getPageSource().getPayload().getType());
         Assert.assertTrue(pocoDriver.getPageSourceForJsonString().length() > 0);
         Assert.assertNotNull(pocoDriver.getPageSourceForXmlElement().toString());
         System.out.println(pocoDriver.getPageSourceForXmlElement().toString());
@@ -32,9 +32,8 @@ public class PocoDriverTest {
 
     @Test
     public void testFindElement() throws SonicRespException {
-        String expression = "poco(\"btn_start\").child(text=\"Start\")[1]";
-//        String expression = "Root > children > MEHolo > children > AnchorManager";
-//        String expression = "//*[@text=\"Start\" and @type=\"Text\"]";
+        String expression = "poco(\"playDragAndDrop\").child(\"star\")[4]";
+//        String expression = "star";
         List<PocoElement> pocoElements = pocoDriver.findElements(PocoSelector.POCO, expression);
         System.out.println(pocoElements.size());
         for (PocoElement pocoElement : pocoElements) {
