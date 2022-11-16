@@ -1,3 +1,19 @@
+/*
+ *  Copyright (C) [SonicCloudOrg] Sonic Project
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ *
+ */
 package org.cloud.sonic.driver.poco.util;
 
 import com.alibaba.fastjson.JSONArray;
@@ -19,7 +35,7 @@ public class pocoJsonToXml {
     }
 
     /**
-     * json对象转xml
+     * json object to xml
      *
      * @param jo JSONObject
      * @param gt "\n" shifter
@@ -36,7 +52,12 @@ public class pocoJsonToXml {
 
             xmlStr.append(gt);
             xmlStr.append("<");
-            xmlStr.append(payload.get("name").toString());
+            String name = String.join("__",payload.get("name").toString().split(" "));
+
+            if (name.equals("<Root>"))name = "Root";
+            name = escapingSpecialCharacters(name);
+
+            xmlStr.append(name);
             xmlStr.append(getAttrStr(payload));
             xmlStr.append(">\n");
             if (children!=null){
@@ -45,6 +66,10 @@ public class pocoJsonToXml {
                     xmlStr.append(jsonToXml(child, gt + "\t"));
                 }
             }
+            xmlStr.append(gt);
+            xmlStr.append("</");
+            xmlStr.append(name);
+            xmlStr.append(">\n");
         } catch (Exception e) {
             return "<error>1</error>";
         }
@@ -60,12 +85,26 @@ public class pocoJsonToXml {
             String val = entry.getValue().toString();
             if (key.equals("zOrders")){
                 JSONObject zOrders = JSONObject.parseObject(val);
-                sb.append(String.format("global:\"%s\" ", zOrders.get("global")));
-                sb.append(String.format("local:\"%s\" ", zOrders.get("local")));
-            }else {
-                sb.append(String.format("%s:\"%s\" ", key, val));
+                sb.append(String.format("global=\"%s\" ", zOrders.get("global")));
+                sb.append(String.format("local=\"%s\" ", zOrders.get("local")));
+            }else if (key.equals("components")){
+                val = val.replace("\"","");
+                sb.append(String.format("%s=\"%s\" ", key, val));
+            } else {
+                val = escapingSpecialCharacters(val);
+                sb.append(String.format("%s=\"%s\" ", key, val));
             }
         }
         return sb;
+    }
+
+    private static String escapingSpecialCharacters(String originStr){
+        if (originStr==null)return null;
+        originStr = originStr.replace("&","&amp;");
+        originStr = originStr.replace("<","&lt;");
+        originStr = originStr.replace(">","&gt;");
+        originStr = originStr.replace("\"","&quot;");
+        originStr = originStr.replace("'","&apos;");
+        return originStr;
     }
 }

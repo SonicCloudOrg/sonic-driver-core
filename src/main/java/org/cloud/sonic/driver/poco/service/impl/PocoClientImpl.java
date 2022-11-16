@@ -30,6 +30,7 @@ import org.cloud.sonic.driver.poco.service.PocoConnection;
 import org.cloud.sonic.driver.poco.util.pocoJsonToXml;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
+import org.jsoup.parser.Parser;
 import org.jsoup.select.Elements;
 
 import java.util.*;
@@ -107,8 +108,8 @@ public class PocoClientImpl implements PocoClient {
     @Override
     public Element pageSourceForXmlElement() throws SonicRespException {
         pageSourceForJsonString();
-        String pocoJson = "{\"Root\"" + source.substring("{\"result\"".length());
-        Element rootXmlElement = Jsoup.parse(pocoJsonToXml.jsonObjToXml(JSON.parseObject(pocoJson).getJSONObject("Root")));
+//        String pocoJson = "{\"Root\"" + source.substring("{\"result\"".length());
+        Element rootXmlElement = Jsoup.parse(pocoJsonToXml.jsonObjToXml(JSON.parseObject(source).getJSONObject("result")),"", Parser.xmlParser());
 
         rootNode.updateVersion(rootXmlElement);
 
@@ -118,7 +119,7 @@ public class PocoClientImpl implements PocoClient {
     @Override
     public PocoElement findElement(String selector, String expression) throws SonicRespException {
         List<PocoElement> pocoElements = findElements(selector, expression);
-        return pocoElements.size() <= 0 ? null : pocoElements.get(0);
+        return pocoElements.get(0);
     }
 
     @Override
@@ -142,13 +143,17 @@ public class PocoClientImpl implements PocoClient {
                         }
                     }
                 }
-                expression = newExpress;
+                xmlNodes = rootNode.getXmlElement().selectXpath(newExpress);
+                break;
             case "xpath":
                 xmlNodes = rootNode.getXmlElement().selectXpath(expression);
                 break;
             case "cssSelector":
                 xmlNodes = rootNode.getXmlElement().select(expression);
                 break;
+        }
+        if (xmlNodes == null ||xmlNodes.isEmpty()){
+            throw  new SonicRespException(String.format("poco element not found for selector:%s, value:%s",selector,expression));
         }
         List<PocoElement> result = new ArrayList<>();
         for (Element node : xmlNodes) {
