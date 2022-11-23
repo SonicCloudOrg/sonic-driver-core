@@ -43,7 +43,7 @@ public class AndroidElementImpl implements AndroidElement {
     public void click() throws SonicRespException {
         uiaClient.checkSessionId();
         BaseResp b = uiaClient.getRespHandler().getResp(
-                HttpUtil.createPost(uiaClient.getRemoteUrl() + "/wd/hub/session/"
+                HttpUtil.createPost(uiaClient.getRemoteUrl() + "/session/"
                         + uiaClient.getSessionId() + "/element/" + id + "/click"));
         if (b.getErr() == null) {
             logger.info("click element %s.", id);
@@ -65,7 +65,7 @@ public class AndroidElementImpl implements AndroidElement {
         data.put("text", text);
         data.put("replace", isCover);
         BaseResp b = uiaClient.getRespHandler().getResp(
-                HttpUtil.createPost(uiaClient.getRemoteUrl() + "/wd/hub/session/"
+                HttpUtil.createPost(uiaClient.getRemoteUrl() + "/session/"
                         + uiaClient.getSessionId() + "/element/" + id + "/value")
                         .body(data.toJSONString()), 60000);
         if (b.getErr() == null) {
@@ -80,7 +80,7 @@ public class AndroidElementImpl implements AndroidElement {
     public void clear() throws SonicRespException {
         uiaClient.checkSessionId();
         BaseResp b = uiaClient.getRespHandler().getResp(
-                HttpUtil.createPost(uiaClient.getRemoteUrl() + "/wd/hub/session/"
+                HttpUtil.createPost(uiaClient.getRemoteUrl() + "/session/"
                         + uiaClient.getSessionId() + "/element/" + id + "/clear"), 60000);
         if (b.getErr() == null) {
             logger.info("clear %s.", id);
@@ -94,7 +94,7 @@ public class AndroidElementImpl implements AndroidElement {
     public String getText() throws SonicRespException {
         uiaClient.checkSessionId();
         BaseResp b = uiaClient.getRespHandler().getResp(
-                HttpUtil.createGet(uiaClient.getRemoteUrl() + "/wd/hub/session/"
+                HttpUtil.createGet(uiaClient.getRemoteUrl() + "/session/"
                         + uiaClient.getSessionId() + "/element/" + id + "/text"));
         if (b.getErr() == null) {
             logger.info("get %s text %s.", id, b.getValue().toString());
@@ -109,7 +109,7 @@ public class AndroidElementImpl implements AndroidElement {
     public String getAttribute(String name) throws SonicRespException {
         uiaClient.checkSessionId();
         BaseResp b = uiaClient.getRespHandler().getResp(
-                HttpUtil.createGet(uiaClient.getRemoteUrl() + "/wd/hub/session/"
+                HttpUtil.createGet(uiaClient.getRemoteUrl() + "/session/"
                         + uiaClient.getSessionId() + "/element/" + id + "/attribute/" + name));
         if (b.getErr() == null) {
             logger.info("get %s attribute %s result %s.", id, name, b.getValue().toString());
@@ -124,7 +124,7 @@ public class AndroidElementImpl implements AndroidElement {
     public ElementRect getRect() throws SonicRespException {
         uiaClient.checkSessionId();
         BaseResp b = uiaClient.getRespHandler().getResp(
-                HttpUtil.createGet(uiaClient.getRemoteUrl() + "/wd/hub/session/"
+                HttpUtil.createGet(uiaClient.getRemoteUrl() + "/session/"
                         + uiaClient.getSessionId() + "/element/" + id + "/rect"));
         if (b.getErr() == null) {
             ElementRect elementRect = JSON.parseObject(b.getValue().toString(), ElementRect.class);
@@ -140,7 +140,7 @@ public class AndroidElementImpl implements AndroidElement {
     public byte[] screenshot() throws SonicRespException {
         uiaClient.checkSessionId();
         BaseResp b = uiaClient.getRespHandler().getResp(
-                HttpUtil.createGet(uiaClient.getRemoteUrl() + "/wd/hub/session/"
+                HttpUtil.createGet(uiaClient.getRemoteUrl() + "/session/"
                         + uiaClient.getSessionId() + "/element/" + id + "/screenshot"), 60000);
         if (b.getErr() == null) {
             logger.info("get element %s screenshot.", id);

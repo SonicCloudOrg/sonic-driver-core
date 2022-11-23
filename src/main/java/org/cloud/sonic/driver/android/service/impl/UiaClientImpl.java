@@ -121,7 +121,7 @@ public class UiaClientImpl implements UiaClient {
     public void newSession(JSONObject capabilities) throws SonicRespException {
         JSONObject data = new JSONObject();
         data.put("capabilities", capabilities);
-        BaseResp b = respHandler.getResp(HttpUtil.createPost(remoteUrl + "/wd/hub/session").body(data.toJSONString()));
+        BaseResp b = respHandler.getResp(HttpUtil.createPost(remoteUrl + "/session").body(data.toJSONString()));
         if (b.getErr() == null) {
             SessionInfo sessionInfo = JSON.parseObject(b.getValue().toString(), SessionInfo.class);
             setSessionId(sessionInfo.getSessionId());
@@ -137,7 +137,7 @@ public class UiaClientImpl implements UiaClient {
     @Override
     public void closeSession() throws SonicRespException {
         checkSessionId();
-        respHandler.getResp(HttpUtil.createRequest(Method.DELETE, remoteUrl + "/wd/hub/session/" + sessionId));
+        respHandler.getResp(HttpUtil.createRequest(Method.DELETE, remoteUrl + "/session/" + sessionId));
         logger.info("close session successful!");
     }
 
@@ -153,7 +153,7 @@ public class UiaClientImpl implements UiaClient {
     public WindowSize getWindowSize() throws SonicRespException {
         if (size == null) {
             checkSessionId();
-            BaseResp b = respHandler.getResp(HttpUtil.createGet(remoteUrl + "/wd/hub/session/" + sessionId + "/window/:windowHandle/size"));
+            BaseResp b = respHandler.getResp(HttpUtil.createGet(remoteUrl + "/session/" + sessionId + "/window/:windowHandle/size"));
             if (b.getErr() == null) {
                 size = JSON.parseObject(b.getValue().toString(), WindowSize.class);
                 logger.info("get window size %s.", size.toString());
@@ -171,7 +171,7 @@ public class UiaClientImpl implements UiaClient {
         JSONObject data = new JSONObject();
         data.put("text", text);
         data.put("replace", isCover);
-        BaseResp b = respHandler.getResp(HttpUtil.createPost(remoteUrl + "/wd/hub/session/" + sessionId + "/keys")
+        BaseResp b = respHandler.getResp(HttpUtil.createPost(remoteUrl + "/session/" + sessionId + "/keys")
                 .body(data.toJSONString()));
         if (b.getErr() == null) {
             logger.info("send key %s.", text);
@@ -187,7 +187,7 @@ public class UiaClientImpl implements UiaClient {
         JSONObject data = new JSONObject();
         data.put("contentType", contentType.toUpperCase(Locale.ROOT));
         data.put("content", Base64.getEncoder().encodeToString(content.getBytes(StandardCharsets.UTF_8)));
-        BaseResp b = respHandler.getResp(HttpUtil.createPost(remoteUrl + "/wd/hub/session/" + sessionId + "/appium/device/set_clipboard")
+        BaseResp b = respHandler.getResp(HttpUtil.createPost(remoteUrl + "/session/" + sessionId + "/appium/device/set_clipboard")
                 .body(data.toJSONString()));
         if (b.getErr() == null) {
             logger.info("set pasteboard %s.", content);
@@ -202,7 +202,7 @@ public class UiaClientImpl implements UiaClient {
         checkSessionId();
         JSONObject data = new JSONObject();
         data.put("contentType", contentType.toUpperCase(Locale.ROOT));
-        BaseResp b = respHandler.getResp(HttpUtil.createPost(remoteUrl + "/wd/hub/session/" + sessionId + "/appium/device/get_clipboard")
+        BaseResp b = respHandler.getResp(HttpUtil.createPost(remoteUrl + "/session/" + sessionId + "/appium/device/get_clipboard")
                 .body(data.toJSONString()));
         if (b.getErr() == null) {
             byte[] result = Base64.getMimeDecoder().decode(b.getValue().toString());
@@ -217,7 +217,7 @@ public class UiaClientImpl implements UiaClient {
     @Override
     public String pageSource() throws SonicRespException {
         checkSessionId();
-        BaseResp b = respHandler.getResp(HttpUtil.createGet(remoteUrl + "/wd/hub/session/" + sessionId + "/source"), 60000);
+        BaseResp b = respHandler.getResp(HttpUtil.createGet(remoteUrl + "/session/" + sessionId + "/source"), 60000);
         if (b.getErr() == null) {
             logger.info("get page source.");
             return b.getValue().toString();
@@ -250,7 +250,7 @@ public class UiaClientImpl implements UiaClient {
             JSONObject data = new JSONObject();
             data.put("strategy", selector);
             data.put("selector", value);
-            BaseResp b = respHandler.getResp(HttpUtil.createPost(remoteUrl + "/wd/hub/session/" + sessionId + "/element")
+            BaseResp b = respHandler.getResp(HttpUtil.createPost(remoteUrl + "/session/" + sessionId + "/element")
                     .body(data.toJSONString()));
             if (b.getErr() == null) {
                 logger.info("find element successful.");
@@ -292,7 +292,7 @@ public class UiaClientImpl implements UiaClient {
             JSONObject data = new JSONObject();
             data.put("strategy", selector);
             data.put("selector", value);
-            BaseResp b = respHandler.getResp(HttpUtil.createPost(remoteUrl + "/wd/hub/session/" + sessionId + "/elements")
+            BaseResp b = respHandler.getResp(HttpUtil.createPost(remoteUrl + "/session/" + sessionId + "/elements")
                     .body(data.toJSONString()));
             if (b.getErr() == null) {
                 logger.info("find elements successful.");
@@ -329,7 +329,7 @@ public class UiaClientImpl implements UiaClient {
     public byte[] screenshot() throws SonicRespException {
         checkSessionId();
         BaseResp b = respHandler.getResp(
-                HttpUtil.createGet(remoteUrl + "/wd/hub/session/" + sessionId + "/screenshot"), 60000);
+                HttpUtil.createGet(remoteUrl + "/session/" + sessionId + "/screenshot"), 60000);
         if (b.getErr() == null) {
             logger.info("get screenshot.");
             return Base64.getMimeDecoder().decode(b.getValue().toString());
@@ -344,7 +344,7 @@ public class UiaClientImpl implements UiaClient {
         checkSessionId();
         JSONObject data = new JSONObject();
         data.put("settings", settings);
-        BaseResp b = respHandler.getResp(HttpUtil.createPost(remoteUrl + "/wd/hub/session/" + sessionId + "/appium/settings")
+        BaseResp b = respHandler.getResp(HttpUtil.createPost(remoteUrl + "/session/" + sessionId + "/appium/settings")
                 .body(data.toJSONString()));
         if (b.getErr() == null) {
             logger.info("set appium settings %s.", settings.toJSONString());
