@@ -43,7 +43,7 @@ public class PocoClientImpl implements PocoClient {
     private PocoEngine engine;
     private String source;
 
-    private RootElement rootNode;
+    public RootElement rootNode;
     private boolean isFrozen = false;
 
     public PocoClientImpl() {
