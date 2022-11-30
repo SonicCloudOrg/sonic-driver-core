@@ -43,7 +43,7 @@ public class PocoClientImpl implements PocoClient {
     private PocoEngine engine;
     private String source;
 
-    private RootElement rootNode;
+    public RootElement rootNode;
     private boolean isFrozen = false;
 
     public PocoClientImpl() {
@@ -173,7 +173,7 @@ public class PocoClientImpl implements PocoClient {
         for (String attr : attrs) {
             String field = attr.substring(0, attr.indexOf("="));
             String value = attr.substring(attr.indexOf("=") + 1).replace("\"", "");
-            if (value.equals("visible") || value.equals("clickable")) {
+            if ("visible".equals(value) || "clickable".equals(value)) {
                 value = value.toLowerCase(Locale.ROOT);
             }
             result += ("@" + field + "=\"" + value + "\" and ");
