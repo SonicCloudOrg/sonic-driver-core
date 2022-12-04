@@ -109,7 +109,7 @@ public class PocoClientImpl implements PocoClient {
     public Element pageSourceForXmlElement() throws SonicRespException {
         pageSourceForJsonString();
 //        String pocoJson = "{\"Root\"" + source.substring("{\"result\"".length());
-        Element rootXmlElement = Jsoup.parse(pocoJsonToXml.jsonObjToXml(JSON.parseObject(source).getJSONObject("result")),"", Parser.xmlParser());
+        Element rootXmlElement = Jsoup.parse(pocoJsonToXml.jsonObjToXml(JSON.parseObject(source).getJSONObject("result")), "", Parser.xmlParser());
 
         rootNode.updateVersion(rootXmlElement);
 
@@ -137,12 +137,13 @@ public class PocoClientImpl implements PocoClient {
                         newExpress += ("//*" + parseAttr(step));
                     } else if (step.startsWith("child")) {
                         newExpress += ("/*" + parseAttr(step));
-                        if (step.endsWith("]") && step.contains("[")) {
-                            int index = Integer.parseInt(step.substring(step.indexOf("[") + 1, step.indexOf("]")));
-                            newExpress += ("[" + (index + 1) + "]");
-                        }
+                    }
+                    if (step.endsWith("]") && step.contains("[")) {
+                        int index = Integer.parseInt(step.substring(step.indexOf("[") + 1, step.indexOf("]")));
+                        newExpress = String.format("(%s)[%d]", newExpress, (index + 1));
                     }
                 }
+                System.out.println(newExpress);
                 xmlNodes = rootNode.getXmlElement().selectXpath(newExpress);
                 break;
             case "xpath":
@@ -152,8 +153,8 @@ public class PocoClientImpl implements PocoClient {
                 xmlNodes = rootNode.getXmlElement().select(expression);
                 break;
         }
-        if (xmlNodes == null ||xmlNodes.isEmpty()){
-            throw  new SonicRespException(String.format("poco element not found for selector:%s, value:%s",selector,expression));
+        if (xmlNodes == null || xmlNodes.isEmpty()) {
+            throw new SonicRespException(String.format("poco element not found for selector:%s, value:%s", selector, expression));
         }
         List<PocoElement> result = new ArrayList<>();
         for (Element node : xmlNodes) {
@@ -201,7 +202,7 @@ public class PocoClientImpl implements PocoClient {
             jsonObject.put("id", UUID.randomUUID().toString());
             jsonObject.put("method", "GetScreenSize");
             List<Integer> result = ((JSONArray) JSONObject.parseObject(
-                    pocoConnection.sendAndReceive(jsonObject))
+                            pocoConnection.sendAndReceive(jsonObject))
                     .get("result"))
                     .toJavaList(Integer.class);
             return new WindowSize(result.get(0), result.get(1));

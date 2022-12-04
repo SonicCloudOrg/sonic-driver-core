@@ -105,7 +105,7 @@ public class SocketClientImpl implements PocoConnection {
                 inputStream = poco.getInputStream();
                 outputStream = poco.getOutputStream();
             } catch (Exception e) {
-                e.printStackTrace();
+                logger.info(e.getMessage());
             }
         }
         if (poco != null) {

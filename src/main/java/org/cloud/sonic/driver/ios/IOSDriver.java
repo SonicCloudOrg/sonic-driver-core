@@ -195,7 +195,7 @@ public class IOSDriver {
      * @throws SonicRespException
      */
     public void swipe(int fromX, int fromY, int toX, int toY) throws SonicRespException {
-        performTouchAction(new TouchActions().press(fromX, fromY).wait(50).move(toX, toY).wait(10).release());
+        performTouchAction(new TouchActions().press(fromX, fromY).wait(300).move(toX, toY).wait(10).release());
     }
 
     /**
