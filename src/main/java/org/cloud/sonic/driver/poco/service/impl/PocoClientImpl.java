@@ -143,7 +143,6 @@ public class PocoClientImpl implements PocoClient {
                         newExpress = String.format("(%s)[%d]", newExpress, (index + 1));
                     }
                 }
-                System.out.println(newExpress);
                 xmlNodes = rootNode.getXmlElement().selectXpath(newExpress);
                 break;
             case "xpath":
