@@ -92,17 +92,26 @@ public class SocketClientImpl implements PocoConnection {
         int waitConnect = 0;
         while (poco == null || !poco.isConnected()) {
             try {
-                poco = new Socket("localhost", port);
-                inputStream = poco.getInputStream();
-                outputStream = poco.getOutputStream();
-                logger.info("poco socket connected.");
-            } catch (Exception e) {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
                 e.printStackTrace();
             }
             waitConnect++;
             if (waitConnect >= 20) {
                 break;
             }
+            try {
+                poco = new Socket("localhost", port);
+                inputStream = poco.getInputStream();
+                outputStream = poco.getOutputStream();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        if (poco != null) {
+            logger.info("poco socket connected.");
+        } else {
+            logger.info("poco socket disconnected.");
         }
     }
 
