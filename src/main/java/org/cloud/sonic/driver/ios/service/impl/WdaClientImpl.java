@@ -45,7 +45,6 @@ public class WdaClientImpl implements WdaClient {
     private final String WEB_ELEMENT_IDENTIFIER = "element-6066-11e4-a52e-4f735466cecf";
     private int FIND_ELEMENT_INTERVAL = 3000;
     private int FIND_ELEMENT_RETRY = 5;
-    private WindowSize size;
 
     public WdaClientImpl() {
         respHandler = new RespHandler();
@@ -156,18 +155,15 @@ public class WdaClientImpl implements WdaClient {
 
     @Override
     public WindowSize getWindowSize() throws SonicRespException {
-        if (size == null) {
-            checkSessionId();
-            BaseResp b = respHandler.getResp(HttpUtil.createGet(remoteUrl + "/session/" + sessionId + "/window/size"));
-            if (b.getErr() == null) {
-                size = JSON.parseObject(b.getValue().toString(), WindowSize.class);
-                logger.info("get window size %s.", size.toString());
-            } else {
-                logger.error("get window size failed.");
-                throw new SonicRespException(b.getErr().getMessage());
-            }
+        checkSessionId();
+        BaseResp b = respHandler.getResp(HttpUtil.createGet(remoteUrl + "/session/" + sessionId + "/window/size"));
+        if (b.getErr() == null) {
+            logger.info("get window size %s.", b.getValue().toString());
+            return JSON.parseObject(b.getValue().toString(), WindowSize.class);
+        } else {
+            logger.error("get window size failed.");
+            throw new SonicRespException(b.getErr().getMessage());
         }
-        return size;
     }
 
     @Override
