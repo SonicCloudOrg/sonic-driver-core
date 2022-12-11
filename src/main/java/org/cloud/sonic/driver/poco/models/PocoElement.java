@@ -77,6 +77,7 @@ public class PocoElement {
 
     public PocoElement(RootElement root) {
         this.rootElement = root;
+        this.currentNodeSelector = root.getXmlElement().cssSelector();
         payload = new Payload();
         children = new ArrayList<>();
     }
