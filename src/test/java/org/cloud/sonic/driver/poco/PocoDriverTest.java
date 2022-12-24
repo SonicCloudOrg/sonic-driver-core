@@ -112,6 +112,14 @@ public class PocoDriverTest {
         Assert.assertEquals(lastRootXml, pocoElement.getRootElement().getXmlElement().toString());
     }
 
+    @Test
+    public void testGetAttribute() throws SonicRespException{
+        String expression = "poco(\"star\")[3]";
+        PocoElement pocoElement = pocoDriver.findElement(PocoSelector.POCO, expression);
+        System.out.println(pocoElement.getAttribute("_instanceId"));
+        assert pocoElement.getAttribute("_instanceId")!=null;
+    }
+
     @AfterClass
     public static void afterClass() {
         pocoDriver.closeDriver();

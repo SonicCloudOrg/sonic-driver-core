@@ -19,6 +19,9 @@ package org.cloud.sonic.driver.poco.models;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.ToString;
+import org.cloud.sonic.driver.common.models.BaseElement;
+import org.cloud.sonic.driver.common.models.ElementRect;
+import org.cloud.sonic.driver.common.tool.SonicRespException;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
@@ -29,7 +32,7 @@ import java.util.List;
 @Getter
 @ToString
 @AllArgsConstructor
-public class PocoElement {
+public class PocoElement implements BaseElement {
     public String currentNodeSelector = "Root";
     private Payload payload;
     private List<PocoElement> children;
@@ -37,6 +40,25 @@ public class PocoElement {
     private Element currentNodeXmlElement;
 
     private long version;
+
+    @Override
+    // the poco given pos is a point where the origin of the coordinates will change with
+    // the rotation of the screen. The function and others are not uniform, so the implementation
+    // is not considered, you can get the pos point through the payload, and then convert it at
+    // the application layer
+    public ElementRect getRect() throws SonicRespException {
+        throw new SonicRespException("poco element unrealized");
+    }
+
+    @Override
+    public String getAttribute(String name) throws SonicRespException {
+        return currentNodeXmlElement.attr(name);
+    }
+
+    @Override
+    public String getUniquelyIdentifies() throws SonicRespException {
+        return currentNodeSelector;
+    }
 
     @Getter
     @ToString

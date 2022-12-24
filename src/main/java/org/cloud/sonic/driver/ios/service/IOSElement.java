@@ -16,6 +16,7 @@
  */
 package org.cloud.sonic.driver.ios.service;
 
+import org.cloud.sonic.driver.common.models.BaseElement;
 import org.cloud.sonic.driver.common.models.ElementRect;
 import org.cloud.sonic.driver.common.tool.SonicRespException;
 
@@ -23,7 +24,7 @@ import org.cloud.sonic.driver.common.tool.SonicRespException;
  * @author Eason
  * web element interface
  */
-public interface IOSElement {
+public interface IOSElement extends BaseElement {
 
     void click() throws SonicRespException;
 
@@ -34,8 +35,6 @@ public interface IOSElement {
     void clear() throws SonicRespException;
 
     String getText() throws SonicRespException;
-
-    ElementRect getRect() throws SonicRespException;
 
     byte[] screenshot() throws SonicRespException;
 }
