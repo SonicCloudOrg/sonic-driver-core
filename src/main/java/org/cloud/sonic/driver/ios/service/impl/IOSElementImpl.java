@@ -66,7 +66,7 @@ public class IOSElementImpl implements IOSElement {
         data.put("frequency", frequency);
         BaseResp b = wdaClient.getRespHandler().getResp(
                 HttpUtil.createPost(wdaClient.getRemoteUrl() + "/session/"
-                        + wdaClient.getSessionId() + "/element/" + id + "/value")
+                                + wdaClient.getSessionId() + "/element/" + id + "/value")
                         .body(data.toJSONString()), 60000);
         if (b.getErr() == null) {
             logger.info("send key to %s.", id);
@@ -119,6 +119,21 @@ public class IOSElementImpl implements IOSElement {
             logger.error("get %s rect failed.", id);
             throw new SonicRespException(b.getErr().getMessage());
         }
+    }
+
+    @Override
+    public String getAttribute(String name) throws SonicRespException {
+        wdaClient.checkSessionId();
+        BaseResp b = wdaClient.getRespHandler().getResp(
+                HttpUtil.createGet(wdaClient.getRemoteUrl() + "/session/"
+                        + wdaClient.getSessionId() + "/element/" + id + "/attribute/" + name), 60000);
+
+        throw new SonicRespException("ios not implemented getAttribute");
+    }
+
+    @Override
+    public String getUniquelyIdentifies() throws SonicRespException {
+        return id;
     }
 
     @Override

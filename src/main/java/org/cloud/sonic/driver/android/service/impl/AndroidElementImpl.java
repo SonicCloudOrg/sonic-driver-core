@@ -121,6 +121,11 @@ public class AndroidElementImpl implements AndroidElement {
     }
 
     @Override
+    public String getUniquelyIdentifies() throws SonicRespException {
+        return id;
+    }
+
+    @Override
     public ElementRect getRect() throws SonicRespException {
         uiaClient.checkSessionId();
         BaseResp b = uiaClient.getRespHandler().getResp(
