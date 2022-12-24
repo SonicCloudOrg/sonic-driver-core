@@ -243,6 +243,7 @@ public class IOSDriverTest {
         w.sendKeys(text);
         Assert.assertEquals(text, w.getText());
         w.clear();
+        Assert.assertEquals("搜索地点或地址", w.getAttribute("name"));
         Assert.assertEquals("搜索地点或地址", w.getText());
         ElementRect elementRect = w.getRect();
         Assert.assertTrue(elementRect.getX() > 0);

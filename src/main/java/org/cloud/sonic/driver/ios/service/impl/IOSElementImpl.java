@@ -127,8 +127,13 @@ public class IOSElementImpl implements IOSElement {
         BaseResp b = wdaClient.getRespHandler().getResp(
                 HttpUtil.createGet(wdaClient.getRemoteUrl() + "/session/"
                         + wdaClient.getSessionId() + "/element/" + id + "/attribute/" + name), 60000);
-
-        throw new SonicRespException("ios not implemented getAttribute");
+        if (b.getErr() == null) {
+            logger.info("get %s attribute %s.", id, name);
+            return b.getValue().toString();
+        } else {
+            logger.info("get %s attribute %s.", id, name);
+            throw new SonicRespException(b.getErr().getMessage());
+        }
     }
 
     @Override
