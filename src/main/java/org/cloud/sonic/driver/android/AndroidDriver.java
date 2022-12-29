@@ -20,6 +20,7 @@ import com.alibaba.fastjson.JSONObject;
 import org.cloud.sonic.driver.android.enmus.AndroidSelector;
 import org.cloud.sonic.driver.android.service.AndroidElement;
 import org.cloud.sonic.driver.android.service.UiaClient;
+import org.cloud.sonic.driver.android.service.impl.AndroidElementImpl;
 import org.cloud.sonic.driver.android.service.impl.UiaClientImpl;
 import org.cloud.sonic.driver.common.enums.PasteboardType;
 import org.cloud.sonic.driver.common.tool.RespHandler;
@@ -228,6 +229,17 @@ public class AndroidDriver {
      */
     public AndroidElement findElement(AndroidSelector androidSelector, String value) throws SonicRespException {
         return findElement(androidSelector, value, null);
+    }
+
+    /**
+     * find element in device.
+     *
+     * @param uiaElementID This ID is the id returned by uia after finding the control
+     * @return
+     * @throws SonicRespException
+     */
+    public AndroidElement findElement(String uiaElementID) throws SonicRespException {
+        return new AndroidElementImpl(uiaElementID, uiaClient);
     }
 
     /**

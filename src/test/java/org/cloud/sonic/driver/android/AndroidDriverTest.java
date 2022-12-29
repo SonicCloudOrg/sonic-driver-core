@@ -141,7 +141,7 @@ public class AndroidDriverTest {
 
     @Test
     public void testFindElementList() throws SonicRespException {
-        int eleSize = androidDriver.findElementList("id", "android:id/content").size();
+        int eleSize = androidDriver.findElementList("id", "com.android.contacts:id/name").size();
         Assert.assertEquals(eleSize, androidDriver.findElementList(AndroidSelector.Id, "android:id/content").size());
     }
 

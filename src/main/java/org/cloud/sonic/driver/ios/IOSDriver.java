@@ -23,6 +23,7 @@ import org.cloud.sonic.driver.ios.enums.*;
 import org.cloud.sonic.driver.ios.models.*;
 import org.cloud.sonic.driver.ios.service.WdaClient;
 import org.cloud.sonic.driver.ios.service.IOSElement;
+import org.cloud.sonic.driver.ios.service.impl.IOSElementImpl;
 import org.cloud.sonic.driver.ios.service.impl.WdaClientImpl;
 import org.cloud.sonic.driver.common.tool.RespHandler;
 import org.cloud.sonic.driver.common.tool.SonicRespException;
@@ -405,6 +406,17 @@ public class IOSDriver {
      */
     public IOSElement findElement(IOSSelector iosSelector, String value) throws SonicRespException {
         return findElement(iosSelector, value, null);
+    }
+
+    /**
+     * find element in device.
+     *
+     * @param wdaElementID This id is the id returned by the wda lookup control
+     * @return
+     * @throws SonicRespException
+     */
+    public IOSElement findElement(String wdaElementID) throws SonicRespException {
+        return new IOSElementImpl(wdaElementID,wdaClient);
     }
 
     /**
