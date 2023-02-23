@@ -84,6 +84,10 @@ public class MyTest {
 }
 ```
 
+## 文档
+
+查看 [这里](https://sonic-cloud.cn/sdc/re-sdc.html).
+
 ## 赞助商
 
 感谢所有赞助商！
