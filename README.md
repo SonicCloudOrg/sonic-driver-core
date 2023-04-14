@@ -26,20 +26,6 @@
   </a>
 </p>
 
-### Official Website
-
-[Sonic Official Website](https://sonic-cloud.gitee.io)
-
-## Background
-
-#### What is sonic ?
-
-> Sonic is a platform that integrates remote control debugging and automated testing of mobile devices, and strives to create a better use experience for global developers and test engineers.
->
->If you want to participate, welcome to join us! 💪
->
->If you want to support, you can give me a star. ⭐
-
 ## What is sonic-driver-core?
 
 sonic-driver-core can be separated from appium and interact directly with webdriveragent or uiautomator2, which reduces the communication layer of appium and makes the test faster and more stable.
