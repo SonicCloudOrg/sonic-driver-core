@@ -165,7 +165,7 @@ public class PocoClientImpl implements PocoClient {
 
     private String parseAttr(String express) {
         String result = "[";
-        String attrExpression = express.substring(express.indexOf("(") + 1, express.indexOf(")"));
+        String attrExpression = express.substring(express.indexOf("(") + 1, express.lastIndexOf(")"));
         if (attrExpression.startsWith("\"") && attrExpression.endsWith("\"")) {
             attrExpression = "name=" + attrExpression.replace("\"", "");
         }
