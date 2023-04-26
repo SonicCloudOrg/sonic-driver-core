@@ -283,7 +283,7 @@ public class WdaClientImpl implements WdaClient {
     @Override
     public String pageSource() throws SonicRespException {
         checkSessionId();
-        BaseResp b = respHandler.getResp(HttpUtil.createGet(remoteUrl + "/session/" + sessionId + "/source"), 60000);
+        BaseResp b = respHandler.getResp(HttpUtil.createGet(remoteUrl + "/session/" + sessionId + "/source"), 5 * 60 * 1000);
         if (b.getErr() == null) {
             logger.info("get page source.");
             return b.getValue().toString();
