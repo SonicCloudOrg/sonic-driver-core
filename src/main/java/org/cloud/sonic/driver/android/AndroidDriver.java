@@ -23,9 +23,9 @@ import org.cloud.sonic.driver.android.service.UiaClient;
 import org.cloud.sonic.driver.android.service.impl.AndroidElementImpl;
 import org.cloud.sonic.driver.android.service.impl.UiaClientImpl;
 import org.cloud.sonic.driver.common.enums.PasteboardType;
+import org.cloud.sonic.driver.common.models.WindowSize;
 import org.cloud.sonic.driver.common.tool.RespHandler;
 import org.cloud.sonic.driver.common.tool.SonicRespException;
-import org.cloud.sonic.driver.common.models.WindowSize;
 
 import java.util.List;
 

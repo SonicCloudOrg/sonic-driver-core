@@ -20,11 +20,11 @@ import cn.hutool.http.HttpUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson2.JSON;
 import org.cloud.sonic.driver.common.models.BaseResp;
+import org.cloud.sonic.driver.common.models.ElementRect;
 import org.cloud.sonic.driver.common.tool.Logger;
 import org.cloud.sonic.driver.common.tool.SonicRespException;
-import org.cloud.sonic.driver.common.models.ElementRect;
-import org.cloud.sonic.driver.ios.service.WdaClient;
 import org.cloud.sonic.driver.ios.service.IOSElement;
+import org.cloud.sonic.driver.ios.service.WdaClient;
 
 import java.util.Base64;
 

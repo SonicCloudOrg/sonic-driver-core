@@ -22,6 +22,7 @@ public enum SystemButton {
     VOLUME_DOWN("volumeDown");
 
     private final String button;
+
     SystemButton(String button) {
         this.button = button;
     }

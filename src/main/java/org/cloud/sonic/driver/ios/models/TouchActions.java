@@ -43,13 +43,13 @@ public class TouchActions {
             private Integer ms;
         }
 
-        public TouchAction(ActionType actionType){
+        public TouchAction(ActionType actionType) {
             this.action = actionType.getType();
             this.options = new Options();
         }
     }
 
-    public TouchActions(){
+    public TouchActions() {
         actions = new ArrayList<>();
     }
 

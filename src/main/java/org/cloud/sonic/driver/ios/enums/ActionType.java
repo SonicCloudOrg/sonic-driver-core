@@ -23,6 +23,7 @@ public enum ActionType {
     RELEASE("release");
 
     private final String type;
+
     ActionType(String type) {
         this.type = type;
     }

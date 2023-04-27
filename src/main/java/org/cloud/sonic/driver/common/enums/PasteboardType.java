@@ -22,6 +22,7 @@ public enum PasteboardType {
     URL("url");
 
     private final String type;
+
     PasteboardType(String pasteboardType) {
         this.type = pasteboardType;
     }

@@ -8,8 +8,6 @@ import org.cloud.sonic.driver.common.models.ErrorMsg;
 import org.cloud.sonic.driver.common.tool.RespHandler;
 import org.cloud.sonic.driver.common.tool.SonicRespException;
 import org.cloud.sonic.driver.ios.enums.IOSSelector;
-import org.cloud.sonic.driver.ios.service.WdaClient;
-import org.cloud.sonic.driver.ios.service.impl.WdaClientImpl;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -56,7 +54,7 @@ public class UiaClientTest {
     public void testSendKeys() {
         Boolean hasThrow = false;
         try {
-            uiaClient.sendKeys("test",false);
+            uiaClient.sendKeys("test", false);
         } catch (Throwable e) {
             hasThrow = true;
             Assert.assertEquals(SonicRespException.class, e.getClass());

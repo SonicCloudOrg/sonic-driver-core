@@ -17,7 +17,6 @@
 package org.cloud.sonic.driver.ios.service;
 
 import org.cloud.sonic.driver.common.models.BaseElement;
-import org.cloud.sonic.driver.common.models.ElementRect;
 import org.cloud.sonic.driver.common.tool.SonicRespException;
 
 /**
@@ -30,7 +29,7 @@ public interface IOSElement extends BaseElement {
 
     void sendKeys(String text) throws SonicRespException;
 
-    void sendKeys(String text,int frequency) throws SonicRespException;
+    void sendKeys(String text, int frequency) throws SonicRespException;
 
     void clear() throws SonicRespException;
 

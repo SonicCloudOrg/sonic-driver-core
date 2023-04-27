@@ -30,6 +30,7 @@ public enum IOSSelector {
     PARTIAL_LINK_TEXT("partial link text");
 
     private final String selector;
+
     IOSSelector(String selector) {
         this.selector = selector;
     }

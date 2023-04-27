@@ -24,9 +24,9 @@ import org.cloud.sonic.driver.android.service.AndroidElement;
 import org.cloud.sonic.driver.android.service.UiaClient;
 import org.cloud.sonic.driver.common.models.BaseResp;
 import org.cloud.sonic.driver.common.models.SessionInfo;
-import org.cloud.sonic.driver.common.tool.RespHandler;
 import org.cloud.sonic.driver.common.models.WindowSize;
 import org.cloud.sonic.driver.common.tool.Logger;
+import org.cloud.sonic.driver.common.tool.RespHandler;
 import org.cloud.sonic.driver.common.tool.SonicRespException;
 
 import java.nio.charset.StandardCharsets;

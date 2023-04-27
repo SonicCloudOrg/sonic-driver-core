@@ -87,7 +87,7 @@ public class PocoDriverTest {
     }
 
     @Test
-    public void testElementGetChild()  throws SonicRespException{
+    public void testElementGetChild() throws SonicRespException {
         String expression = "Root > Canvas";
         PocoElement pocoElement = pocoDriver.findElement(PocoSelector.CSS_SELECTOR, expression);
         Assert.assertTrue(!pocoElement.getChildren().isEmpty());
@@ -95,7 +95,7 @@ public class PocoDriverTest {
     }
 
     @Test
-    public void testUpdateRootCase() throws SonicRespException{
+    public void testUpdateRootCase() throws SonicRespException {
         String expression = "Root > MEHolo > AnchorManager";
         PocoElement pocoElement = pocoDriver.findElement(PocoSelector.CSS_SELECTOR, expression);
         String lastRootXml = pocoElement.getRootElement().getXmlElement().toString();
@@ -111,11 +111,11 @@ public class PocoDriverTest {
     }
 
     @Test
-    public void testGetAttribute() throws SonicRespException{
+    public void testGetAttribute() throws SonicRespException {
         String expression = "poco(\"star\")[3]";
         PocoElement pocoElement = pocoDriver.findElement(PocoSelector.POCO, expression);
         System.out.println(pocoElement.getAttribute("_instanceId"));
-        assert pocoElement.getAttribute("_instanceId")!=null;
+        assert pocoElement.getAttribute("_instanceId") != null;
     }
 
     @AfterClass

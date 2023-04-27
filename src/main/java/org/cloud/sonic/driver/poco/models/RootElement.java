@@ -22,13 +22,14 @@ public class RootElement {
     private Element XmlElement;
     private long version;
 
-    public RootElement(){}
+    public RootElement() {
+    }
 
-    public RootElement(Element XmlElement){
+    public RootElement(Element XmlElement) {
         this.XmlElement = XmlElement;
     }
 
-    public RootElement(Element XmlElement, long version){
+    public RootElement(Element XmlElement, long version) {
         this(XmlElement);
         this.version = version;
     }
@@ -50,8 +51,8 @@ public class RootElement {
         this.version = version;
     }
 
-    public synchronized void updateVersion(Element rootXmlElement){
+    public synchronized void updateVersion(Element rootXmlElement) {
         this.XmlElement = rootXmlElement;
-        this.version+=1;
+        this.version += 1;
     }
 }

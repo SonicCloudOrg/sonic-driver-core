@@ -111,7 +111,8 @@ public enum XCUIElementType {
     MENU_BAR_ITEM("XCUIElementTypeMenuBarItem"),
 
     INCREMENT_ARROW("XCUIElementTypeIncrementArrow"),
-    DECREMENT_ARROW("XCUIElementTypeDecrementArrow"),;
+    DECREMENT_ARROW("XCUIElementTypeDecrementArrow"),
+    ;
 
     private final String type;
 

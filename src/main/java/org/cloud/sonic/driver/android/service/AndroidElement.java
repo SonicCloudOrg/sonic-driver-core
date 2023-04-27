@@ -18,7 +18,6 @@ package org.cloud.sonic.driver.android.service;
 
 import org.cloud.sonic.driver.common.models.BaseElement;
 import org.cloud.sonic.driver.common.tool.SonicRespException;
-import org.cloud.sonic.driver.common.models.ElementRect;
 
 /**
  * @author Eason
@@ -30,7 +29,7 @@ public interface AndroidElement extends BaseElement {
 
     void sendKeys(String text) throws SonicRespException;
 
-    void sendKeys(String text,boolean isCover) throws SonicRespException;
+    void sendKeys(String text, boolean isCover) throws SonicRespException;
 
     void clear() throws SonicRespException;
 

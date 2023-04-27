@@ -22,9 +22,9 @@ import com.alibaba.fastjson2.JSON;
 import org.cloud.sonic.driver.android.service.AndroidElement;
 import org.cloud.sonic.driver.android.service.UiaClient;
 import org.cloud.sonic.driver.common.models.BaseResp;
+import org.cloud.sonic.driver.common.models.ElementRect;
 import org.cloud.sonic.driver.common.tool.Logger;
 import org.cloud.sonic.driver.common.tool.SonicRespException;
-import org.cloud.sonic.driver.common.models.ElementRect;
 
 import java.util.Base64;
 
@@ -66,7 +66,7 @@ public class AndroidElementImpl implements AndroidElement {
         data.put("replace", isCover);
         BaseResp b = uiaClient.getRespHandler().getResp(
                 HttpUtil.createPost(uiaClient.getRemoteUrl() + "/session/"
-                        + uiaClient.getSessionId() + "/element/" + id + "/value")
+                                + uiaClient.getSessionId() + "/element/" + id + "/value")
                         .body(data.toJSONString()), 60000);
         if (b.getErr() == null) {
             logger.info("send key to %s.", id);

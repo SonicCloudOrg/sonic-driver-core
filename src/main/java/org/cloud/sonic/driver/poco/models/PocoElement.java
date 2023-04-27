@@ -113,7 +113,7 @@ public class PocoElement implements BaseElement {
 
     public Payload getPayload() {
 
-        if (rootElement.getVersion()!=getVersion()){
+        if (rootElement.getVersion() != getVersion()) {
             Element xmlPocoNode = rootElement.getXmlElement().select(currentNodeSelector).first();
             if (xmlPocoNode == null) {
                 return null;
@@ -126,7 +126,7 @@ public class PocoElement implements BaseElement {
 
     public List<PocoElement> getChildren() {
 
-        if (rootElement.getVersion()!=getVersion()){
+        if (rootElement.getVersion() != getVersion()) {
             Element xmlPocoNode = rootElement.getXmlElement().select(currentNodeSelector).first();
 
             if (xmlPocoNode == null) {
@@ -139,7 +139,7 @@ public class PocoElement implements BaseElement {
 
             Elements childList = xmlPocoNode.children();
 
-            for (Element child:childList) {
+            for (Element child : childList) {
                 children.add(new PocoElement(rootElement, child));
             }
 
@@ -158,7 +158,7 @@ public class PocoElement implements BaseElement {
         payload.texture = xmlNode.attr("texture");
 
         String _instanceId = xmlNode.attr("_instanceId");
-        payload._instanceId = _instanceId.isEmpty()? 0 : Integer.parseInt(_instanceId);
+        payload._instanceId = _instanceId.isEmpty() ? 0 : Integer.parseInt(_instanceId);
 
         String _ilayer = xmlNode.attr("_ilayer");
         payload._ilayer = _ilayer.isEmpty() ? 0 : Integer.parseInt(_ilayer);
@@ -195,20 +195,20 @@ public class PocoElement implements BaseElement {
         return result;
     }
 
-    public Boolean currentTheNodeExists(){
-        return rootElement.getXmlElement().select(currentNodeSelector).first()!=null;
+    public Boolean currentTheNodeExists() {
+        return rootElement.getXmlElement().select(currentNodeSelector).first() != null;
     }
 
-    public PocoElement getParentNode(){
+    public PocoElement getParentNode() {
         Element xmlPocoNode = rootElement.getXmlElement().select(currentNodeSelector).first();
 
         if (xmlPocoNode == null) {
             return null;
         }
         Element parentNode = xmlPocoNode.parent();
-        if (parentNode==null){
+        if (parentNode == null) {
             return null;
         }
-        return new PocoElement(rootElement,parentNode);
+        return new PocoElement(rootElement, parentNode);
     }
 }

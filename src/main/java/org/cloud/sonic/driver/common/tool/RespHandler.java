@@ -52,7 +52,7 @@ public class RespHandler {
 
     public BaseResp initResp(String response) {
         if (response.contains("traceback") || response.contains("stacktrace")) {
-            return initErrorMsg(response.replace("stacktrace","traceback"));
+            return initErrorMsg(response.replace("stacktrace", "traceback"));
         } else {
             return JSON.parseObject(response, BaseResp.class);
         }

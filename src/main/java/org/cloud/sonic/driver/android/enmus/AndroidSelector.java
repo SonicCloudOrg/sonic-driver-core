@@ -26,6 +26,7 @@ public enum AndroidSelector {
     UIAUTOMATOR("-android uiautomator");
 
     private final String selector;
+
     AndroidSelector(String selector) {
         this.selector = selector;
     }

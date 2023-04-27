@@ -16,7 +16,7 @@
  */
 package org.cloud.sonic.driver.common.tool;
 
-public class SonicRespException extends Exception{
+public class SonicRespException extends Exception {
     public SonicRespException(String message) {
         super(message);
     }
