@@ -27,7 +27,7 @@ import org.cloud.sonic.driver.poco.models.PocoElement;
 import org.cloud.sonic.driver.poco.models.RootElement;
 import org.cloud.sonic.driver.poco.service.PocoClient;
 import org.cloud.sonic.driver.poco.service.PocoConnection;
-import org.cloud.sonic.driver.poco.util.pocoJsonToXml;
+import org.cloud.sonic.driver.poco.util.PocoJsonToXml;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
 import org.jsoup.parser.Parser;
@@ -109,7 +109,7 @@ public class PocoClientImpl implements PocoClient {
     public Element pageSourceForXmlElement() throws SonicRespException {
         pageSourceForJsonString();
 //        String pocoJson = "{\"Root\"" + source.substring("{\"result\"".length());
-        Element rootXmlElement = Jsoup.parse(pocoJsonToXml.jsonObjToXml(JSON.parseObject(source).getJSONObject("result")), "", Parser.xmlParser());
+        Element rootXmlElement = Jsoup.parse(PocoJsonToXml.jsonObjToXml(JSON.parseObject(source).getJSONObject("result")), "", Parser.xmlParser());
 
         rootNode.updateVersion(rootXmlElement);
 

@@ -19,12 +19,10 @@ package org.cloud.sonic.driver.poco.util;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import org.cloud.sonic.driver.common.tool.SonicRespException;
-import org.apache.commons.lang3.StringEscapeUtils;
 
 import java.util.Map;
-import java.util.regex.Pattern;
 
-public class pocoJsonToXml {
+public class PocoJsonToXml {
     /**
      * convert json to xml
      *

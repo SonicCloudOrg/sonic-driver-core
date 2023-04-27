@@ -1,12 +1,11 @@
 package org.cloud.sonic.driver.poco;
 
 import com.alibaba.fastjson.JSON;
-import org.apache.commons.lang3.StringEscapeUtils;
 import org.cloud.sonic.driver.common.tool.SonicRespException;
 import org.cloud.sonic.driver.poco.models.PocoElement;
 import org.cloud.sonic.driver.poco.models.RootElement;
 import org.cloud.sonic.driver.poco.service.impl.PocoClientImpl;
-import org.cloud.sonic.driver.poco.util.pocoJsonToXml;
+import org.cloud.sonic.driver.poco.util.PocoJsonToXml;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
 import org.jsoup.parser.Parser;
@@ -15,11 +14,11 @@ import org.junit.Test;
 import java.util.List;
 
 
-public class pocoJsonToXmlTest {
+public class PocoJsonToXmlTest {
 
     @Test
     public void testToXml() throws SonicRespException {
-        System.out.println(pocoJsonToXml.jsonObjToXml(JSON.parseObject(dump).getJSONObject("Root")));
+        System.out.println(PocoJsonToXml.jsonObjToXml(JSON.parseObject(dump).getJSONObject("Root")));
     }
 
     @Test
@@ -28,7 +27,7 @@ public class pocoJsonToXmlTest {
 
 //        String expression = "poco(\"<Root>\")";
 
-        Element rootXmlElement = Jsoup.parse(pocoJsonToXml.jsonObjToXml(JSON.parseObject(dump).getJSONObject("result")), "", Parser.xmlParser());
+        Element rootXmlElement = Jsoup.parse(PocoJsonToXml.jsonObjToXml(JSON.parseObject(dump).getJSONObject("result")), "", Parser.xmlParser());
 
         PocoClientImpl pocoClient = new PocoClientImpl();
         RootElement rootElement = new RootElement(rootXmlElement);
