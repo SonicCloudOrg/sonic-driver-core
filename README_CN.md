@@ -72,6 +72,10 @@ public class MyTest {
 }
 ```
 
+## 更多例子
+
+查看 [这里](https://github.com/SonicCloudOrg/sonic-uiautomation-example/tree/main/java-example).
+
 ## 文档
 
 查看 [这里](https://sonic-cloud.cn/sdc/re-sdc.html).
