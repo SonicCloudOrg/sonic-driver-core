@@ -78,6 +78,10 @@ public class MyTest {
 }
 ```
 
+## More Example
+
+See [Here](https://github.com/SonicCloudOrg/sonic-uiautomation-example/tree/main/java-example).
+
 ## Document
 
 See [Here](https://sonic-cloud.cn/sdc/re-sdc.html).
