@@ -371,8 +371,22 @@ public class UiaClientImpl implements UiaClient {
     }
 
     @Override
-    public void longPress(int x, int y, int ms) throws SonicRespException {
-
+    public void longPress(double x, double y, double ms) throws SonicRespException {
+        checkSessionId();
+        JSONObject data = new JSONObject();
+        JSONObject touchEventParams = new JSONObject();
+        touchEventParams.put("x", x);
+        touchEventParams.put("y", y);
+        touchEventParams.put("duration", ms);
+        data.put("params", touchEventParams);
+        BaseResp b = respHandler.getResp(HttpUtil.createPost(remoteUrl + "/session/" + sessionId + "/touch/longclick")
+                .body(data.toJSONString()));
+        if (b.getErr() == null) {
+            logger.info("perform longPress action %s.", data.toString());
+        } else {
+            logger.error("perform longPress action failed.");
+            throw new SonicRespException(b.getErr().getMessage());
+        }
     }
 
     @Override

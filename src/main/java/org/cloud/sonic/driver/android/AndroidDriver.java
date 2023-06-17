@@ -425,7 +425,7 @@ public class AndroidDriver {
      * @param ms
      * @throws SonicRespException
      */
-    public void longPress(int x, int y, int ms) throws SonicRespException {
+    public void longPress(double x, double y, double ms) throws SonicRespException {
         uiaClient.longPress(x, y, ms);
     }
 
