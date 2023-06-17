@@ -159,4 +159,33 @@ public class AndroidDriverTest {
     public void testSetAppiumSettings() throws SonicRespException {
         androidDriver.setAppiumSettings(new JSONObject());
     }
+
+    @Test
+    public void testSwipeAction() throws SonicRespException {
+        // 默认滑动操作的完成时间，500毫秒
+        androidDriver.swipe(540, 1710, 540, 200);
+        // 指定滑动操作在1000毫秒内完成
+        androidDriver.swipe(540, 1710, 540, 200, 1000);
+    }
+
+    @Test
+    public void testTapAction() throws SonicRespException {
+        // 替换为任意待测试的元素
+        AndroidElement androidElement = androidDriver.findElement(AndroidSelector.Id,
+                "com.xueqiu.android:id/my_groups_new_title_bar_ding");
+        ElementRect elementRect = androidElement.getRect();
+        androidDriver.tap(elementRect.getX() + elementRect.getWidth() / 2, elementRect.getY() + elementRect.getHeight() / 2);
+    }
+
+    @Test
+    public void testLongPressAction() throws SonicRespException {
+        // 替换为任意待测试的元素
+        AndroidElement androidElement = androidDriver.findElement(AndroidSelector.Id,
+                "com.xueqiu.android:id/my_groups_list_item_stock_name_label");
+        ElementRect elementRect = androidElement.getRect();
+        androidDriver.longPress((double) elementRect.getX() + (double) elementRect.getWidth() / 2,
+                (double) elementRect.getY() + (double) elementRect.getHeight() / 2,
+                100);
+    }
+
 }

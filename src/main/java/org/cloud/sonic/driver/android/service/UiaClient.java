@@ -82,4 +82,10 @@ public interface UiaClient {
 
     //appium setting handler.
     void setAppiumSettings(JSONObject settings) throws SonicRespException;
+
+    void tap(int x, int y) throws SonicRespException;
+
+    void longPress(double x, double y, double ms) throws SonicRespException;
+
+    void swipe(int fromX, int fromY, int toX, int toY, Integer duration) throws SonicRespException;
 }
