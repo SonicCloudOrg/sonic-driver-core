@@ -356,7 +356,18 @@ public class UiaClientImpl implements UiaClient {
 
     @Override
     public void tap(int x, int y) throws SonicRespException {
-
+        checkSessionId();
+        JSONObject data = new JSONObject();
+        data.put("x", x);
+        data.put("y", y);
+        BaseResp b = respHandler.getResp(HttpUtil.createPost(remoteUrl + "/session/" + sessionId + "/appium/tap")
+                .body(data.toJSONString()));
+        if (b.getErr() == null) {
+            logger.info("perform tap action %s.", data.toString());
+        } else {
+            logger.error("perform tap action failed.");
+            throw new SonicRespException(b.getErr().getMessage());
+        }
     }
 
     @Override
