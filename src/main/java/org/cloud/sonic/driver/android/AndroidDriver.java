@@ -405,4 +405,54 @@ public class AndroidDriver {
     public void setAppiumSettings(JSONObject settings) throws SonicRespException {
         uiaClient.setAppiumSettings(settings);
     }
+
+    /**
+     * tap position on screen.
+     *
+     * @param x
+     * @param y
+     * @throws SonicRespException
+     */
+    public void tap(int x, int y) throws SonicRespException {
+        uiaClient.tap(x, y);
+    }
+
+    /**
+     * long press position on screen.
+     *
+     * @param x
+     * @param y
+     * @param ms
+     * @throws SonicRespException
+     */
+    public void longPress(int x, int y, int ms) throws SonicRespException {
+        uiaClient.longPress(x, y, ms);
+    }
+
+    /**
+     * swipe position on screen.
+     *
+     * @param fromX
+     * @param fromY
+     * @param toX
+     * @param toY
+     * @throws SonicRespException
+     */
+    public void swipe(int fromX, int fromY, int toX, int toY) throws SonicRespException {
+        this.swipe(fromX, fromY, toX, toY, null);
+    }
+
+    /**
+     * swipe position on screen with target time
+     *
+     * @param fromX
+     * @param fromY
+     * @param toX
+     * @param toY
+     * @param duration
+     * @throws SonicRespException
+     */
+    public void swipe(int fromX, int fromY, int toX, int toY, Integer duration) throws SonicRespException {
+        uiaClient.swipe(fromX, fromY, toX, toY, duration);
+    }
 }

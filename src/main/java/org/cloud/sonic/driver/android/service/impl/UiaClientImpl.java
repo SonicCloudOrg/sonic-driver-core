@@ -353,4 +353,19 @@ public class UiaClientImpl implements UiaClient {
             throw new SonicRespException(b.getErr().getMessage());
         }
     }
+
+    @Override
+    public void tap(int x, int y) throws SonicRespException {
+
+    }
+
+    @Override
+    public void longPress(int x, int y, int ms) throws SonicRespException {
+
+    }
+
+    @Override
+    public void swipe(int fromX, int fromY, int toX, int toY, Integer duration) throws SonicRespException {
+
+    }
 }
