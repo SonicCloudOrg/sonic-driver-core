@@ -366,6 +366,27 @@ public class UiaClientImpl implements UiaClient {
 
     @Override
     public void swipe(int fromX, int fromY, int toX, int toY, Integer duration) throws SonicRespException {
-
+        checkSessionId();
+        JSONObject data = new JSONObject();
+        data.put("startX", fromX);
+        data.put("startY", fromY);
+        data.put("endX", toX);
+        data.put("endY", toY);
+        // steps 参数为uiautomator层定义的单位
+        // example：So for a 100 steps, the swipe will take about 1/2 second to complete.
+        if (duration == null) {
+            data.put("steps", 100);
+        } else {
+            data.put("steps", duration / 5);
+        }
+        BaseResp b = respHandler.getResp(HttpUtil.createPost(remoteUrl + "/session/" + sessionId + "/touch/perform")
+                .body(data.toJSONString()));
+        if (b.getErr() == null) {
+            logger.info("perform swipe action %s.", data.toString());
+        } else {
+            logger.error("perform swipe action failed.");
+            throw new SonicRespException(b.getErr().getMessage());
+        }
     }
+
 }
