@@ -144,7 +144,12 @@ public class IOSDriverTest {
     public void testSwipe() throws SonicRespException, InterruptedException {
         iosDriver.swipe(100, 256, 50, 256);
         Thread.sleep(500);
-        iosDriver.swipe(50, 256, 100, 256);
+        iosDriver.swipe(100, 600, 100, 200);
+    }
+
+    @Test
+    public void testSwipeWithTime() throws SonicRespException, InterruptedException {
+        iosDriver.swipe(100, 600, 100, 200, 2000);
     }
 
     @Test
