@@ -200,6 +200,20 @@ public class IOSDriver {
     }
 
     /**
+     * swipe position on screen with target time
+     *
+     * @param fromX
+     * @param fromY
+     * @param toX
+     * @param toY
+     * @param duration 滑动完成的时间，单位为毫秒
+     * @throws SonicRespException
+     */
+    public void swipe(double fromX, double fromY, double toX, double toY, double duration) throws SonicRespException {
+        wdaClient.swipe(fromX, fromY, toX, toY, duration);
+    }
+
+    /**
      * perform touch action.
      *
      * @param touchActions
