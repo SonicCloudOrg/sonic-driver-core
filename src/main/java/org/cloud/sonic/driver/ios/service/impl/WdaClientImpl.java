@@ -502,4 +502,30 @@ public class WdaClientImpl implements WdaClient {
             throw new SonicRespException(b.getErr().getMessage());
         }
     }
+
+    @Override
+    public void swipe(double fromX, double fromY, double toX, double toY, double duration) throws SonicRespException {
+        checkSessionId();
+        JSONObject data = new JSONObject();
+
+        double maxSwipeDistance = Math.max(Math.abs(toX - fromX), Math.abs(toY - fromY));
+        double velocity = maxSwipeDistance / duration * 1000;
+        // velocity 单位为像素/秒，这里做个限制，如果超过1000则滑动的过快，很容易触发fling行为
+        velocity = Math.min(velocity, 1000);
+        data.put("fromX", fromX);
+        data.put("fromY", fromY);
+        data.put("toX", toX);
+        data.put("toY", toY);
+        data.put("velocity", velocity);
+
+        BaseResp b = respHandler.getResp(HttpUtil.createPost(remoteUrl + "/session/" + sessionId + "/wda/pressAndDragWithVelocity")
+                .body(data.toJSONString()));
+        if (b.getErr() == null) {
+            logger.info("perform swipe %s successful.", data.toString());
+        } else {
+            logger.error("perform swipe %s failed.", data.toString());
+            throw new SonicRespException(b.getErr().getMessage());
+        }
+    }
+
 }

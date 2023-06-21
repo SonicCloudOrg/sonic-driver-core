@@ -108,4 +108,6 @@ public interface WdaClient {
 
     //appium setting handler.
     void setAppiumSettings(JSONObject settings) throws SonicRespException;
+
+    void swipe(double fromX, double fromY, double toX, double toY, double duration) throws SonicRespException;
 }
