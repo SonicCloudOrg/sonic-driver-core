@@ -303,10 +303,11 @@ public class UiaClientImpl implements UiaClient {
                         androidElementList.add(new AndroidElementImpl(id, this));
                     } else {
                         logger.error("parse element id %s failed.", ele);
-                        continue;
                     }
                 }
-                break;
+                if (androidElementList.size() > 0) {
+                    break;
+                }
             } else {
                 logger.error("elements not found. retried %d times, retry in %d ms.", wait, intervalInit);
                 errMsg = b.getErr().getMessage();
