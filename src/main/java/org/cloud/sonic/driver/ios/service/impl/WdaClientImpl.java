@@ -452,10 +452,11 @@ public class WdaClientImpl implements WdaClient {
                         iosElementList.add(new IOSElementImpl(id, this));
                     } else {
                         logger.error("parse element id %s failed.", ele);
-                        continue;
                     }
                 }
-                break;
+                if (iosElementList.size() > 0) {
+                    break;
+                }
             } else {
                 logger.error("elements not found. retried %d times, retry in %d ms.", wait, intervalInit);
                 errMsg = b.getErr().getMessage();
