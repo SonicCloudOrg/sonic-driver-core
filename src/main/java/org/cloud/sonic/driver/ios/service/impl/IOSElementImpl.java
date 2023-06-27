@@ -155,4 +155,19 @@ public class IOSElementImpl implements IOSElement {
             throw new SonicRespException(b.getErr().getMessage());
         }
     }
+
+    @Override
+    public boolean isDisplayed() throws SonicRespException {
+        wdaClient.checkSessionId();
+        BaseResp b = wdaClient.getRespHandler().getResp(
+                HttpUtil.createGet(wdaClient.getRemoteUrl() + "/session/"
+                        + wdaClient.getSessionId() + "/element/" + id + "/displayed"));
+        if (b.getErr() == null) {
+            logger.info("get %s displayed,result is %s.", id, b.getValue().toString());
+            return Boolean.parseBoolean(b.getValue().toString());
+        } else {
+            logger.error("get %s displayed failed.", id);
+            throw new SonicRespException(b.getErr().getMessage());
+        }
+    }
 }

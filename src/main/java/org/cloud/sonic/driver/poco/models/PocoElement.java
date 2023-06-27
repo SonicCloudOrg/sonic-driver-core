@@ -60,6 +60,11 @@ public class PocoElement implements BaseElement {
         return currentNodeSelector;
     }
 
+    @Override
+    public boolean isDisplayed() throws SonicRespException {
+        throw new SonicRespException("poco element unrealized");
+    }
+
     @Getter
     @ToString
     @AllArgsConstructor

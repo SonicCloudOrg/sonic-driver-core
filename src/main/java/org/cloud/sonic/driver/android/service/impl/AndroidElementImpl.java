@@ -155,4 +155,10 @@ public class AndroidElementImpl implements AndroidElement {
             throw new SonicRespException(b.getErr().getMessage());
         }
     }
+
+    @Override
+    public boolean isDisplayed() throws SonicRespException {
+        String result = getAttribute("displayed");
+        return Boolean.parseBoolean(result);
+    }
 }

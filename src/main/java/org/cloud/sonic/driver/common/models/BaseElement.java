@@ -11,4 +11,11 @@ public interface BaseElement {
     String getUniquelyIdentifies() throws SonicRespException;
 
 //    List<BaseElement> getChildren() throws SonicRespException;
+    /**
+     * Is this element displayed or not?
+     * This method avoids the problem of having to parse an element's "style" attribute.
+     *
+     * @return whether the element is displayed
+     */
+    boolean isDisplayed() throws SonicRespException;
 }
