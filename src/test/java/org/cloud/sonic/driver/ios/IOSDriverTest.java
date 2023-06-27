@@ -300,6 +300,18 @@ public class IOSDriverTest {
         iosDriver.setAppiumSettings(new JSONObject());
     }
 
+    @Test
+    public void testIsDisplayed() throws SonicRespException {
+        String value = "name CONTAINS 'QDII' AND label CONTAINS 'QDII' AND enabled == true AND visible == true";
+        IOSElement element1 = iosDriver.findElement(IOSSelector.PREDICATE, value);
+        System.out.println(element1.getUniquelyIdentifies() + ",isDisplayed=" + element1.isDisplayed());
+        System.out.println(element1.getUniquelyIdentifies() + ",rect=" + element1.getRect());
+
+        IOSElement element2 = iosDriver.findElement(IOSSelector.ACCESSIBILITY_ID, "QDII");
+        System.out.println(element2.getUniquelyIdentifies() + ",isDisplayed=" + element2.isDisplayed());
+        System.out.println(element2.getUniquelyIdentifies() + ",rect=" + element2.getRect());
+    }
+
     @AfterClass
     public static void after() throws SonicRespException {
         iosDriver.closeDriver();
