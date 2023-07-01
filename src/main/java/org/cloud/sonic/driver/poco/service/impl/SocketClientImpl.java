@@ -70,14 +70,13 @@ public class SocketClientImpl implements PocoConnection {
                         rData.flip();
                         String pocoResult = new String(rData.array(), StandardCharsets.UTF_8);
                         int subStartIndex = pocoResult.indexOf("\"result\"");
-
-                        String pocoPrefix = pocoResult.substring(0, subStartIndex) + "}";
-
-                        if (PocoTool.checkPocoRpcResultID(pocoPrefix, jsonObject.getString("id"))) {
+                        // when cocos is integrated there will be no id
+//                        String pocoPrefix = pocoResult.substring(0, subStartIndex) + "}";
+//                        if (PocoTool.checkPocoRpcResultID(pocoPrefix, jsonObject.getString("id"))) {
                             return "{" + pocoResult.substring(subStartIndex);
-                        } else {
-                            throw new SonicRespException("id not found!");
-                        }
+//                        } else {
+//                            throw new SonicRespException("id not found!");
+//                        }
                     }
                 }
             } catch (Exception e) {
