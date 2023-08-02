@@ -37,7 +37,7 @@ import java.util.UUID;
 @RunWith(Parameterized.class)
 public class IOSDriverTest {
     static IOSDriver iosDriver;
-    static String url = "http://localhost:8100";
+    static String url = "http://localhost:8827";
 
     @Parameterized.Parameters
     public static Object[][] data() {
@@ -310,6 +310,31 @@ public class IOSDriverTest {
         IOSElement element2 = iosDriver.findElement(IOSSelector.ACCESSIBILITY_ID, "QDII");
         System.out.println(element2.getUniquelyIdentifies() + ",isDisplayed=" + element2.isDisplayed());
         System.out.println(element2.getUniquelyIdentifies() + ",rect=" + element2.getRect());
+    }
+
+    @Test
+    public void testDoubleTap() throws SonicRespException {
+        iosDriver.doubleTap(100,100);
+        iosDriver.pressButton("HOME");
+    }
+
+    @Test
+    public void testActiveElement() throws SonicRespException {
+        IOSElement element = iosDriver.activeElement();
+        Assert.assertNotNull(element);
+        element.sendKeys("find active element");
+    }
+
+    @Test
+    public void testOrientation() throws SonicRespException, InterruptedException {
+        Orientation orientation = iosDriver.getRotate();
+        System.out.print("current orientation: " + orientation);
+
+        iosDriver.rotate(Orientation.LANDSCAPELEFT);
+        Thread.sleep(2000);
+        iosDriver.rotate(Orientation.LANDSCAPERIGHT);
+        Thread.sleep(2000);
+        iosDriver.rotate(Orientation.PORTRAIT);
     }
 
     @AfterClass

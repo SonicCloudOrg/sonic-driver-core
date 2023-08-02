@@ -21,6 +21,7 @@ import org.cloud.sonic.driver.common.models.WindowSize;
 import org.cloud.sonic.driver.common.tool.Logger;
 import org.cloud.sonic.driver.common.tool.RespHandler;
 import org.cloud.sonic.driver.common.tool.SonicRespException;
+import org.cloud.sonic.driver.ios.enums.Orientation;
 import org.cloud.sonic.driver.ios.models.TouchActions;
 
 import java.util.List;
@@ -74,6 +75,8 @@ public interface WdaClient {
     //button handler.
     void pressButton(String buttonName) throws SonicRespException;
 
+    void doubleTap(int x, int y) throws SonicRespException;
+
     //keyboard handler.
     void sendKeys(String text, Integer frequency) throws SonicRespException;
 
@@ -103,6 +106,9 @@ public interface WdaClient {
 
     List<IOSElement> findElementList(String selector, String value, Integer retry, Integer interval) throws SonicRespException;
 
+    // get current active element
+    IOSElement activeElement() throws SonicRespException;
+
     //screen handler.
     byte[] screenshot() throws SonicRespException;
 
@@ -110,4 +116,6 @@ public interface WdaClient {
     void setAppiumSettings(JSONObject settings) throws SonicRespException;
 
     void swipe(double fromX, double fromY, double toX, double toY, double duration) throws SonicRespException;
+    void rotate(Orientation orientation) throws SonicRespException;
+    Orientation getRotate() throws SonicRespException;
 }
