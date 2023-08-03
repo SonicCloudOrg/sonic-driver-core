@@ -37,7 +37,7 @@ import java.util.UUID;
 @RunWith(Parameterized.class)
 public class IOSDriverTest {
     static IOSDriver iosDriver;
-    static String url = "http://localhost:8827";
+    static String url = "http://localhost:8100";
 
     @Parameterized.Parameters
     public static Object[][] data() {
