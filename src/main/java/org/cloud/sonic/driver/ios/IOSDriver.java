@@ -175,6 +175,16 @@ public class IOSDriver {
     }
 
     /**
+     * double tap position on screen
+     * @param x
+     * @param y
+     * @throws SonicRespException
+     */
+    public void doubleTap(int x, int y) throws SonicRespException {
+        wdaClient.doubleTap(x,y);
+    }
+
+    /**
      * long press position on screen.
      *
      * @param x
@@ -650,6 +660,15 @@ public class IOSDriver {
     }
 
     /**
+     * get current active element
+     * @return
+     * @throws SonicRespException
+     */
+    public IOSElement activeElement() throws SonicRespException{
+        return wdaClient.activeElement();
+    }
+
+    /**
      * get screenshot.
      *
      * @return
@@ -667,5 +686,17 @@ public class IOSDriver {
      */
     public void setAppiumSettings(JSONObject settings) throws SonicRespException {
         wdaClient.setAppiumSettings(settings);
+    }
+
+    /**
+     * rotate screen orientation
+     * @throws SonicRespException
+     */
+    public void rotate(Orientation orientation) throws SonicRespException {
+        wdaClient.rotate(orientation);
+    }
+
+    public Orientation getRotate() throws SonicRespException {
+        return wdaClient.getRotate();
     }
 }

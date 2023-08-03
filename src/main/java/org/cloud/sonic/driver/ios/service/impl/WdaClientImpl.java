@@ -26,15 +26,14 @@ import org.cloud.sonic.driver.common.models.WindowSize;
 import org.cloud.sonic.driver.common.tool.Logger;
 import org.cloud.sonic.driver.common.tool.RespHandler;
 import org.cloud.sonic.driver.common.tool.SonicRespException;
+import org.cloud.sonic.driver.ios.enums.Orientation;
 import org.cloud.sonic.driver.ios.models.TouchActions;
 import org.cloud.sonic.driver.ios.service.IOSElement;
 import org.cloud.sonic.driver.ios.service.WdaClient;
+import org.jsoup.select.CombiningEvaluator;
 
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Base64;
-import java.util.List;
+import java.util.*;
 
 public class WdaClientImpl implements WdaClient {
     private String remoteUrl;
@@ -227,6 +226,23 @@ public class WdaClientImpl implements WdaClient {
             logger.info("press button %s.", buttonName);
         } else {
             logger.error("press button failed.");
+            throw new SonicRespException(b.getErr().getMessage());
+        }
+    }
+
+    @Override
+    public void doubleTap(int x, int y) throws SonicRespException {
+        checkSessionId();
+        JSONObject data = new JSONObject();
+        data.put("x",x);
+        data.put("y",y);
+
+        BaseResp b = respHandler.getResp(HttpUtil.createPost(remoteUrl + "/session/" + sessionId + "/wda/doubleTap")
+                .body(data.toJSONString()));
+        if (b.getErr() == null) {
+            logger.info("double tap success. %s", data.toJSONString());
+        } else {
+            logger.error("double tap failed.");
             throw new SonicRespException(b.getErr().getMessage());
         }
     }
@@ -476,6 +492,32 @@ public class WdaClientImpl implements WdaClient {
     }
 
     @Override
+    public IOSElement activeElement() throws SonicRespException {
+        checkSessionId();
+        BaseResp b = respHandler.getResp(
+                HttpUtil.createGet(remoteUrl + "/session/" + sessionId + "/element/active"));
+        if (b.getErr() == null) {
+            logger.info("find active elements successful.");
+            JSONObject value = JSON.parseObject(b.getValue().toString(), JSONObject.class);
+            List<String> identifier = Arrays.asList("ELEMENT", "element-6066-11e4-a52e-4f735466cecf");
+            Iterator var4 = identifier.iterator();
+            String eleId;
+            do {
+                if (!var4.hasNext()) {
+                    return null;
+                }
+                String i = (String)var4.next();
+                eleId = value.getString(i);
+            } while(eleId == null || eleId.length() <= 0);
+
+            return new IOSElementImpl(eleId,this);
+        } else {
+            logger.error("active element not found.");
+            throw new SonicRespException(b.getErr().getMessage());
+        }
+    }
+
+    @Override
     public byte[] screenshot() throws SonicRespException {
         checkSessionId();
         BaseResp b = respHandler.getResp(
@@ -529,4 +571,40 @@ public class WdaClientImpl implements WdaClient {
         }
     }
 
+    @Override
+    public void rotate(Orientation orientation) throws SonicRespException {
+        JSONObject xyz = orientation.getValue();
+        BaseResp b = respHandler.getResp(HttpUtil.createPost(remoteUrl + "/rotation").body(String.valueOf(xyz.toJSONString())));
+        if (b.getErr() == null) {
+            logger.info("set orientation success. %s", xyz.toJSONString());
+        } else {
+            logger.error("set orientation failed.");
+            throw new SonicRespException(b.getErr().getMessage());
+        }
+    }
+
+    @Override
+    public Orientation getRotate() throws SonicRespException {
+        BaseResp b = respHandler.getResp(HttpUtil.createGet(remoteUrl + "/rotation"));
+        if (b.getErr() == null) {
+            logger.info("get orientation %s.",b.getValue());
+            JSONObject value = JSON.parseObject(b.getValue().toString(), JSONObject.class);
+            Integer zValue = Integer.valueOf(value.getString("z"));
+            switch (zValue) {
+                case 0:
+                    return Orientation.PORTRAIT;
+                case 180:
+                    return Orientation.PORTRAITUPSIDEDOWN;
+                case 90:
+                    return Orientation.LANDSCAPELEFT;
+                case 270:
+                    return Orientation.LANDSCAPERIGHT;
+                default:
+                    return Orientation.UNKNOWN;
+            }
+        } else {
+            logger.error("get orientation failed.");
+            throw new SonicRespException(b.getErr().getMessage());
+        }
+    }
 }
