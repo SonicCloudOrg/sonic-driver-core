@@ -88,4 +88,10 @@ public interface UiaClient {
     void longPress(double x, double y, double ms) throws SonicRespException;
 
     void swipe(int fromX, int fromY, int toX, int toY, Integer duration) throws SonicRespException;
+
+    void drag(int fromX, int fromY, int toX, int toY, Integer duration, String elementId, String destElId) throws SonicRespException;
+
+    // touch handler.
+    void touchAction(String methodType, int x, int y) throws SonicRespException;
+
 }

@@ -455,4 +455,38 @@ public class AndroidDriver {
     public void swipe(int fromX, int fromY, int toX, int toY, Integer duration) throws SonicRespException {
         uiaClient.swipe(fromX, fromY, toX, toY, duration);
     }
+
+    /**
+     * Performs a long press followed by an immediate drag to a location and releases.
+     * fromX(Y) are required if elementId is not provided, so do toX(Y) if destElId is not provided.
+     *
+     * @param fromX     Starting X coordinate
+     * @param fromY     Starting Y coordinate
+     * @param toX       Ending X coordinate
+     * @param toY       Ending Y coordinate
+     * @param duration  Duration of the action in milliseconds
+     * @param elementId ID of the original element (optional), for specific interaction scenarios
+     * @param destElId  ID of the target element (optional), for specific interaction scenarios
+     * @throws SonicRespException Throws when the operation fails
+     */
+    public void drag(int fromX, int fromY, int toX, int toY, Integer duration, String elementId, String destElId) throws SonicRespException {
+        uiaClient.drag(fromX, fromY, toX, toY, duration, elementId, destElId);
+    }
+
+    /**
+     * Performs a touch action.
+     * This method delegates to the UIA client's touchAction method to simulate
+     * a touch event at a specified position on the screen with a given action type.
+     *
+     * @param methodType The type of touch action, enumerate in (down, up, move).
+     *                   Specific supported types depend on the UIA client's implementation.
+     * @param x          The X coordinate of the touch point.
+     * @param y          The Y coordinate of the touch point.
+     * @throws SonicRespException If an error occurs while performing the touch action,
+     *                            this exception is thrown.
+     */
+    public void touchAction(String methodType, int x, int y) throws SonicRespException {
+        uiaClient.touchAction(methodType, x, y);
+    }
+
 }

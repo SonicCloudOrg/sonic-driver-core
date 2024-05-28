@@ -188,4 +188,27 @@ public class AndroidDriverTest {
                 100);
     }
 
+    @Test
+    public void testDragAction() throws SonicRespException {
+        // 替换为任意待测试的元素
+        androidDriver.drag(182, 629, 565, 2259, 100, null, null);
+    }
+
+    @Test
+    public void testTouchActionDown() throws SonicRespException {
+        // 替换为任意待测试的元素
+        androidDriver.touchAction("down", 182, 629);
+    }
+
+    @Test
+    public void testTouchActionMove() throws SonicRespException {
+        // 替换为任意待测试的元素
+        androidDriver.touchAction("move", 565, 2259);
+    }
+
+    @Test
+    public void testTouchActionUp() throws SonicRespException {
+        // 替换为任意待测试的元素
+        androidDriver.touchAction("up", 565, 2259);
+    }
 }
