@@ -415,4 +415,57 @@ public class UiaClientImpl implements UiaClient {
         }
     }
 
+    @Override
+    public void drag(int fromX, int fromY, int toX, int toY, Integer duration, String elementId, String destElId) throws SonicRespException {
+        checkSessionId();
+        JSONObject data = new JSONObject();
+        data.put("startX", fromX);
+        data.put("startY", fromY);
+        data.put("endX", toX);
+        data.put("endY", toY);
+        data.put("steps", duration != null && duration > 0 ? duration / 5 : 100);
+        data.put("elementId", elementId);
+        data.put("destElId", destElId);
+        BaseResp move = respHandler.getResp(HttpUtil.createPost(remoteUrl + "/session/" + sessionId + "/touch/drag").body(data.toJSONString()));
+        if (move.getErr() == null) {
+            logger.info("perform drag action %s.", data.toString());
+        } else {
+            logger.error("perform drag action failed.");
+            throw new SonicRespException(move.getErr().getMessage());
+        }
+    }
+
+    @Override
+    public void touchAction(String methodType, int x, int y) throws SonicRespException {
+        checkSessionId();
+        JSONObject data = new JSONObject();
+        JSONObject touchEventParams = new JSONObject();
+        touchEventParams.put("x", x);
+        touchEventParams.put("y", y);
+        data.put("params", touchEventParams);
+        String path = "/touch/down";
+        switch (methodType) {
+            case "down":
+                break;
+            case "up":
+                path = "/touch/up";
+                break;
+            case "move":
+                path = "/touch/move";
+                break;
+            default:
+                throw new RuntimeException("methodType error.");
+        }
+
+        BaseResp b = respHandler.getResp(HttpUtil.createPost(remoteUrl + "/session/" + sessionId + path)
+                .body(data.toJSONString()));
+        if (b.getErr() == null) {
+            logger.info(String.format("perform touch %s action %s.", methodType, data));
+        } else {
+            logger.error("perform touch %s action failed.", methodType);
+            throw new SonicRespException(b.getErr().getMessage());
+        }
+    }
+
+
 }
