@@ -101,6 +101,22 @@
             <version>4.6.1</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+		    <groupId>com.github.zafarkhaja</groupId>
+		    <artifactId>java-semver</artifactId>
+		    <version>0.10.2</version>
+		</dependency>
+		<dependency>
+		    <groupId>org.seleniumhq.selenium</groupId>
+		    <artifactId>selenium-api</artifactId>
+		    <version>4.22.0</version>
+		</dependency>
+		<dependency>
+		    <groupId>org.apache.httpcomponents</groupId>
+		    <artifactId>httpcore</artifactId>
+		    <version>4.4.16</version>
+		</dependency>
+
 
         <!-- https://mvnrepository.com/artifact/org.jsoup/jsoup -->
         <dependency>
