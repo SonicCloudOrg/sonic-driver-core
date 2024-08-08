@@ -71,6 +71,8 @@ public interface WdaClient {
 
     //perform handler.
     void performTouchAction(TouchActions touchActions) throws SonicRespException;
+    
+    void performW3CTouchAction(final TouchActions touchActions) throws SonicRespException;
 
     //button handler.
     void pressButton(String buttonName) throws SonicRespException;

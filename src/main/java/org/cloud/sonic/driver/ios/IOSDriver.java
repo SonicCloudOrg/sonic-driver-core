@@ -16,10 +16,20 @@
  */
 package org.cloud.sonic.driver.ios;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.github.zafarkhaja.semver.Version;
+
+import cn.hutool.http.HttpUtil;
+import cn.hutool.http.Method;
+
 import org.cloud.sonic.driver.common.enums.PasteboardType;
+import org.cloud.sonic.driver.common.models.BaseResp;
+import org.cloud.sonic.driver.common.models.ErrorMsg;
+import org.cloud.sonic.driver.common.models.WDAStatus;
 import org.cloud.sonic.driver.common.models.WindowSize;
 import org.cloud.sonic.driver.common.tool.RespHandler;
+import org.cloud.sonic.driver.common.tool.SemanticVersionTools;
 import org.cloud.sonic.driver.common.tool.SonicRespException;
 import org.cloud.sonic.driver.ios.enums.*;
 import org.cloud.sonic.driver.ios.models.TouchActions;
@@ -36,6 +46,7 @@ import java.util.List;
  */
 public class IOSDriver {
     private WdaClient wdaClient;
+    private Version wdaVersion;
 
     /**
      * Init ios driver.
@@ -82,6 +93,7 @@ public class IOSDriver {
         wdaClient.setRemoteUrl(url);
         wdaClient.setGlobalTimeOut(timeOut);
         wdaClient.newSession(cap);
+        this.wdaVersion = this.getWDAVersion();
     }
 
     /**
@@ -230,7 +242,11 @@ public class IOSDriver {
      * @throws SonicRespException
      */
     public void performTouchAction(TouchActions touchActions) throws SonicRespException {
-        wdaClient.performTouchAction(touchActions);
+    	if (this.wdaVersion.satisfies("<7.0.0")) { 
+    		this.wdaClient.performTouchAction(touchActions);
+    	} else {
+    		this.wdaClient.performW3CTouchAction(touchActions);
+    	} // end if
     }
 
     /**
@@ -699,4 +715,16 @@ public class IOSDriver {
     public Orientation getRotate() throws SonicRespException {
         return wdaClient.getRotate();
     }
+    
+    public Version getWDAVersion() throws SonicRespException {
+		this.wdaClient.checkSessionId();
+		final String url = this.wdaClient.getRemoteUrl()+"/status";
+		final BaseResp<?> b = this.wdaClient.getRespHandler().getResp(HttpUtil.createRequest(Method.GET, url));
+		if (b==null) { throw new SonicRespException("null response body"); } // end if
+		final ErrorMsg err = b.getErr();
+		if (err!=null) { throw new SonicRespException(err.getMessage()); } // end if
+		final String result = b.getValue().toString();
+		final WDAStatus sessionStatus = JSON.parseObject(result, WDAStatus.class);
+		return SemanticVersionTools.parseSemVer(SemanticVersionTools.pad4SemVer(sessionStatus.getBuild().getVersion()));
+	} // end getWDAVersion()
 }
