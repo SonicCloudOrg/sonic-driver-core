@@ -223,7 +223,7 @@ public class WdaClientImpl implements WdaClient {
     public void performW3CTouchAction(final TouchActions touchActions) throws SonicRespException {
     	final Sequence seq = W3CActions.convert(touchActions);
 		final int timeoutUpdateSettings = 1500;
-		final String strAppiumSettingsURL = "%s/session/%s/actions".formatted(this.remoteUrl, this.sessionId);
+		final String strAppiumSettingsURL = String.format("%s/session/%s/actions", this.remoteUrl, this.sessionId);
 		final JSONObject payload = new JSONObject();
 		payload.put("actions", new LinkedList<Map<String, Object>>() {{ add(seq.toJson()); }});
 		final byte[] rawPayload = payload.toJSONString().getBytes(StandardCharsets.UTF_8);
