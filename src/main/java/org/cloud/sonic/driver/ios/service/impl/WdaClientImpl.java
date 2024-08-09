@@ -20,9 +20,7 @@ import cn.hutool.http.HttpUtil;
 import cn.hutool.http.Method;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import org.apache.http.entity.ContentType;
 import org.cloud.sonic.driver.common.models.BaseResp;
-import org.cloud.sonic.driver.common.models.ErrorMsg;
 import org.cloud.sonic.driver.common.models.SessionInfo;
 import org.cloud.sonic.driver.common.models.WindowSize;
 import org.cloud.sonic.driver.common.tool.Logger;
@@ -30,10 +28,9 @@ import org.cloud.sonic.driver.common.tool.RespHandler;
 import org.cloud.sonic.driver.common.tool.SonicRespException;
 import org.cloud.sonic.driver.ios.enums.Orientation;
 import org.cloud.sonic.driver.ios.models.TouchActions;
-import org.cloud.sonic.driver.ios.models.W3CActions;
 import org.cloud.sonic.driver.ios.service.IOSElement;
 import org.cloud.sonic.driver.ios.service.WdaClient;
-import org.openqa.selenium.interactions.Sequence;
+import org.jsoup.select.CombiningEvaluator;
 
 import java.nio.charset.StandardCharsets;
 import java.util.*;
@@ -217,18 +214,6 @@ public class WdaClientImpl implements WdaClient {
             throw new SonicRespException(b.getErr().getMessage());
         }
     }
-    
-    @SuppressWarnings("serial")
-	@Override
-    public void performW3CTouchAction(final TouchActions touchActions) throws SonicRespException {
-    	final Sequence seq = W3CActions.convert(touchActions);
-		final int timeoutUpdateSettings = 1500;
-		final String strAppiumSettingsURL = String.format("%s/session/%s/actions", this.remoteUrl, this.sessionId);
-		final JSONObject payload = new JSONObject();
-		payload.put("actions", new LinkedList<Map<String, Object>>() {{ add(seq.toJson()); }});
-		final byte[] rawPayload = payload.toJSONString().getBytes(StandardCharsets.UTF_8);
-		this.sendAppiumRequest(Method.POST, strAppiumSettingsURL, ContentType.APPLICATION_JSON.toString(), rawPayload, timeoutUpdateSettings);
-    } // end performW3CTouchAction()
 
     @Override
     public void pressButton(String buttonName) throws SonicRespException {
@@ -622,17 +607,4 @@ public class WdaClientImpl implements WdaClient {
             throw new SonicRespException(b.getErr().getMessage());
         }
     }
-    
-    private void sendAppiumRequest(final Method method, final String url, final String contentType, final byte[] bodyBytes, final int timeout) throws SonicRespException {
-		this.checkSessionId();
-		final BaseResp<?> b = this.getRespHandler().getResp(HttpUtil.createRequest(method, url).body(bodyBytes).contentType(contentType), timeout);
-		if (b!=null) {
-			final ErrorMsg err = b.getErr();
-			if (err!=null) {
-				throw new SonicRespException(err.getMessage());
-	        } // end if
-		} else {
-			throw new SonicRespException("null response body");
-		} // end if
-	} // end sendAppiumRequest()
 }
