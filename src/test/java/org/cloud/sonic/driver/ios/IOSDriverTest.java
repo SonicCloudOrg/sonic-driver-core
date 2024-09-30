@@ -167,9 +167,26 @@ public class IOSDriverTest {
 
     @Test
     public void testPerformTouchAction() throws SonicRespException, InterruptedException {
-        iosDriver.performTouchAction(new TouchActions().press(100, 256).wait(50).move(50, 256).wait(10).release());
+        iosDriver.performTouchAction(new TouchActions.FingerTouchAction().press(100, 256).wait(50).move(50, 256).wait(10).release());
         Thread.sleep(1500);
-        iosDriver.performTouchAction(new TouchActions().press(50, 256).wait(50).move(100, 256).wait(10).release());
+        iosDriver.performTouchAction(new TouchActions.FingerTouchAction().press(50, 256).wait(50).move(100, 256).wait(10).release());
+    }
+
+    @Test
+    public void testMultiFingerTouchAction() throws SonicRespException, InterruptedException {
+        iosDriver.appActivate("com.apple.camera");
+        Thread.sleep(1000);
+        TouchActions zoomIn = new TouchActions();
+        zoomIn.finger("0").press(100, 256).wait(50).move(150, 256).wait(10).release();
+        zoomIn.finger("1").press(100, 256).wait(50).move(50, 256).wait(10).release();
+        iosDriver.performTouchAction(zoomIn);
+        Thread.sleep(500);
+        TouchActions zoomOut = new TouchActions();
+        zoomOut.finger("0").press(50, 256).wait(50).move(100, 256).wait(10).release();
+        zoomOut.finger("1").press(150, 256).wait(50).move(100, 256).wait(10).release();
+        iosDriver.performTouchAction(zoomOut);
+        Thread.sleep(500);
+        iosDriver.pressButton(SystemButton.HOME);
     }
 
     @Test
@@ -314,7 +331,7 @@ public class IOSDriverTest {
 
     @Test
     public void testDoubleTap() throws SonicRespException {
-        iosDriver.doubleTap(100,100);
+        iosDriver.doubleTap(100, 100);
         iosDriver.pressButton("HOME");
     }
 
