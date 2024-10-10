@@ -94,3 +94,4 @@
 #         with:
 #           draft: false
 #           generate_release_notes: true
+# # mvn clean deploy -Pdeploy -Dmaven.test.skip=true
