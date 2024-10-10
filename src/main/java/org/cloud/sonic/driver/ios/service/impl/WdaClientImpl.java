@@ -205,8 +205,8 @@ public class WdaClientImpl implements WdaClient {
     @Override
     public void performTouchAction(TouchActions touchActions) throws SonicRespException {
         checkSessionId();
-        BaseResp b = respHandler.getResp(HttpUtil.createPost(remoteUrl + "/session/" + sessionId + "/wda/touch/multi/perform")
-                .body(String.valueOf(JSONObject.toJSON(touchActions))));
+        BaseResp b = respHandler.getResp(HttpUtil.createPost(remoteUrl + "/session/" + sessionId + "/actions")
+                .body(JSON.toJSONString(touchActions)));
         if (b.getErr() == null) {
             logger.info("perform action %s.", touchActions.toString());
         } else {

@@ -171,7 +171,7 @@ public class IOSDriver {
      * @throws SonicRespException
      */
     public void tap(int x, int y) throws SonicRespException {
-        performTouchAction(new TouchActions().press(x, y).release());
+        performTouchAction(new TouchActions.FingerTouchAction().press(x, y).release());
     }
 
     /**
@@ -193,7 +193,7 @@ public class IOSDriver {
      * @throws SonicRespException
      */
     public void longPress(int x, int y, int ms) throws SonicRespException {
-        performTouchAction(new TouchActions().press(x, y).wait(ms).release());
+        performTouchAction(new TouchActions.FingerTouchAction().press(x, y).wait(ms).release());
     }
 
     /**
@@ -206,7 +206,7 @@ public class IOSDriver {
      * @throws SonicRespException
      */
     public void swipe(int fromX, int fromY, int toX, int toY) throws SonicRespException {
-        performTouchAction(new TouchActions().press(fromX, fromY).wait(300).move(toX, toY).wait(10).release());
+        performTouchAction(new TouchActions.FingerTouchAction().press(fromX, fromY).wait(300).move(toX, toY).wait(10).release());
     }
 
     /**
@@ -230,7 +230,11 @@ public class IOSDriver {
      * @throws SonicRespException
      */
     public void performTouchAction(TouchActions touchActions) throws SonicRespException {
-    	wdaClient.performTouchAction(touchActions);
+        wdaClient.performTouchAction(touchActions);
+    }
+
+    public void performTouchAction(TouchActions.FingerTouchAction fingerTouchActions) throws SonicRespException {
+        performTouchAction(new TouchActions(fingerTouchActions));
     }
 
     /**

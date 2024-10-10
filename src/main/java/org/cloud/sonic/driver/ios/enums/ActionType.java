@@ -17,10 +17,10 @@
 package org.cloud.sonic.driver.ios.enums;
 
 public enum ActionType {
-    PRESS("press"),
-    WAIT("wait"),
-    MOVE("moveTo"),
-    RELEASE("release");
+    PRESS("pointerDown"),
+    WAIT("pause"),
+    MOVE("pointerMove"),
+    RELEASE("pointerUp");
 
     private final String type;
 
